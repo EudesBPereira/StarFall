@@ -4,7 +4,7 @@ Shoot'em up 2D vertical para **Android e iOS**, feito em **Unity 6**. No ano de 
 
 Campanha de 5 fases com 4 chefes e 5 mini-chefes, 7 armas, 5 naves, árvore de upgrades permanente, ranking local, conquistas e os modos Sobrevivência, Boss Rush e Desafio Diário.
 
-Documentação: [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Balanceamento](docs/BALANCING.md) · [Checklist de QA](docs/QA_CHECKLIST.md) · [Backlog](docs/BACKLOG.md) · [Blueprint original](blueprint.md)
+Documentação: [Estado do projeto e caminho até as lojas](docs/RELEASE_STATUS.md) · [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Balanceamento](docs/BALANCING.md) · [Checklist de QA](docs/QA_CHECKLIST.md) · [Backlog](docs/BACKLOG.md) · [Blueprint original](blueprint.md)
 
 ## Requisitos
 

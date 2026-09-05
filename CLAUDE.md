@@ -27,7 +27,8 @@ Assets/_Project/Scripts/
 Assets/_Project/{ScriptableObjects,Prefabs,Scenes,Art/Placeholders}  gerados pelo bootstrap
 Assets/_Project/Tests/{EditMode,PlayMode}
 Tools/LogicTests/   projeto `dotnet test` que compila Scripts/Logic + Tests/EditMode
-docs/               ARCHITECTURE, DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG, GDD_COMPLIANCE
+docs/               RELEASE_STATUS (o que existe e o que falta p/ as lojas), ARCHITECTURE,
+                    DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG, GDD_COMPLIANCE
 ```
 
 Cenas, prefabs, sprites placeholder e ScriptableObjects são **gerados por script** (`Starfall → Run Full Bootstrap`). Não escreva YAML de cena/prefab à mão. Re-executar `GenerateAll` sobrescreve valores de balanceamento dos assets gerados (D-006): mude os valores em `ContentFactory.CreateData` ou não re-execute.
