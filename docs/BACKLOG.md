@@ -46,3 +46,12 @@ Coop online, ranking global, clãs, Battle Pass, eventos semanais, editor de fas
 - A névoa da fase 3 é um sprite plano; sem efeito de parallax.
 - `PlaceholderAudioSynth` gera clipes de música por cálculo no primeiro uso (~100 ms).
 - Tests PlayMode ainda não cobrem transição de cena.
+
+## Lacunas apontadas pela validação do GDD (`docs/GDD_COMPLIANCE.md`)
+
+- Animação/estado de dano crítico da nave (casco baixo: fumaça, alerta no HUD).
+- Propulsores visuais nos inimigos.
+- Partículas de fumaça e faíscas (hoje só sprites animados por código).
+- Loops de ambiente: motores da nave e nebulosa; trilhas finais por estilo (orquestral, eletrônica, synthwave).
+- Dano em área real para os projéteis do Bomber (`DamageType.Explosive` já existe).
+- Splash com logo do estúdio quando existir o asset.
