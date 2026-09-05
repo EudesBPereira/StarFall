@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30d25317cd07c54e9b9dad9d9ec1fa3, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Core.GameConfig
+  BootScene: Boot
+  MainMenuScene: MainMenu
+  GameplayScene: Gameplay
+  Stages:
+  - {fileID: 11400000, guid: 30be411063f6c9741b63b53134ee4f50, type: 2}
+  - {fileID: 11400000, guid: 6bde68cb39c945847b40e8d5814e65f0, type: 2}
+  - {fileID: 11400000, guid: 3a84dd4d4bb5c3240bf6cac36cc5ec47, type: 2}
+  StartingLives: 3
+  MaxLives: 9
+  RespawnDelay: 1.5
+  RespawnInvulnerability: 2.5
+  HitInvulnerability: 1
+  SpawnHeightFraction: 0.15
+  PlayAreaWidth: 10
+  PlayerEdgePadding: 0.45
+  DespawnMargin: 2.5
+  MaxMultiplier: 10
+  KillsPerMultiplierStep: 4
+  UltimateEnergyMax: 100
+  UltimateEliteDamage: 150
+  UltimateClearsEnemyProjectiles: 1
+  PrewarmPlayerProjectiles: 48
+  PrewarmEnemyProjectiles: 96
+  PrewarmEnemies: 24
+  PrewarmExplosions: 24

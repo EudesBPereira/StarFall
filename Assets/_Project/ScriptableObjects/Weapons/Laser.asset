@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae6dd8985bfec43af214453ccdf696, type: 3}
+  m_Name: Laser
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Combat.WeaponDefinition
+  DisplayName: Laser
+  ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
+  FireInterval: 0.14
+  Damage: 4
+  ProjectileSpeed: 18
+  ProjectileLifetime: 2.5
+  ProjectileScale: 1
+  ProjectileColor: {r: 0.35, g: 0.9, b: 1, a: 1}
+  ParallelSpacing: 0.22
+  SideShotAngle: 9
+  MaxLevel: 5
+  DamagePerLevel: 0.15

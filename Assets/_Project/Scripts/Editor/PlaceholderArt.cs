@@ -1,0 +1,227 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
+using UnityEngine;
+
+namespace Starfall.EditorTools
+{
+    /// <summary>
+    /// Generates clearly-temporary white sprites (tinted at runtime) so the MVP has no external art dependency.
+    /// All shapes are simple polygons/circles rendered with anti-aliased signed distance fields.
+    /// Output: Assets/_Project/Art/Placeholders/*.png
+    /// </summary>
+    public static class PlaceholderArt
+    {
+        public const string Folder = "Assets/_Project/Art/Placeholders";
+
+        public sealed class Set
+        {
+            public Sprite Pixel, Dot, Circle, Ring, Gradient;
+            public Sprite Ship, Flame, Projectile, Bullet;
+            public Sprite Drone, Interceptor, Bomber, Kamikaze, ShieldDrone, Asteroid;
+            public Sprite SentinelX, Destroyer;
+            public Sprite Satellite, Panel;
+        }
+
+        public static Set GenerateAll()
+        {
+            Directory.CreateDirectory(Folder);
+            var set = new Set();
+
+            set.Pixel = Save("pixel", 8, (x, y) => -1f, ppu: 100, fullRect: true);
+            set.Dot = Save("dot", 64, (x, y) => SoftCircle(x, y, 0.95f), soft: true);
+            set.Circle = Save("circle", 128, (x, y) => Circle(x, y, 0.95f));
+            set.Ring = Save("ring", 128, (x, y) => Ring(x, y, 0.92f, 0.12f));
+            set.Gradient = SaveGradient("gradient", 4, 256);
+
+            set.Ship = Save("ship", 96, (x, y) => Union(
+                Polygon(x, y, P(0f, 1f), P(0.28f, -0.2f), P(0.16f, -0.45f), P(-0.16f, -0.45f), P(-0.28f, -0.2f)),
+                Polygon(x, y, P(0.2f, 0.0f), P(0.95f, -0.55f), P(0.9f, -0.85f), P(0.15f, -0.6f)),
+                Polygon(x, y, P(-0.2f, 0.0f), P(-0.95f, -0.55f), P(-0.9f, -0.85f), P(-0.15f, -0.6f))));
+            set.Flame = Save("flame", 32, (x, y) => Union(Polygon(x, y, P(-0.5f, 1f), P(0.5f, 1f), P(0f, -1f)), Circle(x, y - 0.6f, 0.45f)), soft: true);
+            set.Projectile = Save("projectile", 32, (x, y) => Capsule(x, y, 0.28f, 0.9f), soft: true);
+            set.Bullet = Save("bullet", 32, (x, y) => SoftCircle(x, y, 0.9f), soft: true);
+
+            set.Drone = Save("drone", 80, (x, y) => Union(RegularPolygon(x, y, 6, 0.9f), Circle(x, y, 0.35f) * -1f + 0.15f));
+            set.Interceptor = Save("interceptor", 80, (x, y) => Union(
+                Polygon(x, y, P(0f, -1f), P(0.35f, 0.4f), P(0f, 0.8f), P(-0.35f, 0.4f)),
+                Polygon(x, y, P(0.2f, 0.2f), P(0.95f, 0.7f), P(0.75f, 0.85f), P(0.1f, 0.55f)),
+                Polygon(x, y, P(-0.2f, 0.2f), P(-0.95f, 0.7f), P(-0.75f, 0.85f), P(-0.1f, 0.55f))));
+            set.Bomber = Save("bomber", 96, (x, y) => Union(
+                Polygon(x, y, P(-0.95f, 0.1f), P(-0.5f, 0.6f), P(0.5f, 0.6f), P(0.95f, 0.1f), P(0.6f, -0.6f), P(-0.6f, -0.6f)),
+                Capsule(x, y + 0.1f, 0.22f, 0.55f) - 0.02f));
+            set.Kamikaze = Save("kamikaze", 80, (x, y) => Union(Star(x, y, 4, 0.95f, 0.35f), Circle(x, y, 0.3f)));
+            set.ShieldDrone = Save("shielddrone", 80, (x, y) => Union(RoundedBox(x, y, 0.62f, 0.62f, 0.15f), Polygon(x, y, P(0f, 0.95f), P(0.25f, 0.5f), P(-0.25f, 0.5f))));
+            set.Asteroid = Save("asteroid", 96, (x, y) => Polygon(x, y,
+                P(-0.9f, 0.1f), P(-0.6f, 0.7f), P(-0.1f, 0.9f), P(0.5f, 0.75f), P(0.95f, 0.2f), P(0.8f, -0.5f), P(0.3f, -0.9f), P(-0.4f, -0.8f), P(-0.85f, -0.4f)));
+
+            set.SentinelX = Save("sentinelx", 256, (x, y) => Union(
+                RegularPolygon(x, y, 8, 0.75f),
+                Polygon(x, y, P(-1f, -0.15f), P(-0.7f, 0f), P(-1f, 0.15f)),
+                Polygon(x, y, P(1f, -0.15f), P(0.7f, 0f), P(1f, 0.15f)),
+                Polygon(x, y, P(-0.15f, 1f), P(0f, 0.7f), P(0.15f, 1f)),
+                Polygon(x, y, P(-0.15f, -1f), P(0f, -0.7f), P(0.15f, -1f)),
+                Ring(x, y, 0.55f, 0.06f) * -1f + 0.1f));
+            set.Destroyer = Save("destroyer", 384, (x, y) => Union(
+                Polygon(x, y, P(-0.35f, 0.95f), P(0.35f, 0.95f), P(0.5f, 0.2f), P(0.25f, -0.95f), P(-0.25f, -0.95f), P(-0.5f, 0.2f)),
+                Polygon(x, y, P(-0.45f, 0.5f), P(-1f, 0.35f), P(-1f, -0.2f), P(-0.45f, -0.4f)),
+                Polygon(x, y, P(0.45f, 0.5f), P(1f, 0.35f), P(1f, -0.2f), P(0.45f, -0.4f)),
+                Capsule(x + 0.78f, y - 0.35f, 0.09f, 0.35f),
+                Capsule(x - 0.78f, y - 0.35f, 0.09f, 0.35f)));
+
+            set.Satellite = Save("satellite", 96, (x, y) => Union(
+                RoundedBox(x, y, 0.25f, 0.35f, 0.05f),
+                Box(x + 0.62f, y, 0.35f, 0.18f), Box(x - 0.62f, y, 0.35f, 0.18f),
+                Capsule(x, y + 0.55f, 0.04f, 0.25f)));
+            set.Panel = Save("panel", 64, (x, y) => RoundedBox(x, y, 0.95f, 0.95f, 0.25f), ppu: 64, fullRect: true);
+
+            AssetDatabase.SaveAssets();
+            return set;
+        }
+
+        // ---- Rendering ------------------------------------------------------------------------------
+
+        private static Sprite Save(string name, int size, Func<float, float, float> sdf, bool soft = false, int ppu = 100, bool fullRect = false)
+        {
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            var pixels = new Color32[size * size];
+            float aa = 2.5f / size;
+            for (int py = 0; py < size; py++)
+            {
+                for (int px = 0; px < size; px++)
+                {
+                    float x = (px + 0.5f) / size * 2f - 1f;
+                    float y = (py + 0.5f) / size * 2f - 1f;
+                    float d = sdf(x, y);
+                    float alpha = soft ? Mathf.Clamp01(-d * 2.2f) : Mathf.Clamp01(0.5f - d / aa);
+                    byte a = (byte)Mathf.RoundToInt(alpha * 255f);
+                    pixels[py * size + px] = new Color32(255, 255, 255, a);
+                }
+            }
+            tex.SetPixels32(pixels);
+            tex.Apply();
+            return WritePng(name, tex, ppu, fullRect);
+        }
+
+        private static Sprite SaveGradient(string name, int width, int height)
+        {
+            var tex = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            var pixels = new Color32[width * height];
+            for (int y = 0; y < height; y++)
+            {
+                float t = (float)y / (height - 1);
+                byte a = (byte)Mathf.RoundToInt(Mathf.SmoothStep(0f, 1f, t) * 255f);
+                for (int x = 0; x < width; x++) pixels[y * width + x] = new Color32(255, 255, 255, a);
+            }
+            tex.SetPixels32(pixels);
+            tex.Apply();
+            return WritePng(name, tex, 100, true);
+        }
+
+        private static Sprite WritePng(string name, Texture2D tex, int ppu, bool fullRect)
+        {
+            string path = $"{Folder}/{name}.png";
+            File.WriteAllBytes(path, tex.EncodeToPNG());
+            UnityEngine.Object.DestroyImmediate(tex);
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
+
+            var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+            if (importer != null)
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
+                importer.spritePixelsPerUnit = ppu;
+                importer.mipmapEnabled = false;
+                importer.alphaIsTransparency = true;
+                importer.filterMode = FilterMode.Bilinear;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.wrapMode = TextureWrapMode.Clamp;
+                var settings = new TextureImporterSettings();
+                importer.ReadTextureSettings(settings);
+                settings.spriteMeshType = fullRect ? SpriteMeshType.FullRect : SpriteMeshType.Tight;
+                settings.spriteGenerateFallbackPhysicsShape = false;
+                importer.SetTextureSettings(settings);
+                importer.SaveAndReimport();
+            }
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            if (sprite == null) Debug.LogError($"[Starfall] Failed to import placeholder sprite {path}");
+            return sprite;
+        }
+
+        // ---- Signed distance primitives (negative = inside) ----------------------------------------------
+
+        private static Vector2 P(float x, float y) => new Vector2(x, y);
+
+        private static float Union(params float[] distances)
+        {
+            float d = float.MaxValue;
+            for (int i = 0; i < distances.Length; i++) d = Mathf.Min(d, distances[i]);
+            return d;
+        }
+
+        private static float Circle(float x, float y, float r) => Mathf.Sqrt(x * x + y * y) - r;
+
+        private static float SoftCircle(float x, float y, float r) => (Mathf.Sqrt(x * x + y * y) - r) / r;
+
+        private static float Ring(float x, float y, float r, float thickness) => Mathf.Abs(Mathf.Sqrt(x * x + y * y) - r) - thickness;
+
+        private static float Box(float x, float y, float hw, float hh)
+        {
+            float dx = Mathf.Abs(x) - hw;
+            float dy = Mathf.Abs(y) - hh;
+            float outside = Mathf.Sqrt(Mathf.Max(dx, 0f) * Mathf.Max(dx, 0f) + Mathf.Max(dy, 0f) * Mathf.Max(dy, 0f));
+            return outside + Mathf.Min(Mathf.Max(dx, dy), 0f);
+        }
+
+        private static float RoundedBox(float x, float y, float hw, float hh, float r) => Box(x, y, hw - r, hh - r) - r;
+
+        private static float Capsule(float x, float y, float r, float halfLength)
+        {
+            float cy = Mathf.Clamp(y, -halfLength, halfLength);
+            return Mathf.Sqrt(x * x + (y - cy) * (y - cy)) - r;
+        }
+
+        private static float RegularPolygon(float x, float y, int sides, float r)
+        {
+            var pts = new Vector2[sides];
+            for (int i = 0; i < sides; i++)
+            {
+                float a = (i / (float)sides) * Mathf.PI * 2f + Mathf.PI / sides;
+                pts[i] = new Vector2(Mathf.Cos(a) * r, Mathf.Sin(a) * r);
+            }
+            return Polygon(x, y, pts);
+        }
+
+        private static float Star(float x, float y, int points, float outer, float inner)
+        {
+            var pts = new Vector2[points * 2];
+            for (int i = 0; i < points * 2; i++)
+            {
+                float a = (i / (float)(points * 2)) * Mathf.PI * 2f + Mathf.PI / 2f;
+                float r = i % 2 == 0 ? outer : inner;
+                pts[i] = new Vector2(Mathf.Cos(a) * r, Mathf.Sin(a) * r);
+            }
+            return Polygon(x, y, pts);
+        }
+
+        private static float Polygon(float x, float y, params Vector2[] v)
+        {
+            var p = new Vector2(x, y);
+            int n = v.Length;
+            float d = Vector2.Dot(p - v[0], p - v[0]);
+            float s = 1f;
+            for (int i = 0, j = n - 1; i < n; j = i, i++)
+            {
+                Vector2 e = v[j] - v[i];
+                Vector2 w = p - v[i];
+                float t = Mathf.Clamp01(Vector2.Dot(w, e) / Vector2.Dot(e, e));
+                Vector2 b = w - e * t;
+                d = Mathf.Min(d, Vector2.Dot(b, b));
+                bool c1 = p.y >= v[i].y, c2 = p.y < v[j].y, c3 = e.x * w.y > e.y * w.x;
+                if ((c1 && c2 && c3) || (!c1 && !c2 && !c3)) s *= -1f;
+            }
+            return s * Mathf.Sqrt(d);
+        }
+    }
+}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 987c7550097953943a0d00ff4e495c5d, type: 3}
+  m_Name: Yellow_Speed
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.PowerUps.PowerUpDefinition
+  Kind: 3
+  DisplayName: Speed Boost
+  Label: SPEED UP
+  Color: {r: 1, g: 0.9, b: 0.2, a: 1}
+  Duration: 8
+  Magnitude: 1.4
+  Weight: 2
+  PickupPrefab: {fileID: 8228906170934228257, guid: 973a110a3c877ce4cbe6ef9374391580, type: 3}
+  FallSpeed: 1.6
+  SwayAmplitude: 0.4

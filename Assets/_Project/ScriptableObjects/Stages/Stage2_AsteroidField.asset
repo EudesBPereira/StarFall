@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage2_AsteroidField
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Asteroid Field
+  Subtitle: Between Mars and Jupiter
+  Briefing: 'The Swarm is using the asteroid belt as cover.
+
+    Avoid the rocks,
+    break the shielded units and take down the Sentinel-X outpost.'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: ASTEROID FIELD
+    Seconds: 2.2
+    Flag: 1
+  - Type: 5
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 26f64b003b656f34e957795c4649061e, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: BOMBERS DETECTED
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 2183b04306d156e41b8dc5247a372c75, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: KAMIKAZE UNITS!
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: bdc1ef6e1c4e8ca4ab86c34dea58c853, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: SHIELDED UNITS - BREAK THE SHIELD FIRST
+    Seconds: 2.5
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: f1360c5a95763a544824801f625a0acf, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: df395e82b403333408f67a145b836844, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: f27b6df4d173a4047837d8de0fc52a9b, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 5
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: c6263f1dc58fc3a4cb5d9a5cfc5846a4, type: 2}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  CompletionBonus: 2000
+  Music: 3
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.1, g: 0.06, b: 0.12, a: 1}
+  BackgroundBottom: {r: 0.03, g: 0.02, b: 0.05, a: 1}
+  Fog: {r: 0, g: 0, b: 0, a: 0}
+  StarDensity: 0.5
+  StarTint: {r: 1, g: 0.95, b: 0.85, a: 1}
+  DebrisSprites: []
+  DebrisInterval: 0
+  AsteroidDefinition: {fileID: 11400000, guid: 33764b9c5b78608439ee79c4810eedc2, type: 2}
+  AsteroidInterval: 1.4

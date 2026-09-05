@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage1_OrbitalSector
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Orbital Sector
+  Subtitle: Earth orbit, 2237
+  Briefing: 'The Swarm vanguard has breached the orbital defense grid.
+
+    Clear
+    the debris field and stop the drones before they reach the surface.
+
+
+    Drag
+    to move. The Vanguard fires automatically.
+
+    Tap the energy bar (or press
+    E) to unleash the Ultimate when it is full.'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: ORBITAL SECTOR
+    Seconds: 2.2
+    Flag: 1
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: DRAG TO MOVE  -  AUTO FIRE ON
+    Seconds: 3
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 86e9abc1db509e44c9945a461a42478e, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 23fa805c542f822499b01dd69a8c98d6, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: SUPPLY DRONES CARRY POWER-UPS
+    Seconds: 2.5
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: b712a7ca0656fbb46a7c874df4f7f17d, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: INTERCEPTORS INBOUND
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 1290512204d64d04fb1480694f2271e6, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: b1e20ec51cfa8be449009d5c7c1599f9, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: d0944dd1314ad044bab588debe7552d3, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: FINAL WAVE
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: cbc65d4c107dfae4982d8afafb3ab789, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  CompletionBonus: 1000
+  Music: 2
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.02, g: 0.06, b: 0.18, a: 1}
+  BackgroundBottom: {r: 0, g: 0.01, b: 0.06, a: 1}
+  Fog: {r: 0, g: 0, b: 0, a: 0}
+  StarDensity: 0.8
+  StarTint: {r: 1, g: 1, b: 1, a: 1}
+  DebrisSprites:
+  - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
+  DebrisInterval: 4
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2
