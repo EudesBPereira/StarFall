@@ -11,6 +11,7 @@ namespace Starfall.VFX
         [SerializeField] internal PoolService pools;
         [SerializeField] internal PooledObject explosionPrefab;
         [SerializeField] internal PooledObject floatingTextPrefab;
+        [SerializeField] internal PooledObject sparksPrefab;
         [SerializeField] internal SpriteRenderer screenFlash;
 
         private Coroutine _flashRoutine;
@@ -38,6 +39,7 @@ namespace Starfall.VFX
         {
             var fx = SpawnBurst(position);
             if (fx != null) fx.Play(scale * 1.4f, color, 0.5f, true);
+            SpawnSparks(position, color, Mathf.RoundToInt(8 * scale));
         }
 
         public void SpawnImpact(Vector2 position, Color color)
@@ -70,11 +72,26 @@ namespace Starfall.VFX
             if (fx != null) fx.Play(1.1f, new Color(color.r, color.g, color.b, 0.6f), 0.4f, true);
         }
 
-        public void SpawnFloatingText(Vector2 position, string text, Color color)
+        /// <summary>Expanding ring only (Ultimate, boss phase change).</summary>
+        public void SpawnShockwave(Vector2 position, float radius, Color color)
+        {
+            var fx = SpawnBurst(position);
+            if (fx != null) fx.Play(radius, new Color(color.r, color.g, color.b, 0f), 0.7f, true);
+        }
+
+        /// <summary>Particle sparks (impacts, hull damage, explosions).</summary>
+        public void SpawnSparks(Vector2 position, Color color, int count = 10)
+        {
+            if (pools == null || sparksPrefab == null || count <= 0) return;
+            var fx = pools.Spawn<ParticleBurst>(sparksPrefab, position, Quaternion.identity);
+            if (fx != null) fx.Play(color, count);
+        }
+
+        public void SpawnFloatingText(Vector2 position, string text, Color color, float duration = 0.9f)
         {
             if (pools == null || floatingTextPrefab == null || string.IsNullOrEmpty(text)) return;
             var ft = pools.Spawn<FloatingText>(floatingTextPrefab, position, Quaternion.identity);
-            if (ft != null) ft.Show(text, color);
+            if (ft != null) ft.Show(text, color, duration);
         }
 
         public void SpawnExplosionChain(Vector2 center, int count, float radius, float seconds, Color color)
@@ -92,6 +109,7 @@ namespace Starfall.VFX
                 yield return new WaitForSeconds(interval);
             }
             SpawnExplosion(center, 3f, Color.white);
+            SpawnShockwave(center, 10f, color);
         }
 
         public void FlashScreen(Color color, float seconds)

@@ -19,6 +19,14 @@ namespace Starfall.Combat
         public Transform HomingTarget;
         /// <summary>Extra targets the projectile may pass through before despawning (0 = none).</summary>
         public int Pierce;
+        /// <summary>Marks a critical hit for feedback.</summary>
+        public bool Critical;
+        /// <summary>Optional sprite override (null keeps the prefab sprite).</summary>
+        public Sprite Sprite;
+        /// <summary>Widow webs: seconds of Slowed applied to the player on hit (0 = none).</summary>
+        public float SlowSeconds;
+        /// <summary>Optional area damage radius applied on impact (Bomber bombs, missiles).</summary>
+        public float SplashRadius;
 
         public static ProjectileSpec Player(float damage, float speed, float lifetime, Color color, float scale = 1f)
         {

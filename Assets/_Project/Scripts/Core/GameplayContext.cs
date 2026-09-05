@@ -33,6 +33,7 @@ namespace Starfall.Core
         [SerializeField] internal StageDirector stageDirector;
         [SerializeField] internal VfxSpawner vfx;
         [SerializeField] internal CameraShake cameraShake;
+        [SerializeField] internal RunTracker runTracker;
 
         public GameConfig Config => config;
         public PlayArea PlayArea => playArea;
@@ -45,6 +46,7 @@ namespace Starfall.Core
         public StageDirector StageDirector => stageDirector;
         public VfxSpawner Vfx => vfx;
         public CameraShake CameraShake => cameraShake;
+        public RunTracker RunTracker => runTracker;
 
         public StageDefinition CurrentStage => config != null ? config.GetStage(GameSession.CurrentStageIndex) : null;
 
@@ -59,7 +61,7 @@ namespace Starfall.Core
             Current = this;
 
             // Allow opening the Gameplay scene directly in the editor without passing through Boot.
-            SaveService.EnsureInitialized(config != null ? config.StageCount : 3);
+            SaveService.EnsureInitialized(config != null ? config.StageCount : 5);
             AudioManager.Ensure(audioLibrary);
 
             if (playArea != null && config != null)

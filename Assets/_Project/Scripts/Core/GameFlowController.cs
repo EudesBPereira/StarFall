@@ -11,7 +11,7 @@ namespace Starfall.Core
 {
     /// <summary>
     /// Gameplay state machine: Briefing -> Playing <-> Paused, PlayerDown -> Playing | GameOver, Victory.
-    /// Owns lives and the stage lifecycle; delegates rules to models and services.
+    /// Owns lives and the stage lifecycle for every mode; delegates rules to models and services.
     /// </summary>
     public sealed class GameFlowController : MonoBehaviour
     {
@@ -29,6 +29,7 @@ namespace Starfall.Core
         private GameState _state = GameState.None;
         private Waves.StageDefinition _stage;
         private Coroutine _transition;
+        private bool _runRecorded;
 
         public GameState State => _state;
         public LivesModel Lives => _lives;
@@ -37,7 +38,9 @@ namespace Starfall.Core
         {
             if (ctx == null) ctx = GameplayContext.Current;
             var config = ctx.Config;
-            _stage = ctx.CurrentStage;
+            _stage = GameSession.IsEndless || GameSession.Mode == GameModeId.BossRush
+                ? (config.SurvivalLook != null ? config.SurvivalLook : ctx.CurrentStage)
+                : ctx.CurrentStage;
 
             int startLives = GameSession.CarriedLives >= 0 ? GameSession.CarriedLives : config.StartingLives;
             _lives = new LivesModel(startLives, config.MaxLives);
@@ -52,7 +55,11 @@ namespace Starfall.Core
             GameSignals.PlayerDied += OnPlayerDied;
             GameSignals.StageCompleted += OnStageCompleted;
 
-            if (_stage != null) AudioManager.Instance.PlayMusic(_stage.Music);
+            if (_stage != null)
+            {
+                AudioManager.Instance.PlayMusic(GameSession.IsEndless ? MusicId.Survival : _stage.Music);
+                AudioManager.Instance.PlayAmbient(_stage.Ambient);
+            }
             ShowBriefing();
         }
 
@@ -61,6 +68,7 @@ namespace Starfall.Core
             GameSignals.PlayerDied -= OnPlayerDied;
             GameSignals.StageCompleted -= OnStageCompleted;
             if (_lives != null) _lives.Changed -= OnLivesChanged;
+            if (AudioManager.Instance != null) AudioManager.Instance.StopAmbient();
             Time.timeScale = 1f;
         }
 
@@ -70,8 +78,6 @@ namespace Starfall.Core
             if (spawner == null) return;
             if (spawner.defaultEnemyPrefab != null) ctx.Pools.Prewarm(spawner.defaultEnemyPrefab, config.PrewarmEnemies);
             if (spawner.enemyProjectilePrefab != null) ctx.Pools.Prewarm(spawner.enemyProjectilePrefab, config.PrewarmEnemyProjectiles);
-            var weapon = ctx.Player.Definition != null ? ctx.Player.Definition.Weapon : null;
-            if (weapon != null && weapon.ProjectilePrefab != null) ctx.Pools.Prewarm(weapon.ProjectilePrefab, config.PrewarmPlayerProjectiles);
             if (ctx.Vfx != null && ctx.Vfx.explosionPrefab != null) ctx.Pools.Prewarm(ctx.Vfx.explosionPrefab, config.PrewarmExplosions);
         }
 
@@ -142,9 +148,8 @@ namespace Starfall.Core
         {
             SetState(GameState.Briefing);
             Time.timeScale = 0f;
-            int number = GameSession.CurrentStageIndex + 1;
             string hint = Application.isMobilePlatform ? "TAP TO LAUNCH" : "PRESS SPACE / START TO LAUNCH";
-            if (briefingPanel != null) briefingPanel.Show(_stage, number, hint);
+            if (briefingPanel != null) briefingPanel.Show(_stage, GameSession.Mode, GameSession.CurrentStageIndex + 1, hint, ctx.Player.Loadout);
             else StartStage();
         }
 
@@ -194,11 +199,14 @@ namespace Starfall.Core
             if (_state != GameState.PlayerDown) yield break;
             SetState(GameState.GameOver);
             ctx.StageDirector.Stop();
-            int total = ctx.Score.RunTotal;
-            bool record = SaveService.RecordScore(total);
+
+            var run = FinalizeRun(false);
+            var rewards = ProgressionRules.ComputeRewards(run, _stage != null ? _stage.CompletionBonus : 0);
+            RecordRun(run, rewards, out bool record, out int rank);
+
             Time.timeScale = 0f;
             AudioManager.Instance.StopMusic(1f);
-            if (gameOverPanel != null) gameOverPanel.Show(total, record);
+            if (gameOverPanel != null) gameOverPanel.Show(run, rewards, record, rank);
             _transition = null;
         }
 
@@ -216,23 +224,64 @@ namespace Starfall.Core
             ctx.Player.Health.Invulnerable = true;
             Projectile.ClearEnemyProjectiles();
             ctx.Enemies.KillAllCommon(DamageSource.Environment);
-            GameSignals.RaiseStageMessage("SECTOR CLEARED", 2f);
+            GameSignals.RaiseStageMessage(GameSession.Mode == GameModeId.BossRush ? "ALL BOSSES DESTROYED" : "SECTOR CLEARED", 2f);
             yield return new WaitForSeconds(2f);
 
-            var score = ctx.Score.Model;
             if (_stage != null) ctx.Score.AddBonus(_stage.CompletionBonus);
+            var run = FinalizeRun(true);
+            var rewards = ProgressionRules.ComputeRewards(run, _stage != null ? _stage.CompletionBonus : 0);
+            RecordRun(run, rewards, out bool record, out int rank);
+
             int stageIndex = GameSession.CurrentStageIndex;
             int stageCount = ctx.Config.StageCount;
-            SaveService.RecordStageCompleted(stageIndex);
-            int total = ctx.Score.RunTotal;
-            bool record = SaveService.RecordScore(total);
-            bool hasNext = StageProgression.HasNextStage(stageIndex, stageCount);
+            bool hasNext = GameSession.Mode == GameModeId.Campaign && StageProgression.HasNextStage(stageIndex, stageCount);
 
             Time.timeScale = 0f;
             if (victoryPanel != null)
-                victoryPanel.Show(hasNext ? "SECTOR CLEARED" : "THE SWARM IS DEFEATED", total, score.HighestMultiplier,
-                    score.EnemiesDestroyed, score.DamageTakenCount, _lives.Lives, record, hasNext);
+            {
+                string title = GameSession.Mode == GameModeId.BossRush ? "BOSS RUSH COMPLETE"
+                    : hasNext ? "SECTOR CLEARED" : "THE SWARM IS DEFEATED";
+                victoryPanel.Show(title, run, ctx.Score.Model, _lives.Lives, rewards, record, rank, hasNext);
+            }
             _transition = null;
+        }
+
+        /// <summary>Copies score/multiplier into the run stats and marks completion.</summary>
+        private RunStats FinalizeRun(bool completed)
+        {
+            var run = GameSession.Run;
+            run.Score = ctx.Score.RunTotal;
+            run.HighestMultiplier = Mathf.Max(run.HighestMultiplier, ctx.Score.Model.HighestMultiplier);
+            run.Completed = completed;
+            run.Mode = GameSession.Mode;
+            run.StageIndex = GameSession.CurrentStageIndex;
+            run.WavesSurvived = Mathf.Max(run.WavesSurvived, ctx.StageDirector.Wave);
+            return run;
+        }
+
+        /// <summary>Applies rewards, campaign progress, leaderboard, stats and achievements to the save (once per stage).</summary>
+        private void RecordRun(RunStats run, in RunRewards rewards, out bool record, out int rank)
+        {
+            record = false;
+            rank = -1;
+            if (_runRecorded) return;
+            _runRecorded = true;
+            var save = SaveService.Data;
+            if (save == null) return;
+
+            ProgressionRules.ApplyRewards(save, rewards);
+            save.totalKills += run.Kills;
+            save.bossesDefeatedMask |= run.BossesDefeatedMask;
+            if (run.Mode == GameModeId.Campaign && run.Completed)
+                ProgressionRules.RecordCampaignStage(save, run.StageIndex, ctx.Config.StageCount, ctx.Score.Model.Score);
+
+            record = SaveService.RecordScore(run.Score);
+            // Endless / boss rush rank on game over or completion; campaign only when the run ends.
+            bool finalStage = run.Mode != GameModeId.Campaign || !run.Completed || !StageProgression.HasNextStage(run.StageIndex, ctx.Config.StageCount);
+            if (finalStage) rank = SaveService.RecordLeaderboard(run, ctx.Player.Definition != null ? (int)ctx.Player.Definition.Id : 0);
+
+            SaveService.Save();
+            AchievementService.Evaluate(run, ctx.Config.StageCount, ctx.Config.BossCount);
         }
 
         // ---- Pause -----------------------------------------------------------------------------------
@@ -274,6 +323,7 @@ namespace Starfall.Core
         public void RestartStage()
         {
             SaveService.Save();
+            GameSession.StartNewRun(GameSession.Mode, GameSession.CurrentStageIndex, GameSession.Mode == GameModeId.DailyChallenge ? GameSession.Seed : System.Environment.TickCount);
             SceneLoader.ReloadCurrent();
         }
 

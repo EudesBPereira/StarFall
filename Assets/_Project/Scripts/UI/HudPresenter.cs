@@ -17,6 +17,9 @@ namespace Starfall.UI
         private BossController _boss;
         private Coroutine _messageRoutine;
         private bool _bound;
+        private bool _critical;
+        private string _lastSpecial = "";
+        private float _specialRefresh;
 
         public void Bind(GameplayContext ctx, LivesModel lives)
         {
@@ -29,7 +32,6 @@ namespace Starfall.UI
             score.MultiplierChanged += OnMultiplierChanged;
             ctx.Player.Health.Changed += OnHealthChanged;
             ctx.Player.Ultimate.Energy.Changed += OnEnergyChanged;
-            ctx.Player.Effects.Changed += OnEffectsChanged;
             lives.Changed += OnLivesChanged;
 
             GameSignals.WeaponLevelChanged += OnWeaponLevelChanged;
@@ -37,6 +39,9 @@ namespace Starfall.UI
             GameSignals.BossSpawned += OnBossSpawned;
             GameSignals.BossDefeated += OnBossDefeated;
             GameSignals.PowerUpCollected += OnPowerUpCollected;
+            GameSignals.PlayerCriticalChanged += OnCriticalChanged;
+            GameSignals.WaveStarted += OnWaveStarted;
+            GameSignals.ComponentCollected += OnComponentCollected;
 
             if (view.ultimateButton != null) view.ultimateButton.onClick.AddListener(() => ctx.Input.PressUltimate());
             if (view.pauseButton != null) view.pauseButton.onClick.AddListener(() => ctx.Input.PressPause());
@@ -51,6 +56,9 @@ namespace Starfall.UI
             view.SetSpecial("");
             view.SetMessage("", false);
             view.SetBoss(false, "", 0f);
+            view.SetCritical(false, 0f);
+            view.SetCharge(0f);
+            view.SetWave(GameSession.Mode == GameModeId.Campaign ? $"STAGE {GameSession.CurrentStageIndex + 1}" : "");
         }
 
         private void OnDestroy()
@@ -67,7 +75,6 @@ namespace Starfall.UI
                 {
                     if (_ctx.Player.Health != null) _ctx.Player.Health.Changed -= OnHealthChanged;
                     if (_ctx.Player.Ultimate != null) _ctx.Player.Ultimate.Energy.Changed -= OnEnergyChanged;
-                    if (_ctx.Player.Effects != null) _ctx.Player.Effects.Changed -= OnEffectsChanged;
                 }
             }
             if (_lives != null) _lives.Changed -= OnLivesChanged;
@@ -76,6 +83,9 @@ namespace Starfall.UI
             GameSignals.BossSpawned -= OnBossSpawned;
             GameSignals.BossDefeated -= OnBossDefeated;
             GameSignals.PowerUpCollected -= OnPowerUpCollected;
+            GameSignals.PlayerCriticalChanged -= OnCriticalChanged;
+            GameSignals.WaveStarted -= OnWaveStarted;
+            GameSignals.ComponentCollected -= OnComponentCollected;
         }
 
         private void Update()
@@ -84,9 +94,23 @@ namespace Starfall.UI
             if (_boss != null && _boss.IsActiveInstance)
                 view.SetBoss(true, _boss.Boss != null ? _boss.Boss.Title : "BOSS", _boss.Health.MaxHull > 0f ? _boss.Health.Hull / _boss.Health.MaxHull : 0f);
 
-            var effects = _ctx.Player.Effects;
-            var kind = effects.Tracker.Longest(out float remaining);
-            view.SetSpecial(kind.HasValue ? $"{Label(kind.Value)} {remaining:0.0}s" : "");
+            if (_critical) view.SetCritical(true, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 8f));
+            view.SetCharge(_ctx.Player.Weapon.ChargeFraction);
+
+            // Special indicator refreshes 10x per second to avoid per-frame string allocation.
+            _specialRefresh -= Time.unscaledDeltaTime;
+            if (_specialRefresh <= 0f)
+            {
+                _specialRefresh = 0.1f;
+                var effects = _ctx.Player.Effects;
+                var kind = effects.Tracker.Longest(out float remaining);
+                string text = kind.HasValue ? $"{Label(kind.Value)} {remaining:0.0}s" : "";
+                if (text != _lastSpecial)
+                {
+                    _lastSpecial = text;
+                    view.SetSpecial(text);
+                }
+            }
         }
 
         private static string Label(PowerUpKind kind)
@@ -96,6 +120,7 @@ namespace Starfall.UI
                 case PowerUpKind.SpeedBoost: return "SPEED";
                 case PowerUpKind.DamageBoost: return "DAMAGE";
                 case PowerUpKind.Invincibility: return "INVINCIBLE";
+                case PowerUpKind.Slowed: return "SLOWED";
                 default: return kind.ToString().ToUpperInvariant();
             }
         }
@@ -104,7 +129,21 @@ namespace Starfall.UI
         private void OnMultiplierChanged(int m) => view.SetMultiplier(m);
         private void OnLivesChanged(int lives) => view.SetLives(lives);
         private void OnEnergyChanged(float current, float max) => view.SetEnergy(max > 0f ? current / max : 0f, current >= max);
-        private void OnEffectsChanged() { }
+
+        private void OnCriticalChanged(bool critical)
+        {
+            _critical = critical;
+            view.SetCritical(critical, 1f);
+        }
+
+        private void OnWaveStarted(int wave)
+        {
+            if (GameSession.Mode == GameModeId.Campaign) view.SetWave($"STAGE {GameSession.CurrentStageIndex + 1}  WAVE {wave}");
+            else if (GameSession.Mode == GameModeId.BossRush) view.SetWave($"BOSS {wave}");
+            else view.SetWave($"WAVE {wave}");
+        }
+
+        private void OnComponentCollected(int amount) => OnStageMessage($"+{amount} COMPONENT", 0.9f);
 
         private void OnHealthChanged()
         {

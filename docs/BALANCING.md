@@ -91,3 +91,110 @@ Casco 2.800, entrada 3 s. ⚠️ tempo de luta alvo: 90–120 s; verificar legib
 3. Frequência de drop (14 %) — pode ser alta com ondas de 8 drones.
 4. Duração dos chefes com laser nível 5 + Vermelho.
 5. Dano de contato do Bomber (25) vs. escudo 50.
+
+---
+
+# Versão 1.0 completa (GDD `document.md`)
+
+Adições da entrega completa do GDD. Todos os valores vivem em `ContentFactory.CreateData`.
+
+## Naves (`ScriptableObjects/Ships`, GDD §15)
+
+| Nave | Casco | Escudo | Regen | Veloc. | Crítico | Dano | Carga Ult. | Poder Ult. | Custo |
+|---|---|---|---|---|---|---|---|---|---|
+| SF-01 Vanguard | 100 | 50 | 0 | 9,0 | 5 % x2,0 | x1,00 | x1,00 | x1,00 | inicial |
+| SF-02 Falcon | 75 | 40 | 0 | 12,0 | 8 % x2,0 | x1,00 | x1,15 | x0,90 | 2 500 |
+| SF-03 Titan | 160 | 90 | 1,5/s | 6,8 | 3 % x1,8 | x1,10 | x0,90 | x1,30 | 4 000 |
+| SF-04 Phantom | 85 | 45 | 0,5/s | 10,0 | 25 % x3,0 | x0,95 | x1,00 | x1,00 | 6 000 |
+| Nova-X | 130 | 80 | 2,0/s | 11,0 | 15 % x2,5 | x1,20 | x1,25 | x1,50 | campanha |
+
+Nova-X não é comprável: desbloqueia ao concluir a fase 5. ⚠️ Verificar se Phantom com 25 % de crítico supera a Nova-X.
+
+## Armas (`ScriptableObjects/Weapons`, GDD §4)
+
+| Arma | Dano | Cadência | DPS nv.1 | Especial | Custo |
+|---|---|---|---|---|---|
+| Laser | 4 | 0,14 s | 28,6 | 5 níveis: 1→3 tiros + leque | inicial |
+| Laser Duplo | 3,5 | 0,13 s | 53,8 | sempre dois canos | 1 500 |
+| Plasma | 11 | 0,32 s | 34,4 | projétil grande e lento | 3 000 |
+| Spread Shot | 3 | 0,20 s | 45,0 | leque de 3→8 tiros | 2 500 |
+| Railgun | 16 | 0,55 s | 29,1 | perfura 3 alvos, 32 u/s | 4 500 |
+| Mísseis | 12 | 0,45 s | 53,3 | teleguiado + área 0,9 u | 5 000 |
+| Canhão de Energia | 10 | 0,60 s | 16,7 | carga 1,2 s → x4 dano, x2,6 tamanho | 7 000 |
+
+⚠️ Laser Duplo e Mísseis parecem fortes demais pelo preço; medir em playtest.
+
+## Árvore de upgrades (`UpgradeCatalog`, GDD §14)
+
+Cinco níveis por nó. Custo do próximo nível = `base * (nível+1)^1,6`; a partir do nível 3 também custa componentes (1, 2 e 3).
+
+| Nó | Base | Bônus por nível |
+|---|---|---|
+| Dano da arma | 400 | +8 % |
+| Cadência | 400 | +7 % |
+| Alcance | 300 | +10 % |
+| Capacidade de escudo | 350 | +12 % |
+| Regeneração de escudo | 450 | +1,0 escudo/s |
+| Integridade do casco | 350 | +10 % |
+| Velocidade | 300 | +5 % |
+| Aceleração | 250 | +8 % |
+| Recarga da Ultimate | 500 | +10 % |
+| Potência da Ultimate | 600 | +15 % |
+
+Maximizar tudo custa ≈ 63 000 créditos e 30 componentes. ⚠️ Ajustar após medir créditos por run.
+
+## Progressão (`ProgressionRules`, GDD §13)
+
+| Regra | Valor |
+|---|---|
+| Créditos | `pontuação/10 + bônus_da_fase/5`, x0,5 quando o jogador perde |
+| XP | 5 por abate, 20 por elite, 200 por chefe, +150 ao concluir |
+| Componentes | só de elites (1), mini-chefes (1) e chefes (3–5) |
+| Nível de piloto | nível n exige `100·(n-1)²` de XP |
+
+## Inimigos adicionais
+
+| Inimigo | Casco | Escudo | Contato | Pontos | Comportamento |
+|---|---|---|---|---|---|
+| Turret | 55 | 0 | 25 | 100 | desce até a linha e fica; anel de 8 projéteis a cada 2,4 s |
+| Supply Drone | 8 | 0 | 0 | 50 | zigue-zague lento, drop garantido |
+| Elites (5 tipos) | x2,4 | x2,0 | x1,3 | 500 | +15 % velocidade, ataque 25 % mais rápido, 1 componente |
+
+Elites sobrevivem à Ultimate (recebem 150 de dano em vez de morrer).
+
+## Mini-chefes (GDD §10) — 2 500 pontos cada
+
+| Mini-chefe | Casco | Fases | Padrões |
+|---|---|---|---|
+| Sentinel-X | 900 | 2 | anel de 10→14 projéteis + tiro mirado |
+| Widow | 1 100 | 2 | teia (deixa lento 3 s) + mirado; fase 2 acrescenta anel |
+| Reaper Wing | 1 000 | 2 | investidas rápidas + rajadas; fase 2 acrescenta jato varrendo |
+| Sentinel-X Mk.II | 1 800 | 2 | variante 30 % mais rápida (fase 4) |
+| Widow Prime | 2 200 | 2 | variante 35 % mais rápida (fase 5) |
+
+## Chefes (GDD §11) — 10 000 pontos cada
+
+| Chefe | Casco | Escudo | Fases | Padrões |
+|---|---|---|---|---|
+| The Destroyer | 2 400 | 0 | 3 | canhões laterais · mísseis · laser frontal (aviso 1,2 s, 45 dano/s) |
+| Leviathan | 2 800 | 0 | 3 | corpo de 8 segmentos, jato contínuo, anel, mirado |
+| Hive Queen | 3 400 | 200 | 3 | invoca drones/kamikazes/interceptores (limite 8), anéis |
+| Destroyer Mk.II | 4 200 | 0 | 3 | variante 15 % mais rápida (fase 4) |
+| Omega Core | 6 000 | 400 | 4 | transforma-se 3 vezes; laser, mísseis, invocação, anéis |
+
+Transformações do Omega Core trocam o sprite e dão 1,4–1,8 s de invulnerabilidade.
+
+## Modos extras (GDD §23)
+
+| Modo | Regras |
+|---|---|
+| Sobrevivência | ondas procedurais infinitas; dificuldade `1 + 0,06·onda`; mini-chefe a cada 8 ondas |
+| Boss Rush | os 4 chefes principais em sequência; desbloqueia ao derrotar qualquer chefe |
+| Desafio Diário | semente = data; inimigos 15 % mais rápidos, 40 % menos drops; um recorde por dia |
+
+## Fases 4 e 5 (GDD §12)
+
+| Fase | Bônus | Introduz | Chefe |
+|---|---|---|---|
+| 4 — Fortaleza Mecânica | 2 500 | turrets, elites em massa | Destroyer Mk.II (mini: Sentinel-X Mk.II) |
+| 5 — Núcleo da Colmeia | 4 000 | ondas densas com todos os tipos | Omega Core (mini: Widow Prime) |

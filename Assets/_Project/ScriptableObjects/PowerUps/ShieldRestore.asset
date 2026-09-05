@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 987c7550097953943a0d00ff4e495c5d, type: 3}
+  m_Name: ShieldRestore
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.PowerUps.PowerUpDefinition
+  Kind: 1
+  DisplayName: Shield Restore
+  Label: SHIELD +50
+  Color: {r: 0.35, g: 1, b: 0.5, a: 1}
+  Duration: 0
+  Magnitude: 50
+  Weight: 1.4
+  PickupPrefab: {fileID: 8228906170934228257, guid: 973a110a3c877ce4cbe6ef9374391580, type: 3}
+  FallSpeed: 1.6
+  SwayAmplitude: 0.4

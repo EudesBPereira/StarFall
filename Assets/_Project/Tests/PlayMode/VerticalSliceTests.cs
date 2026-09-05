@@ -70,7 +70,10 @@ namespace Starfall.Tests.PlayMode
             var menu = UnityEngine.Object.FindFirstObjectByType<MainMenuController>();
             Assert.That(menu, Is.Not.Null);
             Assert.That(menu.playButton.gameObject.activeInHierarchy, Is.True);
-            Assert.That(menu.continueButton.gameObject.activeInHierarchy, Is.False, "no progress yet -> no Continue");
+            Assert.That(menu.missionPanel, Is.Not.Null, "mission select panel");
+            Assert.That(menu.hangarPanel, Is.Not.Null, "hangar panel");
+            Assert.That(menu.upgradesPanel, Is.Not.Null, "upgrades panel");
+            Assert.That(menu.rankingPanel, Is.Not.Null, "ranking panel");
         }
 
         [UnityTest]
@@ -175,7 +178,9 @@ namespace Starfall.Tests.PlayMode
             Assert.That(Time.timeScale, Is.EqualTo(1f));
             yield return null;
             var menu = UnityEngine.Object.FindFirstObjectByType<MainMenuController>();
-            Assert.That(menu.continueButton.gameObject.activeInHierarchy, Is.True, "Continue visible after unlocking stage 2");
+            Assert.That(menu, Is.Not.Null);
+            Assert.That(SaveService.Data.unlockedStage, Is.GreaterThan(0), "stage 2 unlocked after victory");
+            Assert.That(SaveService.Data.credits, Is.GreaterThan(0), "credits rewarded");
         }
 
         [UnityTest]

@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ce7ad3fb0d9234db4e362d0a1df7e9, type: 3}
+  m_Name: Widow
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
+  DisplayName: WIDOW
+  Prefab: {fileID: 7531717429517131280, guid: 20a9fd39e52534540962186a3b48d8b9, type: 3}
+  Sprite: {fileID: 21300000, guid: 83b6714efc5685443a25b36b75658cde, type: 3}
+  Tint: {r: 0.8, g: 0.95, b: 1, a: 1}
+  Scale: 1.5
+  ColliderRadius: 1
+  MaxHull: 1100
+  MaxShield: 0
+  ShieldColor: {r: 0.4, g: 0.9, b: 1, a: 0.6}
+  ContactDamage: 30
+  SelfDestructOnContact: 0
+  ScoreValue: 2500
+  EnergyOnKill: 40
+  ComponentReward: 1
+  DropTable: {fileID: 11400000, guid: 06154b06ada0eed42afa6dc384c08fdd, type: 2}
+  IsElite: 0
+  IsObstacle: 0
+  ImmuneToUltimate: 0
+  Movement: 4
+  MovementSettings:
+    Speed: 1
+    Amplitude: 1.5
+    Frequency: 2
+    HoldHeight: 0.25
+    HoldDuration: 6
+    StrafeSpeed: 2
+    TurnRate: 90
+  Attack: 0
+  AttackSettings:
+    Interval: 2
+    InitialDelay: 0.8
+    Count: 1
+    SpreadAngle: 0
+    BurstCount: 1
+    BurstInterval: 0.12
+    ProjectileSpeed: 6
+    Damage: 10
+    ProjectileScale: 1
+    Lifetime: 5
+    Color: {r: 1, g: 0.4, b: 0.3, a: 1}
+    OnlyWhenOnScreen: 1
+    SplashRadius: 0
+    SlowSeconds: 0
+  ProjectilePrefab: {fileID: 0}
+  MinLifetime: 999
+  ExplosionScale: 1.8000001
+  ExplosionColor: {r: 0.9, g: 0.775, b: 0.625, a: 1}
+  HasThruster: 1
+  ThrusterColor: {r: 0.88, g: 0.77, b: 0.68, a: 1}
+  BossId: 10
+  Title: WIDOW
+  EntranceDuration: 2.5
+  EntranceHeight: 0.18
+  Phases:
+  - Name: WIDOW
+    HealthThreshold: 1
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 3
+      Frequency: 0.7
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 8
+      Settings:
+        Interval: 2.6
+        InitialDelay: 1.2
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 3.5
+        Damage: 14
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.8, g: 0.95, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 3
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 1
+      Settings:
+        Interval: 1.8
+        InitialDelay: 0.6
+        Count: 2
+        SpreadAngle: 14
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 7
+        Damage: 9
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.6, g: 0.9, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  - Name: WIDOW FRENZY
+    HealthThreshold: 0.5
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 3.5
+      Frequency: 1.1
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 8
+      Settings:
+        Interval: 1.8
+        InitialDelay: 0.3
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 4
+        Damage: 14
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.8, g: 0.95, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 3.5
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 0
+      Settings:
+        Interval: 2.4
+        InitialDelay: 1
+        Count: 8
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5
+        Damage: 9
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.6, g: 0.9, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 1
+      Settings:
+        Interval: 1.4
+        InitialDelay: 0.5
+        Count: 3
+        SpreadAngle: 20
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 8
+        Damage: 9
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.6, g: 0.9, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  DeathExplosions: 8
+  DeathSequenceSeconds: 1.6
+  SegmentCount: 0
+  SegmentSprite: {fileID: 0}
+  SegmentSpacing: 0.9
+  SegmentScale: 0.8

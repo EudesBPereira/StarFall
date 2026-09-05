@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Starfall.Enemies
 {
-    /// <summary>Tracks live enemies so the wave director and the Ultimate never search the scene.</summary>
+    /// <summary>Tracks live enemies so the wave director, missiles and the Ultimate never search the scene.</summary>
     public sealed class EnemyRegistry : MonoBehaviour
     {
         private readonly List<Enemy> _active = new List<Enemy>(64);
@@ -56,6 +56,22 @@ namespace Starfall.Enemies
         {
             buffer.Clear();
             buffer.AddRange(_active);
+        }
+
+        /// <summary>Closest live enemy to a point (missiles). Obstacles are skipped when requested.</summary>
+        public Enemy Nearest(Vector2 from, bool skipObstacles)
+        {
+            Enemy best = null;
+            float bestSq = float.MaxValue;
+            for (int i = 0; i < _active.Count; i++)
+            {
+                var e = _active[i];
+                if (e == null || !e.IsActiveInstance || !e.IsOnScreen) continue;
+                if (skipObstacles && e.Definition != null && e.Definition.IsObstacle) continue;
+                float sq = ((Vector2)e.transform.position - from).sqrMagnitude;
+                if (sq < bestSq) { bestSq = sq; best = e; }
+            }
+            return best;
         }
 
         /// <summary>Removes every enemy without rewards (restart, return to menu).</summary>

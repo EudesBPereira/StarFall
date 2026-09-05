@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae6dd8985bfec43af214453ccdf696, type: 3}
+  m_Name: EnergyCannon
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Combat.WeaponDefinition
+  Id: 6
+  DisplayName: Energy Cannon
+  Description: Hold to charge, release to unleash a massive orb.
+  Cost: 7000
+  ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: a04878c0c0fa31046acbe48b98e939d2, type: 3}
+  FireInterval: 0.6
+  Damage: 10
+  ProjectileSpeed: 14
+  ProjectileLifetime: 3
+  ProjectileScale: 1.2
+  ProjectileColor: {r: 0.4, g: 1, b: 0.9, a: 1}
+  DamageType: 6
+  FireSfx: 17
+  Pierce: 1
+  Homing: 0
+  HomingTurnRate: 180
+  ChargeSeconds: 1.2
+  ChargeDamageMultiplier: 4
+  ChargeScaleMultiplier: 2.6
+  SplashRadius: 0
+  Levels:
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.2
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.4
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.6
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.8

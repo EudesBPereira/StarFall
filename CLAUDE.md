@@ -4,9 +4,11 @@ Guia para agentes (Claude Code) trabalhando neste repositório. Leia também `bl
 
 ## O que é
 
-Shoot'em up 2D vertical para **Android/iOS** em **Unity 6000.3.23f1** (Unity 6.3 LTS), orientação portrait. MVP 1.0: 1 nave (SF-01 Vanguard), laser com 5 níveis, 5 inimigos + asteroide, mini-chefe Sentinel-X, chefe The Destroyer, 3 fases, vidas/escudo/casco, pontuação com multiplicador x1–x10, 6 power-ups, Ultimate, menu/briefing/pausa/HUD/vitória/game over, áudio placeholder, save local.
+Shoot'em up 2D vertical para **Android/iOS** em **Unity 6000.3.23f1** (Unity 6.3 LTS), orientação portrait.
 
-Plataforma mobile foi pedida pelo usuário e sobrepõe o "Windows" do blueprint (ver `docs/DECISIONS.md` D-001/D-002).
+Escopo atual (v1.0, GDD completo): 5 naves, 7 armas, 6 tipos de inimigo comum + elites + turret + asteroide, 5 mini-chefes, 4 chefes (Destroyer, Leviathan, Hive Queen, Omega Core), 5 fases, vidas/escudo/casco com crítico, multiplicador x1–x10, 6 power-ups, Ultimate, progressão permanente (créditos/XP/componentes, árvore de 10 upgrades), Hangar, Ranking local, conquistas, modos Sobrevivência/Boss Rush/Desafio Diário, áudio placeholder e save local v2.
+
+**A fonte de verdade é `document.md` (GDD)** desde D-016; o `blueprint.md` foi só o recorte inicial de MVP. Plataforma mobile foi pedida pelo usuário e sobrepõe o "Windows" do GDD (D-001/D-002). Fora do escopo: a "Visão de Futuro" do GDD (coop, ranking global, clãs, Battle Pass, editor de fases, Steam).
 
 ## Estrutura essencial
 
@@ -21,14 +23,14 @@ Assets/_Project/Scripts/
   Bosses/   BossController (fases), BossDefinition, LaserBeam
   Waves/    WaveDefinition, StageDefinition, StageDirector, SpawnPositionResolver
   Scoring/ PowerUps/ UI/ Audio/ Save/ Pooling/ VFX/
-  Editor/   ProjectBootstrap, SceneBuilder, UiBuilder, PlaceholderArt, BuildScript
+  Editor/   ProjectBootstrap (settings+prefabs), ContentFactory (todos os dados), SceneBuilder, UiBuilder, PlaceholderArt, BuildScript
 Assets/_Project/{ScriptableObjects,Prefabs,Scenes,Art/Placeholders}  gerados pelo bootstrap
 Assets/_Project/Tests/{EditMode,PlayMode}
 Tools/LogicTests/   projeto `dotnet test` que compila Scripts/Logic + Tests/EditMode
-docs/               ARCHITECTURE, DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG
+docs/               ARCHITECTURE, DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG, GDD_COMPLIANCE
 ```
 
-Cenas, prefabs, sprites placeholder e ScriptableObjects são **gerados por script** (`Starfall → Run Full Bootstrap`). Não escreva YAML de cena/prefab à mão. Re-executar `GenerateAll` sobrescreve valores de balanceamento dos assets gerados (D-006): mude os valores em `ProjectBootstrap.CreateData` ou não re-execute.
+Cenas, prefabs, sprites placeholder e ScriptableObjects são **gerados por script** (`Starfall → Run Full Bootstrap`). Não escreva YAML de cena/prefab à mão. Re-executar `GenerateAll` sobrescreve valores de balanceamento dos assets gerados (D-006): mude os valores em `ContentFactory.CreateData` ou não re-execute.
 
 ## Comandos
 
@@ -51,7 +53,7 @@ Erros de compilação aparecem no log como `error CS`; `grep -n "error CS" <log>
 
 ## Regras de trabalho (do blueprint)
 
-- Trabalhe em etapas pequenas e verificáveis; vertical slice antes de expandir; nada da visão 2.0 antes do MVP.
+- Trabalhe em etapas pequenas e verificáveis; nada da "Visão de Futuro" (2.0) do GDD.
 - Nunca afirme que rodou o Editor/testes/builds sem ter rodado; separe "implementado", "validado por inspeção" e "pendente no Editor".
 - Sem assets de terceiros: só placeholders procedurais (sprites SDF em `PlaceholderArt`, áudio sintetizado em `PlaceholderAudioSynth`).
 - Sem `FindObjectOfType`/`GameObject.Find` em gameplay; sem alocação em `Update`; pooling para projéteis, inimigos, explosões, itens.
@@ -62,6 +64,7 @@ Erros de compilação aparecem no log como `error CS`; `grep -n "error CS" <log>
 
 ## Convenções de código
 
+- Um MonoBehaviour por arquivo, com o nome do arquivo igual ao da classe (D-022); structs e enums podem compartilhar arquivo.
 - C# com `namespace Starfall.<Módulo>`; campos serializados `[SerializeField] internal` (o assembly Editor e os testes têm `InternalsVisibleTo`).
 - Assinantes de `GameSignals` e dos modelos cancelam a inscrição em `OnDisable`/`OnDestroy`.
 - Pausa usa `Time.timeScale = 0`; gameplay em tempo escalado, UI em tempo real.

@@ -26,10 +26,19 @@ namespace Starfall.Audio
             [Range(0f, 1f)] public float Volume;
         }
 
+        [Serializable]
+        public struct AmbientEntry
+        {
+            public AmbientId Id;
+            public AudioClip Clip;
+            [Range(0f, 1f)] public float Volume;
+        }
+
         [Tooltip("Generate simple synthesized sounds at runtime for empty slots (placeholder audio).")]
         public bool UseSynthesizedPlaceholders = true;
         public SfxEntry[] Sfx = new SfxEntry[0];
         public MusicEntry[] Music = new MusicEntry[0];
+        public AmbientEntry[] Ambient = new AmbientEntry[0];
 
         public bool TryGetSfx(SfxId id, out AudioClip clip, out float volume)
         {
@@ -57,6 +66,21 @@ namespace Starfall.Audio
                 if (Music[i].Id != id || Music[i].Clip == null) continue;
                 clip = Music[i].Clip;
                 volume = Music[i].Volume <= 0f ? 1f : Music[i].Volume;
+                return true;
+            }
+            return false;
+        }
+
+        public bool TryGetAmbient(AmbientId id, out AudioClip clip, out float volume)
+        {
+            clip = null;
+            volume = 1f;
+            if (Ambient == null) return false;
+            for (int i = 0; i < Ambient.Length; i++)
+            {
+                if (Ambient[i].Id != id || Ambient[i].Clip == null) continue;
+                clip = Ambient[i].Clip;
+                volume = Ambient[i].Volume <= 0f ? 1f : Ambient[i].Volume;
                 return true;
             }
             return false;

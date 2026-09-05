@@ -12,6 +12,12 @@ namespace Starfall.Enemies
         Chase = 2,
         HoverStrafe = 3,
         LateralPatrol = 4,
+        /// <summary>Leviathan: wide horizontal sweeps with vertical undulation.</summary>
+        Serpentine = 5,
+        /// <summary>Reaper Wing: quick dashes to random positions with short pauses.</summary>
+        Dash = 6,
+        /// <summary>Turrets: descend to the hold line and stay there.</summary>
+        Hold = 7,
     }
 
     public enum AttackKind
@@ -20,6 +26,10 @@ namespace Starfall.Enemies
         Forward = 1,
         Aimed = 2,
         Ring = 3,
+        /// <summary>Continuous stream of shots sweeping left/right.</summary>
+        Stream = 4,
+        /// <summary>Slow web projectile that slows the player on hit.</summary>
+        Web = 5,
     }
 
     [Serializable]
@@ -30,11 +40,11 @@ namespace Starfall.Enemies
         [Min(0f)] public float Amplitude;
         [Tooltip("Weave/patrol frequency (radians per second).")]
         [Min(0f)] public float Frequency;
-        [Tooltip("HoverStrafe: distance from the top of the screen (fraction of height) where the enemy holds.")]
+        [Tooltip("HoverStrafe/Hold: distance from the top of the screen (fraction of height) where the enemy holds.")]
         [Range(0f, 1f)] public float HoldHeight;
-        [Tooltip("HoverStrafe: seconds holding position before leaving.")]
+        [Tooltip("HoverStrafe: seconds holding position before leaving (Hold: ignored).")]
         [Min(0f)] public float HoldDuration;
-        [Tooltip("HoverStrafe: horizontal speed while holding.")]
+        [Tooltip("HoverStrafe: horizontal speed while holding. Serpentine: vertical amplitude. Dash: pause seconds.")]
         [Min(0f)] public float StrafeSpeed;
         [Tooltip("Chase: turn rate in degrees per second.")]
         [Min(0f)] public float TurnRate;
@@ -57,11 +67,16 @@ namespace Starfall.Enemies
         [Min(0.1f)] public float Lifetime;
         public Color Color;
         public bool OnlyWhenOnScreen;
+        [Tooltip("Splash radius on impact (0 = none). Bomber bombs use this.")]
+        [Min(0f)] public float SplashRadius;
+        [Tooltip("Web: seconds the player stays slowed after a hit.")]
+        [Min(0f)] public float SlowSeconds;
 
         public static AttackParams Default => new AttackParams
         {
             Interval = 2f, InitialDelay = 0.8f, Count = 1, SpreadAngle = 0f, BurstCount = 1, BurstInterval = 0.12f,
             ProjectileSpeed = 6f, Damage = 10f, ProjectileScale = 1f, Lifetime = 5f, Color = new Color(1f, 0.4f, 0.3f), OnlyWhenOnScreen = true,
+            SplashRadius = 0f, SlowSeconds = 0f,
         };
     }
 
@@ -94,6 +109,8 @@ namespace Starfall.Enemies
         [Header("Rewards")]
         [Min(0)] public int ScoreValue = 100;
         [Min(0f)] public float EnergyOnKill = 6f;
+        [Tooltip("Upgrade components granted when destroyed by the player (elites, bosses).")]
+        [Min(0)] public int ComponentReward = 0;
         public DropTable DropTable;
 
         [Header("Classification")]
@@ -118,6 +135,8 @@ namespace Starfall.Enemies
         [Header("Feedback")]
         [Min(0.1f)] public float ExplosionScale = 1f;
         public Color ExplosionColor = new Color(1f, 0.6f, 0.25f);
+        public bool HasThruster = true;
+        public Color ThrusterColor = new Color(1f, 0.5f, 0.2f, 0.9f);
 
         public virtual bool IsBoss => false;
     }

@@ -15,16 +15,22 @@ MonoBehaviour:
   DisplayName: Menu
   Subtitle: 
   Briefing: 
+  Objectives: 
   Events: []
-  CompletionBonus: 1000
+  CompletionBonus: 0
   Music: 1
+  Ambient: 1
   KeepBossMusicAfterDefeat: 0
-  BackgroundTop: {r: 0.05, g: 0.05, b: 0.18, a: 1}
-  BackgroundBottom: {r: 0.01, g: 0, b: 0.05, a: 1}
+  BackgroundTop: {r: 0.03, g: 0.05, b: 0.14, a: 1}
+  BackgroundBottom: {r: 0.05, g: 0.02, b: 0.12, a: 1}
   Fog: {r: 0.5, g: 0.2, b: 0.8, a: 0}
-  StarDensity: 1
+  StarDensity: 0.8
   StarTint: {r: 1, g: 1, b: 1, a: 1}
   DebrisSprites: []
   DebrisInterval: 0
+  DebrisTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropSprite: {fileID: 21300000, guid: da4a7b5c5cda01f4db69766c569b5897, type: 3}
+  BackdropTint: {r: 0.15, g: 0.35, b: 0.6, a: 0.35}
+  BackdropScale: 14
   AsteroidDefinition: {fileID: 0}
   AsteroidInterval: 1.2

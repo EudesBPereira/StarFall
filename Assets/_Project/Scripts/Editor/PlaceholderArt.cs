@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine;
 namespace Starfall.EditorTools
 {
     /// <summary>
-    /// Generates clearly-temporary white sprites (tinted at runtime) so the MVP has no external art dependency.
+    /// Generates clearly-temporary white sprites (tinted at runtime) so the game has no external art dependency.
     /// All shapes are simple polygons/circles rendered with anti-aliased signed distance fields.
     /// Output: Assets/_Project/Art/Placeholders/*.png
     /// </summary>
@@ -17,11 +16,12 @@ namespace Starfall.EditorTools
 
         public sealed class Set
         {
-            public Sprite Pixel, Dot, Circle, Ring, Gradient;
-            public Sprite Ship, Flame, Projectile, Bullet;
-            public Sprite Drone, Interceptor, Bomber, Kamikaze, ShieldDrone, Asteroid;
-            public Sprite SentinelX, Destroyer;
-            public Sprite Satellite, Panel;
+            public Sprite Pixel, Dot, Circle, Ring, Gradient, Panel, Spark;
+            public Sprite Ship, Falcon, Titan, Phantom, NovaX, Flame;
+            public Sprite Projectile, Bullet, Plasma, Missile, Rail, Web;
+            public Sprite Drone, Interceptor, Bomber, Kamikaze, ShieldDrone, Asteroid, Turret;
+            public Sprite SentinelX, Widow, ReaperWing, Destroyer, LeviathanHead, LeviathanSegment, HiveQueen, OmegaCore, OmegaCoreForm2, OmegaCoreForm3;
+            public Sprite Satellite, Planet, FortressWall, HiveWall, Logo;
         }
 
         public static Set GenerateAll()
@@ -31,18 +31,45 @@ namespace Starfall.EditorTools
 
             set.Pixel = Save("pixel", 8, (x, y) => -1f, ppu: 100, fullRect: true);
             set.Dot = Save("dot", 64, (x, y) => SoftCircle(x, y, 0.95f), soft: true);
+            set.Spark = Save("spark", 32, (x, y) => Capsule(x, y, 0.18f, 0.7f), soft: true);
             set.Circle = Save("circle", 128, (x, y) => Circle(x, y, 0.95f));
             set.Ring = Save("ring", 128, (x, y) => Ring(x, y, 0.92f, 0.12f));
             set.Gradient = SaveGradient("gradient", 4, 256);
+            set.Panel = Save("panel", 64, (x, y) => RoundedBox(x, y, 0.95f, 0.95f, 0.25f), ppu: 64, fullRect: true);
 
+            // ---- Player ships (GDD §15) ----
             set.Ship = Save("ship", 96, (x, y) => Union(
                 Polygon(x, y, P(0f, 1f), P(0.28f, -0.2f), P(0.16f, -0.45f), P(-0.16f, -0.45f), P(-0.28f, -0.2f)),
                 Polygon(x, y, P(0.2f, 0.0f), P(0.95f, -0.55f), P(0.9f, -0.85f), P(0.15f, -0.6f)),
                 Polygon(x, y, P(-0.2f, 0.0f), P(-0.95f, -0.55f), P(-0.9f, -0.85f), P(-0.15f, -0.6f))));
+            set.Falcon = Save("falcon", 96, (x, y) => Union(
+                Polygon(x, y, P(0f, 1f), P(0.18f, -0.5f), P(-0.18f, -0.5f)),
+                Polygon(x, y, P(0.1f, -0.1f), P(0.7f, -0.9f), P(0.45f, -0.95f), P(0.05f, -0.55f)),
+                Polygon(x, y, P(-0.1f, -0.1f), P(-0.7f, -0.9f), P(-0.45f, -0.95f), P(-0.05f, -0.55f))));
+            set.Titan = Save("titan", 96, (x, y) => Union(
+                RoundedBox(x, y + 0.1f, 0.42f, 0.7f, 0.2f),
+                Polygon(x, y, P(0f, 1f), P(0.35f, 0.5f), P(-0.35f, 0.5f)),
+                Box(x + 0.72f, y - 0.3f, 0.25f, 0.55f), Box(x - 0.72f, y - 0.3f, 0.25f, 0.55f)));
+            set.Phantom = Save("phantom", 96, (x, y) => Union(
+                Polygon(x, y, P(0f, 1f), P(0.22f, 0.2f), P(0.1f, -0.7f), P(-0.1f, -0.7f), P(-0.22f, 0.2f)),
+                Polygon(x, y, P(0.15f, 0.3f), P(0.95f, -0.2f), P(0.6f, -0.75f), P(0.12f, -0.3f)),
+                Polygon(x, y, P(-0.15f, 0.3f), P(-0.95f, -0.2f), P(-0.6f, -0.75f), P(-0.12f, -0.3f))));
+            set.NovaX = Save("novax", 112, (x, y) => Union(
+                Star(x, y, 4, 1f, 0.32f),
+                Polygon(x, y, P(0f, 1f), P(0.2f, -0.1f), P(-0.2f, -0.1f)),
+                Circle(x, y - 0.1f, 0.22f)));
             set.Flame = Save("flame", 32, (x, y) => Union(Polygon(x, y, P(-0.5f, 1f), P(0.5f, 1f), P(0f, -1f)), Circle(x, y - 0.6f, 0.45f)), soft: true);
+
+            // ---- Projectiles ----
             set.Projectile = Save("projectile", 32, (x, y) => Capsule(x, y, 0.28f, 0.9f), soft: true);
             set.Bullet = Save("bullet", 32, (x, y) => SoftCircle(x, y, 0.9f), soft: true);
+            set.Plasma = Save("plasma", 48, (x, y) => SoftCircle(x, y, 0.85f), soft: true);
+            set.Missile = Save("missile", 40, (x, y) => Union(Capsule(x, y, 0.22f, 0.75f), Polygon(x, y, P(-0.5f, -0.6f), P(0.5f, -0.6f), P(0f, -0.95f))));
+            set.Rail = Save("rail", 32, (x, y) => Capsule(x, y, 0.12f, 0.98f), soft: true);
+            set.Web = Save("web", 96, (x, y) => Union(Ring(x, y, 0.85f, 0.05f), Ring(x, y, 0.5f, 0.05f), Ring(x, y, 0.2f, 0.06f),
+                Capsule(x, y, 0.04f, 0.9f), Capsule(y, x, 0.04f, 0.9f), Capsule((x + y) * 0.7071f, (y - x) * 0.7071f, 0.04f, 0.9f), Capsule((x - y) * 0.7071f, (x + y) * 0.7071f, 0.04f, 0.9f)));
 
+            // ---- Enemies ----
             set.Drone = Save("drone", 80, (x, y) => Union(RegularPolygon(x, y, 6, 0.9f), Circle(x, y, 0.35f) * -1f + 0.15f));
             set.Interceptor = Save("interceptor", 80, (x, y) => Union(
                 Polygon(x, y, P(0f, -1f), P(0.35f, 0.4f), P(0f, 0.8f), P(-0.35f, 0.4f)),
@@ -55,7 +82,9 @@ namespace Starfall.EditorTools
             set.ShieldDrone = Save("shielddrone", 80, (x, y) => Union(RoundedBox(x, y, 0.62f, 0.62f, 0.15f), Polygon(x, y, P(0f, 0.95f), P(0.25f, 0.5f), P(-0.25f, 0.5f))));
             set.Asteroid = Save("asteroid", 96, (x, y) => Polygon(x, y,
                 P(-0.9f, 0.1f), P(-0.6f, 0.7f), P(-0.1f, 0.9f), P(0.5f, 0.75f), P(0.95f, 0.2f), P(0.8f, -0.5f), P(0.3f, -0.9f), P(-0.4f, -0.8f), P(-0.85f, -0.4f)));
+            set.Turret = Save("turret", 96, (x, y) => Union(RegularPolygon(x, y, 8, 0.85f), Capsule(x, y - 0.55f, 0.16f, 0.45f), Capsule(x + 0.45f, y - 0.5f, 0.1f, 0.35f), Capsule(x - 0.45f, y - 0.5f, 0.1f, 0.35f)));
 
+            // ---- Mini-bosses ----
             set.SentinelX = Save("sentinelx", 256, (x, y) => Union(
                 RegularPolygon(x, y, 8, 0.75f),
                 Polygon(x, y, P(-1f, -0.15f), P(-0.7f, 0f), P(-1f, 0.15f)),
@@ -63,18 +92,50 @@ namespace Starfall.EditorTools
                 Polygon(x, y, P(-0.15f, 1f), P(0f, 0.7f), P(0.15f, 1f)),
                 Polygon(x, y, P(-0.15f, -1f), P(0f, -0.7f), P(0.15f, -1f)),
                 Ring(x, y, 0.55f, 0.06f) * -1f + 0.1f));
+            set.Widow = Save("widow", 256, (x, y) => Union(
+                Circle(x, y + 0.1f, 0.42f), Circle(x, y - 0.35f, 0.28f),
+                Leg(x, y, 0.3f, 0.2f, 0.95f, 0.55f), Leg(x, y, -0.3f, 0.2f, -0.95f, 0.55f),
+                Leg(x, y, 0.35f, 0f, 0.98f, -0.05f), Leg(x, y, -0.35f, 0f, -0.98f, -0.05f),
+                Leg(x, y, 0.3f, -0.2f, 0.85f, -0.6f), Leg(x, y, -0.3f, -0.2f, -0.85f, -0.6f),
+                Leg(x, y, 0.2f, -0.35f, 0.55f, -0.95f), Leg(x, y, -0.2f, -0.35f, -0.55f, -0.95f)));
+            set.ReaperWing = Save("reaperwing", 224, (x, y) => Union(
+                Polygon(x, y, P(0f, -1f), P(0.22f, 0.2f), P(0f, 0.7f), P(-0.22f, 0.2f)),
+                Polygon(x, y, P(0.15f, 0f), P(1f, 0.55f), P(0.95f, 0.85f), P(0.35f, 0.75f), P(0.1f, 0.45f)),
+                Polygon(x, y, P(-0.15f, 0f), P(-1f, 0.55f), P(-0.95f, 0.85f), P(-0.35f, 0.75f), P(-0.1f, 0.45f))));
+
+            // ---- Bosses ----
             set.Destroyer = Save("destroyer", 384, (x, y) => Union(
                 Polygon(x, y, P(-0.35f, 0.95f), P(0.35f, 0.95f), P(0.5f, 0.2f), P(0.25f, -0.95f), P(-0.25f, -0.95f), P(-0.5f, 0.2f)),
                 Polygon(x, y, P(-0.45f, 0.5f), P(-1f, 0.35f), P(-1f, -0.2f), P(-0.45f, -0.4f)),
                 Polygon(x, y, P(0.45f, 0.5f), P(1f, 0.35f), P(1f, -0.2f), P(0.45f, -0.4f)),
                 Capsule(x + 0.78f, y - 0.35f, 0.09f, 0.35f),
                 Capsule(x - 0.78f, y - 0.35f, 0.09f, 0.35f)));
+            set.LeviathanHead = Save("leviathan_head", 192, (x, y) => Union(
+                Polygon(x, y, P(0f, -1f), P(0.6f, -0.2f), P(0.7f, 0.6f), P(0.3f, 0.95f), P(-0.3f, 0.95f), P(-0.7f, 0.6f), P(-0.6f, -0.2f)),
+                Polygon(x, y, P(0.55f, 0.5f), P(0.95f, 0.95f), P(0.75f, 0.2f)), Polygon(x, y, P(-0.55f, 0.5f), P(-0.95f, 0.95f), P(-0.75f, 0.2f))));
+            set.LeviathanSegment = Save("leviathan_segment", 96, (x, y) => Union(RoundedBox(x, y, 0.75f, 0.6f, 0.3f), Polygon(x, y, P(-0.9f, 0.7f), P(-0.5f, 0.2f), P(-0.85f, -0.2f)), Polygon(x, y, P(0.9f, 0.7f), P(0.5f, 0.2f), P(0.85f, -0.2f))));
+            set.HiveQueen = Save("hivequeen", 384, (x, y) => Union(
+                Circle(x, y + 0.35f, 0.5f), Capsule(x, y - 0.35f, 0.4f, 0.55f),
+                RegularPolygon(x + 0.7f, y + 0.5f, 6, 0.28f), RegularPolygon(x - 0.7f, y + 0.5f, 6, 0.28f),
+                RegularPolygon(x + 0.75f, y - 0.2f, 6, 0.25f), RegularPolygon(x - 0.75f, y - 0.2f, 6, 0.25f),
+                Polygon(x, y, P(0.15f, 0.8f), P(0.45f, 1f), P(0.3f, 0.6f)), Polygon(x, y, P(-0.15f, 0.8f), P(-0.45f, 1f), P(-0.3f, 0.6f))));
+            set.OmegaCore = Save("omegacore", 384, (x, y) => Union(RegularPolygon(x, y, 8, 0.9f), Ring(x, y, 0.6f, 0.05f) * -1f + 0.08f, Circle(x, y, 0.3f) * -1f + 0.12f));
+            set.OmegaCoreForm2 = Save("omegacore2", 384, (x, y) => Union(Star(x, y, 8, 1f, 0.55f), Circle(x, y, 0.35f) * -1f + 0.1f));
+            set.OmegaCoreForm3 = Save("omegacore3", 384, (x, y) => Union(Star(x, y, 6, 1f, 0.3f), Ring(x, y, 0.5f, 0.1f), Circle(x, y, 0.2f)));
 
+            // ---- Environment ----
             set.Satellite = Save("satellite", 96, (x, y) => Union(
                 RoundedBox(x, y, 0.25f, 0.35f, 0.05f),
                 Box(x + 0.62f, y, 0.35f, 0.18f), Box(x - 0.62f, y, 0.35f, 0.18f),
                 Capsule(x, y + 0.55f, 0.04f, 0.25f)));
-            set.Panel = Save("panel", 64, (x, y) => RoundedBox(x, y, 0.95f, 0.95f, 0.25f), ppu: 64, fullRect: true);
+            set.Planet = Save("planet", 256, (x, y) => SoftCircle(x, y, 0.95f), soft: true);
+            set.FortressWall = Save("fortresswall", 256, (x, y) => Union(
+                Box(x, y, 0.95f, 0.25f), Box(x - 0.6f, y + 0.45f, 0.15f, 0.25f), Box(x, y + 0.5f, 0.15f, 0.3f), Box(x + 0.6f, y + 0.45f, 0.15f, 0.25f),
+                Box(x - 0.6f, y - 0.5f, 0.15f, 0.3f), Box(x + 0.6f, y - 0.5f, 0.15f, 0.3f), Capsule(x, y - 0.6f, 0.08f, 0.3f)), fullRect: true);
+            set.HiveWall = Save("hivewall", 256, (x, y) => Union(
+                RegularPolygon(x, y, 6, 0.32f), RegularPolygon(x + 0.58f, y + 0.33f, 6, 0.32f), RegularPolygon(x - 0.58f, y + 0.33f, 6, 0.32f),
+                RegularPolygon(x + 0.58f, y - 0.33f, 6, 0.32f), RegularPolygon(x - 0.58f, y - 0.33f, 6, 0.32f), RegularPolygon(x, y + 0.66f, 6, 0.32f), RegularPolygon(x, y - 0.66f, 6, 0.32f)), fullRect: true);
+            set.Logo = Save("logo", 256, (x, y) => Union(Star(x, y, 5, 0.9f, 0.4f), Ring(x, y, 0.95f, 0.04f)));
 
             AssetDatabase.SaveAssets();
             return set;
@@ -180,6 +241,15 @@ namespace Starfall.EditorTools
         {
             float cy = Mathf.Clamp(y, -halfLength, halfLength);
             return Mathf.Sqrt(x * x + (y - cy) * (y - cy)) - r;
+        }
+
+        /// <summary>Line segment with thickness (spider legs).</summary>
+        private static float Leg(float x, float y, float ax, float ay, float bx, float by, float r = 0.06f)
+        {
+            float px = x - ax, py = y - ay, ex = bx - ax, ey = by - ay;
+            float h = Mathf.Clamp01((px * ex + py * ey) / (ex * ex + ey * ey));
+            float dx = px - ex * h, dy = py - ey * h;
+            return Mathf.Sqrt(dx * dx + dy * dy) - r;
         }
 
         private static float RegularPolygon(float x, float y, int sides, float r)

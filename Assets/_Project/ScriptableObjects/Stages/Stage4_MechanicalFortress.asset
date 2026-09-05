@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage4_MechanicalFortress
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Mechanical Fortress
+  Subtitle: Swarm forward base - turret grid
+  Briefing: 'A fortress the size of a moon, bristling with cannons.
+
+    Turrets
+    hold their position and fire in every direction: take them out fast.
+
+    The
+    Swarm rebuilt The Destroyer. It is waiting at the core.'
+  Objectives: '- Silence the turret grid
+
+    - Defeat Sentinel-X Mk.II
+
+    - Destroy
+    the Destroyer Mk.II'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 4: MECHANICAL FORTRESS'
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: db4933614ebd4644b9ba39a071feb439, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: c43a9169534bafa4dbfdad5e094b5348, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: HEAVY CANNONS ONLINE
+    Seconds: 1.5
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 1daf82fec88a5af47a20175661739ff9, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 5e7304835360be04aa4f8cb9f970af21, type: 2}
+    Message: 'WARNING: SENTINEL-X MK.II'
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 4753a6df7633c6a4d841df8509b72865, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: e3d8839ffb1b6364abdea7adc1ffcf40, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: a3806039f69685f4a8d315fac6559878, type: 2}
+    Message: 'WARNING: DESTROYER MK.II'
+    Seconds: 2
+    Flag: 1
+  CompletionBonus: 2500
+  Music: 6
+  Ambient: 4
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.12, g: 0.08, b: 0.05, a: 1}
+  BackgroundBottom: {r: 0.05, g: 0.04, b: 0.05, a: 1}
+  Fog: {r: 1, g: 0.5, b: 0.2, a: 0.06}
+  StarDensity: 0.3
+  StarTint: {r: 1, g: 0.8, b: 0.6, a: 1}
+  DebrisSprites:
+  - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
+  - {fileID: 21300000, guid: 04b85a6d11e9f494f9ea3a0758594109, type: 3}
+  DebrisInterval: 4
+  DebrisTint: {r: 0.5, g: 0.45, b: 0.4, a: 0.5}
+  BackdropSprite: {fileID: 21300000, guid: 28460a9dccb5477448d6aff8ffe73c55, type: 3}
+  BackdropTint: {r: 0.35, g: 0.3, b: 0.32, a: 0.6}
+  BackdropScale: 12
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2

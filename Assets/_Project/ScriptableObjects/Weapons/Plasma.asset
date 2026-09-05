@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae6dd8985bfec43af214453ccdf696, type: 3}
+  m_Name: Plasma
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Combat.WeaponDefinition
+  Id: 2
+  DisplayName: Plasma
+  Description: Slow, heavy bolts with high damage per hit.
+  Cost: 3000
+  ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: a04878c0c0fa31046acbe48b98e939d2, type: 3}
+  FireInterval: 0.32
+  Damage: 11
+  ProjectileSpeed: 12
+  ProjectileLifetime: 3
+  ProjectileScale: 1.6
+  ProjectileColor: {r: 0.6, g: 0.4, b: 1, a: 1}
+  DamageType: 4
+  FireSfx: 14
+  Pierce: 0
+  Homing: 0
+  HomingTurnRate: 180
+  ChargeSeconds: 0
+  ChargeDamageMultiplier: 4
+  ChargeScaleMultiplier: 2.5
+  SplashRadius: 0
+  Levels:
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.25
+  - Shots:
+    - OffsetX: -0.24
+      Angle: 0
+    - OffsetX: 0.24
+      Angle: 0
+    DamageMultiplier: 1.25
+  - Shots:
+    - OffsetX: -0.24
+      Angle: 0
+    - OffsetX: 0.24
+      Angle: 0
+    DamageMultiplier: 1.5
+  - Shots:
+    - OffsetX: 0
+      Angle: 0
+    - OffsetX: -0.36
+      Angle: -5
+    - OffsetX: 0.36
+      Angle: 5
+    DamageMultiplier: 1.5

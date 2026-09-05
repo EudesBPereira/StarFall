@@ -9,12 +9,13 @@ using UnityEngine;
 namespace Starfall.Bosses
 {
     /// <summary>
-    /// Boss = enemy with an entrance, health-driven phases and several concurrent attack patterns.
-    /// Sentinel-X and The Destroyer are two <see cref="BossDefinition"/> assets driving this one class.
+    /// Boss = enemy with an entrance, health-driven phases (with optional transformations), several concurrent
+    /// attack patterns and an optional segmented body. Every boss and mini-boss is a <see cref="BossDefinition"/>.
     /// </summary>
     public sealed class BossController : Enemy
     {
         [SerializeField] internal LaserBeam frontLaser;
+        [SerializeField] internal Transform segmentRoot;
 
         private BossDefinition _boss;
         private float _entranceTimer;
@@ -22,24 +23,33 @@ namespace Starfall.Bosses
         private float _entranceStartY;
         private float _entranceTargetY;
         private int _phaseIndex = -1;
+        private float _transformTimer;
+        private Color _phaseTint = Color.white;
         private IMovementStrategy _phaseMovement;
         private MovementKind _phaseMovementKind;
         private readonly List<AttackRunner> _runners = new List<AttackRunner>(4);
+        private readonly List<SpriteRenderer> _segments = new List<SpriteRenderer>(12);
+        private readonly List<Vector3> _trail = new List<Vector3>(256);
 
         public BossDefinition Boss => _boss;
         public bool IsEntering => _entering;
         public int PhaseIndex => _phaseIndex;
+
         /// <summary>Movement parameters come from the active phase instead of the base definition.</summary>
         public override MovementParams Movement => _phaseIndex >= 0 && _boss != null && _phaseIndex < _boss.Phases.Length
             ? _boss.Phases[_phaseIndex].MovementSettings
             : base.Movement;
 
-        public override void Initialize(EnemyDefinition definition, GameplayContext ctx, EnemySpawner spawner)
+        protected override Color CurrentTint => _phaseTint;
+
+        public override void Initialize(EnemyDefinition definition, GameplayContext ctx, EnemySpawner spawner, float statMultiplier = 1f, float speedMultiplier = 1f)
         {
-            base.Initialize(definition, ctx, spawner);
+            base.Initialize(definition, ctx, spawner, statMultiplier, speedMultiplier);
             _boss = definition as BossDefinition;
             _phaseIndex = -1;
+            _phaseTint = definition.Tint;
             _runners.Clear();
+            _trail.Clear();
 
             var area = Area;
             _entranceStartY = area != null ? area.Top + 3f : transform.position.y;
@@ -51,6 +61,7 @@ namespace Starfall.Bosses
 
             _entering = true;
             _entranceTimer = 0f;
+            _transformTimer = 0f;
             Health.Invulnerable = true;
 
             if (frontLaser != null)
@@ -58,6 +69,7 @@ namespace Starfall.Bosses
                 float length = area != null ? area.Height + 4f : 24f;
                 frontLaser.Configure(1f, length, new Color(1f, 0.35f, 0.55f, 0.95f));
             }
+            BuildSegments();
 
             GameSignals.RaiseBossSpawned(this);
             if (ctx != null && ctx.CameraShake != null) ctx.CameraShake.Shake(0.3f, 1.2f);
@@ -76,6 +88,7 @@ namespace Starfall.Bosses
                 var pos = transform.position;
                 pos.y = Mathf.Lerp(_entranceStartY, _entranceTargetY, k);
                 transform.position = pos;
+                UpdateSegments(dt);
                 if (k >= 1f)
                 {
                     _entering = false;
@@ -88,8 +101,19 @@ namespace Starfall.Bosses
             int desired = ResolvePhaseIndex();
             if (desired != _phaseIndex) EnterPhase(desired);
 
+            if (_transformTimer > 0f)
+            {
+                _transformTimer -= dt;
+                if (_transformTimer <= 0f) Health.Invulnerable = false;
+                float pulse = 1f + 0.08f * Mathf.Sin(Time.time * 30f);
+                if (body != null) body.transform.localScale = Vector3.one * pulse;
+                UpdateSegments(dt);
+                return;
+            }
+
             _phaseMovement?.Tick(this, dt);
             for (int i = 0; i < _runners.Count; i++) _runners[i].Tick(this, dt);
+            UpdateSegments(dt);
         }
 
         private int ResolvePhaseIndex()
@@ -104,6 +128,7 @@ namespace Starfall.Bosses
 
         private void EnterPhase(int index)
         {
+            bool first = _phaseIndex < 0;
             _phaseIndex = index;
             _runners.Clear();
             if (frontLaser != null) frontLaser.Hide();
@@ -121,11 +146,32 @@ namespace Starfall.Bosses
                 for (int i = 0; i < phase.Attacks.Length; i++)
                     _runners.Add(new AttackRunner(phase.Attacks[i], i));
 
-            if (index > 0)
+            // Transformation: new look + short invulnerable "morph" window.
+            bool transforms = phase.Sprite != null || phase.Scale > 0f || phase.Tint.a > 0f;
+            if (transforms)
+            {
+                _phaseTint = phase.Tint.a > 0f ? phase.Tint : _boss.Tint;
+                ApplyVisual(phase.Sprite, _phaseTint, phase.Scale);
+                if (body != null) body.transform.localScale = Vector3.one;
+            }
+
+            if (!first)
             {
                 Flash(Color.white);
-                GameSignals.RaiseStageMessage(string.IsNullOrEmpty(phase.Name) ? $"PHASE {index + 1}" : phase.Name, 1.2f);
-                if (Context != null && Context.CameraShake != null) Context.CameraShake.Shake(0.25f, 0.4f);
+                Projectile.ClearEnemyProjectiles();
+                GameSignals.RaiseStageMessage(string.IsNullOrEmpty(phase.Name) ? $"PHASE {index + 1}" : phase.Name, 1.4f);
+                GameSignals.RaiseBossPhaseChanged(this, index);
+                AudioManager.PlaySfx(SfxId.BossWarning, 0.7f);
+                if (Context != null)
+                {
+                    if (Context.CameraShake != null) Context.CameraShake.Shake(0.3f, 0.5f);
+                    if (Context.Vfx != null) Context.Vfx.SpawnShockwave(transform.position, 6f, _phaseTint);
+                }
+                if (transforms && phase.TransformSeconds > 0f)
+                {
+                    _transformTimer = phase.TransformSeconds;
+                    Health.Invulnerable = true;
+                }
             }
         }
 
@@ -140,8 +186,88 @@ namespace Starfall.Bosses
                         transform.localScale.x * 0.8f, _boss != null ? _boss.DeathSequenceSeconds : 1.5f, Definition.ExplosionColor);
                 if (Context.CameraShake != null) Context.CameraShake.Shake(0.6f, 1.2f);
             }
+            for (int i = 0; i < _segments.Count; i++)
+            {
+                if (_segments[i] == null) continue;
+                if (Context != null && Context.Vfx != null) Context.Vfx.SpawnExplosion(_segments[i].transform.position, 1f, Definition.ExplosionColor);
+                _segments[i].enabled = false;
+            }
             GameSignals.RaiseBossDefeated(this);
             base.HandleDeath(source);
+        }
+
+        // ---- Segmented body (Leviathan) ----------------------------------------------------------------
+
+        private void BuildSegments()
+        {
+            for (int i = 0; i < _segments.Count; i++) if (_segments[i] != null) _segments[i].enabled = false;
+            if (_boss == null || _boss.SegmentCount <= 0) return;
+            if (segmentRoot == null)
+            {
+                var root = new GameObject("Segments");
+                root.transform.SetParent(transform.parent, false);
+                segmentRoot = root.transform;
+            }
+            while (_segments.Count < _boss.SegmentCount)
+            {
+                var go = new GameObject("Segment" + _segments.Count);
+                go.transform.SetParent(segmentRoot, false);
+                var sr = go.AddComponent<SpriteRenderer>();
+                _segments.Add(sr);
+            }
+            for (int i = 0; i < _boss.SegmentCount; i++)
+            {
+                var sr = _segments[i];
+                sr.enabled = true;
+                sr.sprite = _boss.SegmentSprite != null ? _boss.SegmentSprite : _boss.Sprite;
+                float t = (float)i / Mathf.Max(1, _boss.SegmentCount - 1);
+                sr.color = Color.Lerp(_boss.Tint, _boss.Tint * 0.55f, t);
+                sr.sortingOrder = SortingOrders.Enemy - 1 - i;
+                sr.transform.localScale = Vector3.one * (_boss.SegmentScale * _boss.Scale * Mathf.Lerp(1f, 0.6f, t));
+                sr.transform.position = transform.position;
+            }
+        }
+
+        private void UpdateSegments(float dt)
+        {
+            if (_boss == null || _boss.SegmentCount <= 0) return;
+            var head = transform.position;
+            if (_trail.Count == 0 || (_trail[_trail.Count - 1] - head).sqrMagnitude > 0.0025f)
+            {
+                _trail.Add(head);
+                if (_trail.Count > 240) _trail.RemoveAt(0);
+            }
+            float spacing = _boss.SegmentSpacing * _boss.Scale;
+            for (int s = 0; s < _boss.SegmentCount && s < _segments.Count; s++)
+            {
+                float wanted = spacing * (s + 1);
+                Vector3 p = PointAlongTrail(wanted, out Vector3 dir);
+                var t = _segments[s].transform;
+                t.position = p;
+                if (dir.sqrMagnitude > 0.0001f) t.rotation = Quaternion.FromToRotation(Vector3.down, -dir);
+            }
+        }
+
+        private Vector3 PointAlongTrail(float distance, out Vector3 direction)
+        {
+            direction = Vector3.down;
+            if (_trail.Count == 0) return transform.position;
+            float acc = 0f;
+            for (int i = _trail.Count - 1; i > 0; i--)
+            {
+                Vector3 a = _trail[i];
+                Vector3 b = _trail[i - 1];
+                float seg = Vector3.Distance(a, b);
+                if (acc + seg >= distance)
+                {
+                    float k = seg > 0f ? (distance - acc) / seg : 0f;
+                    direction = (a - b).normalized;
+                    return Vector3.Lerp(a, b, k);
+                }
+                acc += seg;
+            }
+            Vector3 last = _trail[0];
+            return last + Vector3.up * (distance - acc);
         }
 
         // ---- Attack runners ----------------------------------------------------------------------------
@@ -157,6 +283,7 @@ namespace Starfall.Bosses
             private int _side;
             private float _laserTimer;
             private int _laserState; // 0 idle, 1 telegraph, 2 firing
+            private float _sweep;
 
             public AttackRunner(BossAttack attack, int index)
             {
@@ -209,6 +336,24 @@ namespace Starfall.Bosses
                     case BossAttackKind.Forward:
                         boss.FireSpread(center, Vector2.down, p, p.Count, p.SpreadAngle);
                         break;
+                    case BossAttackKind.Stream:
+                    {
+                        _sweep += 0.7f;
+                        float angle = Mathf.Sin(_sweep) * Mathf.Max(10f, p.SpreadAngle);
+                        boss.FireSpread(center, ProjectileLauncher.Rotate(Vector2.down, angle), p, 1, 0f);
+                        break;
+                    }
+                    case BossAttackKind.Web:
+                        boss.FireWeb(center, boss.DirectionToTarget(center), p);
+                        break;
+                    case BossAttackKind.Summon:
+                    {
+                        if (_attack.SummonEnemy == null || boss.Context == null) break;
+                        int alive = boss.Context.Enemies.BlockingCount - 1;
+                        if (_attack.SummonCap > 0 && alive >= _attack.SummonCap) break;
+                        boss.Summon(_attack.SummonEnemy, Mathf.Max(1, p.Count));
+                        break;
+                    }
                     case BossAttackKind.SideCannons:
                     {
                         _side = 1 - _side;
@@ -229,7 +374,7 @@ namespace Starfall.Bosses
                         Vector2 right = (Vector2)boss.transform.position + new Vector2(offset, 0f);
                         boss.FireProjectile(left, new Vector2(-0.6f, -1f), spec);
                         boss.FireProjectile(right, new Vector2(0.6f, -1f), spec);
-                        AudioManager.PlaySfx(SfxId.EnemyShot, 0.7f);
+                        AudioManager.PlaySfx(SfxId.Missile, 0.7f);
                         break;
                     }
                 }

@@ -13,57 +13,39 @@ MonoBehaviour:
   m_Name: Stage1_OrbitalSector
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
   DisplayName: Orbital Sector
-  Subtitle: Earth orbit, 2237
-  Briefing: 'The Swarm vanguard has breached the orbital defense grid.
+  Subtitle: Low Earth orbit - debris field
+  Briefing: 'The Swarm vanguard is tearing through our satellite grid.
 
     Clear
-    the debris field and stop the drones before they reach the surface.
+    the orbital sector and stop their scout carrier, The Destroyer.
 
 
-    Drag
-    to move. The Vanguard fires automatically.
+    Drag to
+    move. Your laser fires automatically.
 
-    Tap the energy bar (or press
-    E) to unleash the Ultimate when it is full.'
+    Blue crates upgrade your weapon; green
+    ones restore shields.'
+  Objectives: '- Destroy every Swarm wave
+
+    - Defeat Sentinel-X
+
+    - Destroy
+    The Destroyer'
   Events:
   - Type: 2
     Wave: {fileID: 0}
     Boss: {fileID: 0}
-    Message: ORBITAL SECTOR
-    Seconds: 2.2
-    Flag: 1
-  - Type: 1
-    Wave: {fileID: 0}
-    Boss: {fileID: 0}
-    Message: 
-    Seconds: 1.2
-    Flag: 1
-  - Type: 2
-    Wave: {fileID: 0}
-    Boss: {fileID: 0}
-    Message: DRAG TO MOVE  -  AUTO FIRE ON
-    Seconds: 3
+    Message: 'SECTOR 1: ORBITAL'
+    Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: 86e9abc1db509e44c9945a461a42478e, type: 2}
+    Wave: {fileID: 11400000, guid: 38518850f889e414a82090d4d58c641d, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: 23fa805c542f822499b01dd69a8c98d6, type: 2}
-    Boss: {fileID: 0}
-    Message: 
-    Seconds: 2
-    Flag: 1
-  - Type: 2
-    Wave: {fileID: 0}
-    Boss: {fileID: 0}
-    Message: SUPPLY DRONES CARRY POWER-UPS
-    Seconds: 2.5
-    Flag: 1
-  - Type: 0
-    Wave: {fileID: 11400000, guid: b712a7ca0656fbb46a7c874df4f7f17d, type: 2}
+    Wave: {fileID: 11400000, guid: a4dc71677f8f0d24bb5fea2c400cffce, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
@@ -72,48 +54,65 @@ MonoBehaviour:
     Wave: {fileID: 0}
     Boss: {fileID: 0}
     Message: INTERCEPTORS INBOUND
-    Seconds: 2
+    Seconds: 1.5
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: 1290512204d64d04fb1480694f2271e6, type: 2}
+    Wave: {fileID: 11400000, guid: 6e126e980ee2f1146a4e4687289b157f, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: b1e20ec51cfa8be449009d5c7c1599f9, type: 2}
+    Wave: {fileID: 11400000, guid: 7b8dda8fda49c9d43a996393f7cc8e3f, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: c6263f1dc58fc3a4cb5d9a5cfc5846a4, type: 2}
+    Message: 'WARNING: SENTINEL-X APPROACHING'
+    Seconds: 2
+    Flag: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: e29d2e36b180a1c469ebca741b662644, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: d0944dd1314ad044bab588debe7552d3, type: 2}
+    Wave: {fileID: 11400000, guid: cb7e404ed0e751741bd26d13e798c26b, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
-  - Type: 2
+  - Type: 1
     Wave: {fileID: 0}
     Boss: {fileID: 0}
-    Message: FINAL WAVE
-    Seconds: 2
-    Flag: 1
-  - Type: 0
-    Wave: {fileID: 11400000, guid: cbc65d4c107dfae4982d8afafb3ab789, type: 2}
-    Boss: {fileID: 0}
     Message: 
+    Seconds: 1.5
+    Flag: 1
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: ba548743a4f21fc46a2f99e892c51b1b, type: 2}
+    Message: 'WARNING: THE DESTROYER'
     Seconds: 2
     Flag: 1
   CompletionBonus: 1000
   Music: 2
+  Ambient: 1
   KeepBossMusicAfterDefeat: 0
-  BackgroundTop: {r: 0.02, g: 0.06, b: 0.18, a: 1}
-  BackgroundBottom: {r: 0, g: 0.01, b: 0.06, a: 1}
-  Fog: {r: 0, g: 0, b: 0, a: 0}
-  StarDensity: 0.8
+  BackgroundTop: {r: 0.03, g: 0.05, b: 0.14, a: 1}
+  BackgroundBottom: {r: 0.06, g: 0.03, b: 0.14, a: 1}
+  Fog: {r: 0.5, g: 0.2, b: 0.8, a: 0}
+  StarDensity: 0.75
   StarTint: {r: 1, g: 1, b: 1, a: 1}
   DebrisSprites:
   - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
-  DebrisInterval: 4
+  DebrisInterval: 5
+  DebrisTint: {r: 0.6, g: 0.65, b: 0.75, a: 0.55}
+  BackdropSprite: {fileID: 21300000, guid: da4a7b5c5cda01f4db69766c569b5897, type: 3}
+  BackdropTint: {r: 0.15, g: 0.35, b: 0.6, a: 0.45}
+  BackdropScale: 14
   AsteroidDefinition: {fileID: 0}
   AsteroidInterval: 1.2

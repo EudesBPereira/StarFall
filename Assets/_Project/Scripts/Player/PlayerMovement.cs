@@ -19,26 +19,28 @@ namespace Starfall.Player
         private float _padding = 0.45f;
         private PlayArea _area;
         private Vector2 _velocity;
+        private Vector2 _lastFrameDelta;
 
         public Vector2 Velocity => _velocity;
+        public float MaxSpeed => _speed;
+        /// <summary>Movement actually applied last frame (axis + drag), in world units per second.</summary>
+        public float CurrentSpeed { get; private set; }
 
-        public void Configure(ShipDefinition ship, PlayArea area, float edgePadding)
+        public void Configure(in PlayerLoadout loadout, PlayArea area, float edgePadding)
         {
             _area = area;
             _padding = edgePadding;
-            if (ship != null)
-            {
-                _speed = ship.MoveSpeed;
-                _acceleration = ship.Acceleration;
-                _deceleration = ship.Deceleration;
-                _bankAngle = ship.BankAngle;
-            }
+            _speed = loadout.MoveSpeed;
+            _acceleration = loadout.Acceleration;
+            _deceleration = loadout.Deceleration;
+            _bankAngle = loadout.Ship != null ? loadout.Ship.BankAngle : 18f;
         }
 
         public void Tick(IGameInput input, float speedMultiplier, float dragSensitivity)
         {
             float dt = Time.deltaTime;
-            Vector2 pos = transform.position;
+            Vector2 start = transform.position;
+            Vector2 pos = start;
 
             Vector2 targetVelocity = input.MoveAxis * (_speed * speedMultiplier);
             float rate = input.MoveAxis.sqrMagnitude > 0.001f ? _acceleration : _deceleration;
@@ -48,11 +50,13 @@ namespace Starfall.Player
             if (input.DragActive && _area != null && Screen.height > 0)
             {
                 float unitsPerPixel = _area.Height / Screen.height;
-                pos += input.DragDeltaScreen * (unitsPerPixel * dragSensitivity);
+                pos += input.DragDeltaScreen * (unitsPerPixel * dragSensitivity * Mathf.Min(1f, speedMultiplier + 0.3f));
             }
 
             if (_area != null) pos = _area.Clamp(pos, _padding);
             transform.position = new Vector3(pos.x, pos.y, transform.position.z);
+            _lastFrameDelta = pos - start;
+            CurrentSpeed = dt > 0f ? _lastFrameDelta.magnitude / dt : 0f;
 
             if (bankTarget != null)
             {
@@ -70,6 +74,7 @@ namespace Starfall.Player
         public void ResetMotion()
         {
             _velocity = Vector2.zero;
+            CurrentSpeed = 0f;
             if (bankTarget != null) bankTarget.localRotation = Quaternion.identity;
         }
     }

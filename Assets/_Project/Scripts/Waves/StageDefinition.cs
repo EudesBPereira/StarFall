@@ -31,7 +31,7 @@ namespace Starfall.Waves
     }
 
     /// <summary>
-    /// Data-driven stage: ordered events (waves, delays, messages, bosses), look and music.
+    /// Data-driven stage: ordered events (waves, delays, messages, bosses), look, music and ambience.
     /// Authoring guide in README.md.
     /// </summary>
     [CreateAssetMenu(menuName = "Starfall/Stages/Stage Definition", fileName = "Stage")]
@@ -41,12 +41,14 @@ namespace Starfall.Waves
         public string DisplayName = "Sector";
         public string Subtitle = "";
         [TextArea(2, 6)] public string Briefing = "";
+        [TextArea(1, 4)] public string Objectives = "";
 
         [Header("Flow")]
         public StageEvent[] Events = new StageEvent[0];
         [Tooltip("Bonus points granted on completion (not multiplied).")]
         [Min(0)] public int CompletionBonus = 1000;
         public MusicId Music = MusicId.Stage1;
+        public AmbientId Ambient = AmbientId.Space;
         public bool KeepBossMusicAfterDefeat = false;
 
         [Header("Look")]
@@ -58,6 +60,11 @@ namespace Starfall.Waves
         public Color StarTint = Color.white;
         public Sprite[] DebrisSprites = new Sprite[0];
         [Min(0f)] public float DebrisInterval = 0f;
+        public Color DebrisTint = new Color(0.6f, 0.65f, 0.75f, 0.55f);
+        [Tooltip("Optional large silhouette scrolling slowly behind everything (planet, fortress wall).")]
+        public Sprite BackdropSprite;
+        public Color BackdropTint = new Color(0.3f, 0.3f, 0.4f, 0.5f);
+        [Min(0f)] public float BackdropScale = 6f;
 
         [Header("Asteroid field")]
         public EnemyDefinition AsteroidDefinition;

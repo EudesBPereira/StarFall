@@ -1,4 +1,5 @@
 using System.Collections;
+using Starfall.Bosses;
 using Starfall.Core;
 using Starfall.Logic;
 using Starfall.Save;
@@ -7,12 +8,12 @@ using UnityEngine;
 namespace Starfall.Audio
 {
     /// <summary>
-    /// Persistent audio service (music + pooled SFX sources). It is the one DontDestroyOnLoad singleton in the
-    /// project: music must keep playing across scene loads and volumes are global. See docs/ARCHITECTURE.md.
+    /// Persistent audio service (music, ambience and pooled SFX sources). It is the one DontDestroyOnLoad singleton
+    /// in the project: music must keep playing across scene loads and volumes are global. See docs/ARCHITECTURE.md.
     /// </summary>
     public sealed class AudioManager : MonoBehaviour
     {
-        private const int SfxSourceCount = 10;
+        private const int SfxSourceCount = 12;
 
         public static AudioManager Instance { get; private set; }
 
@@ -20,10 +21,13 @@ namespace Starfall.Audio
         private AudioSource _musicA;
         private AudioSource _musicB;
         private AudioSource _activeMusic;
+        private AudioSource _ambient;
         private AudioSource[] _sfx;
         private int _nextSfx;
         private MusicId _currentMusic = MusicId.None;
+        private AmbientId _currentAmbient = AmbientId.None;
         private float _currentMusicVolume = 1f;
+        private float _currentAmbientVolume = 1f;
         private Coroutine _fade;
 
         private float _master = 1f;
@@ -62,12 +66,14 @@ namespace Starfall.Audio
         {
             _musicA = CreateSource("MusicA", true);
             _musicB = CreateSource("MusicB", true);
+            _ambient = CreateSource("Ambient", true);
             _sfx = new AudioSource[SfxSourceCount];
             for (int i = 0; i < SfxSourceCount; i++) _sfx[i] = CreateSource("Sfx" + i, false);
             ApplySavedSettings();
             GameSignals.EnemyDestroyed += OnEnemyDestroyed;
             GameSignals.BossSpawned += OnBossSpawned;
             GameSignals.BossDefeated += OnBossDefeated;
+            GameSignals.AchievementUnlocked += OnAchievementUnlocked;
         }
 
         private void OnDestroy()
@@ -76,6 +82,7 @@ namespace Starfall.Audio
             GameSignals.EnemyDestroyed -= OnEnemyDestroyed;
             GameSignals.BossSpawned -= OnBossSpawned;
             GameSignals.BossDefeated -= OnBossDefeated;
+            GameSignals.AchievementUnlocked -= OnAchievementUnlocked;
             Instance = null;
         }
 
@@ -105,6 +112,7 @@ namespace Starfall.Audio
             _music = Mathf.Clamp01(music);
             _sfxVolume = Mathf.Clamp01(sfx);
             if (_activeMusic != null) _activeMusic.volume = MusicGain * _currentMusicVolume;
+            if (_ambient != null) _ambient.volume = SfxGain * 0.6f * _currentAmbientVolume;
         }
 
         private float MusicGain => _master * _music;
@@ -169,6 +177,37 @@ namespace Starfall.Audio
             _fade = null;
         }
 
+        // ---- Ambience -------------------------------------------------------------------------------
+
+        public void PlayAmbient(AmbientId id)
+        {
+            if (_ambient == null) return;
+            if (id == _currentAmbient && _ambient.isPlaying) return;
+            _currentAmbient = id;
+            AudioClip clip = null;
+            float volume = 1f;
+            if (_library != null && _library.TryGetAmbient(id, out var libClip, out var libVol))
+            {
+                clip = libClip;
+                volume = libVol;
+            }
+            else if (_library == null || _library.UseSynthesizedPlaceholders)
+            {
+                clip = PlaceholderAudioSynth.GetAmbient(id);
+            }
+            _currentAmbientVolume = volume;
+            _ambient.Stop();
+            _ambient.clip = clip;
+            _ambient.volume = SfxGain * 0.6f * volume;
+            if (clip != null) _ambient.Play();
+        }
+
+        public void StopAmbient()
+        {
+            _currentAmbient = AmbientId.None;
+            if (_ambient != null) _ambient.Stop();
+        }
+
         // ---- SFX -------------------------------------------------------------------------------------
 
         public static void PlaySfx(SfxId id, float volumeScale = 1f)
@@ -205,18 +244,20 @@ namespace Starfall.Audio
             PlaySfxInternal(info.IsBoss ? SfxId.ExplosionLarge : SfxId.ExplosionSmall, info.IsBoss ? 1f : 0.7f);
         }
 
-        private void OnBossSpawned(Bosses.BossController boss)
+        private void OnBossSpawned(BossController boss)
         {
             PlaySfxInternal(SfxId.BossWarning, 1f);
-            PlayMusic(MusicId.Boss, 1.2f);
+            bool final = boss != null && boss.Boss != null && boss.Boss.BossId == BossId.OmegaCore;
+            PlayMusic(final ? MusicId.FinalBoss : MusicId.Boss, 1.2f);
         }
 
-        private void OnBossDefeated(Bosses.BossController boss)
+        private void OnBossDefeated(BossController boss)
         {
-            // Stage music resumes when the next stage loads; keep silence-free by fading to the stage track.
             var ctx = GameplayContext.Current;
             if (ctx != null && ctx.CurrentStage != null && !ctx.CurrentStage.KeepBossMusicAfterDefeat)
                 PlayMusic(ctx.CurrentStage.Music, 1.5f);
         }
+
+        private void OnAchievementUnlocked(AchievementId id) => PlaySfxInternal(SfxId.Achievement, 1f);
     }
 }

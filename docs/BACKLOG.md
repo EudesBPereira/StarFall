@@ -55,3 +55,31 @@ Coop online, ranking global, clãs, Battle Pass, eventos semanais, editor de fas
 - Loops de ambiente: motores da nave e nebulosa; trilhas finais por estilo (orquestral, eletrônica, synthwave).
 - Dano em área real para os projéteis do Bomber (`DamageType.Explosive` já existe).
 - Splash com logo do estúdio quando existir o asset.
+
+---
+
+## Estado após a entrega completa do GDD (D-016)
+
+Concluídos e removidos do backlog: cinco naves, sete armas, classe Elite, mini-chefes Widow e Reaper Wing, chefes Leviathan/Hive Queen/Omega Core, fases 4 e 5, progressão permanente, árvore de upgrades, telas Hangar/Melhorias/Ranking, seleção de missão, conquistas, modos Sobrevivência/Boss Rush/Desafio Diário, partículas, shaders, ambiente sonoro, dano crítico da nave e propulsores dos inimigos.
+
+### Continua pendente
+
+**Assets finais**
+- Substituir os sprites placeholder por arte definitiva (o pipeline já aceita: cada `Definition` tem campo `Sprite`).
+- Substituir o áudio sintetizado preenchendo `AudioLibrary.asset`, incluindo as trilhas por estilo do GDD §21.
+- Logo do estúdio no splash.
+
+**Polimento**
+- URP + Bloom para o neon (hoje é blending aditivo no Built-in RP, D-021).
+- Balanceamento após playtest: itens marcados com ⚠️ em `docs/BALANCING.md`, em especial Laser Duplo, Mísseis e a Phantom.
+- Tutorial contextual mais explícito na fase 1.
+- Vibração (haptics) no dano e na Ultimate.
+
+**Visão de Futuro (2.0, do próprio GDD)**
+- Coop online, ranking global, clãs, eventos semanais, Battle Pass, editor de fases, Steam Achievements, Steam Cloud Save, 20 fases.
+- O ranking e as conquistas existem em versão local (D-017, D-020); migrar para servidor exige apenas trocar a fonte de dados.
+
+**Débitos técnicos**
+- `PlaceholderAudioSynth` gera clipes na primeira reprodução; pré-gerar no boot evitaria um pico de CPU.
+- Os segmentos do Leviathan usam um rastro em lista; com muitos chefes segmentados valeria um buffer circular.
+- Não há teste PlayMode para os modos Sobrevivência/Boss Rush/Diário (só para a campanha).

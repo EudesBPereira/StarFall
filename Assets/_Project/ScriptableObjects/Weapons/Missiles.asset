@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae6dd8985bfec43af214453ccdf696, type: 3}
+  m_Name: Missiles
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Combat.WeaponDefinition
+  Id: 5
+  DisplayName: Missiles
+  Description: Homing warheads with splash damage. Never miss, but reload slowly.
+  Cost: 5000
+  ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 27e8e33eb75beaa4ca64ee75b2315890, type: 3}
+  FireInterval: 0.45
+  Damage: 12
+  ProjectileSpeed: 10
+  ProjectileLifetime: 4
+  ProjectileScale: 1
+  ProjectileColor: {r: 1, g: 0.55, b: 0.35, a: 1}
+  DamageType: 2
+  FireSfx: 16
+  Pierce: 0
+  Homing: 1
+  HomingTurnRate: 240
+  ChargeSeconds: 0
+  ChargeDamageMultiplier: 4
+  ChargeScaleMultiplier: 2.5
+  SplashRadius: 0.9
+  Levels:
+  - Shots:
+    - OffsetX: -0.3
+      Angle: -20
+    - OffsetX: 0.3
+      Angle: 20
+    DamageMultiplier: 1
+  - Shots:
+    - OffsetX: -0.3
+      Angle: -20
+    - OffsetX: 0.3
+      Angle: 20
+    DamageMultiplier: 1.15
+  - Shots:
+    - OffsetX: -0.3
+      Angle: -25
+    - OffsetX: 0.3
+      Angle: 25
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.15
+  - Shots:
+    - OffsetX: -0.3
+      Angle: -25
+    - OffsetX: 0.3
+      Angle: 25
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.3
+  - Shots:
+    - OffsetX: -0.3
+      Angle: -30
+    - OffsetX: 0.3
+      Angle: 30
+    - OffsetX: -0.15
+      Angle: -8
+    - OffsetX: 0.15
+      Angle: 8
+    DamageMultiplier: 1.3

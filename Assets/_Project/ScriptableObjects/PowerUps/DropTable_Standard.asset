@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cfafee7c2ab9664ba4433e1850cac46, type: 3}
+  m_Name: DropTable_Standard
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.PowerUps.DropTable
+  DropChance: 0.12
+  Entries:
+  - PowerUp: {fileID: 11400000, guid: 21945d5f4337f954bae46fd147368230, type: 2}
+    Weight: 0
+  - PowerUp: {fileID: 11400000, guid: 3cf8ce738634e504a8992bebfab42d68, type: 2}
+    Weight: 0
+  - PowerUp: {fileID: 11400000, guid: 635a02356f4323849bd44113ab24942e, type: 2}
+    Weight: 0
+  - PowerUp: {fileID: 11400000, guid: a48561060d4ac8e42b22913f9f9bf030, type: 2}
+    Weight: 0
+  - PowerUp: {fileID: 11400000, guid: da18f577e46cf5b4f846b1f31a05958a, type: 2}
+    Weight: 0
+  - PowerUp: {fileID: 11400000, guid: 5aa2262f4868d6b46a0dff2129baf882, type: 2}
+    Weight: 0

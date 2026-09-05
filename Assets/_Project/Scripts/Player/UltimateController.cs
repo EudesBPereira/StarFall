@@ -10,21 +10,25 @@ namespace Starfall.Player
 {
     /// <summary>
     /// Ultimate energy + activation. Energy is earned by player kills; activation wipes common enemies and
-    /// damages elites/bosses by a configurable amount.
+    /// damages elites/bosses by a configurable amount (scaled by ship and upgrades).
     /// </summary>
     public sealed class UltimateController : MonoBehaviour
     {
         private EnergyModel _energy;
         private GameConfig _config;
+        private float _chargeMultiplier = 1f;
+        private float _powerMultiplier = 1f;
         private readonly List<Enemy> _buffer = new List<Enemy>(64);
         private bool _subscribed;
 
         public EnergyModel Energy => _energy ??= new EnergyModel(_config != null ? _config.UltimateEnergyMax : 100f);
         public bool IsReady => Energy.IsFull;
 
-        public void Initialize(GameConfig config)
+        public void Initialize(GameConfig config, in PlayerLoadout loadout)
         {
             _config = config;
+            _chargeMultiplier = loadout.UltimateChargeMultiplier;
+            _powerMultiplier = loadout.UltimatePowerMultiplier;
             _energy = new EnergyModel(config != null ? config.UltimateEnergyMax : 100f);
             Subscribe();
         }
@@ -49,7 +53,7 @@ namespace Starfall.Player
         {
             // Only weapon kills charge the bar (Ultimate kills would otherwise refund themselves).
             if (info.Source != DamageSource.Player || info.Definition == null) return;
-            Energy.Add(info.Definition.EnergyOnKill);
+            Energy.Add(info.Definition.EnergyOnKill * _chargeMultiplier);
         }
 
         public void AddEnergy(float amount) => Energy.Add(amount);
@@ -75,10 +79,14 @@ namespace Starfall.Player
             AudioManager.PlaySfx(SfxId.Ultimate);
 
             if (ctx == null) return;
-            if (ctx.Vfx != null) ctx.Vfx.FlashScreen(new Color(0.7f, 0.9f, 1f, 0.9f), 0.6f);
+            if (ctx.Vfx != null)
+            {
+                ctx.Vfx.FlashScreen(new Color(0.7f, 0.9f, 1f, 0.9f), 0.6f);
+                ctx.Vfx.SpawnShockwave(transform.position, ctx.PlayArea != null ? ctx.PlayArea.Height : 16f, new Color(0.6f, 0.9f, 1f));
+            }
             if (ctx.CameraShake != null) ctx.CameraShake.Shake(0.45f, 0.6f);
 
-            float eliteDamage = _config != null ? _config.UltimateEliteDamage : 150f;
+            float eliteDamage = (_config != null ? _config.UltimateEliteDamage : 150f) * _powerMultiplier;
             ctx.Enemies.CopyTo(_buffer);
             for (int i = 0; i < _buffer.Count; i++)
             {

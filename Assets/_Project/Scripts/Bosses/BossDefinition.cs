@@ -4,6 +4,17 @@ using UnityEngine;
 
 namespace Starfall.Bosses
 {
+    /// <summary>Main bosses of the campaign (GDD §11). Index = bit in SaveData.bossesDefeatedMask.</summary>
+    public enum BossId
+    {
+        Destroyer = 0,
+        Leviathan = 1,
+        HiveQueen = 2,
+        OmegaCore = 3,
+        /// <summary>Mini-bosses and variants share this id and never count for Boss Hunter.</summary>
+        MiniBoss = 10,
+    }
+
     public enum BossAttackKind
     {
         Ring = 0,
@@ -12,6 +23,12 @@ namespace Starfall.Bosses
         SideCannons = 3,
         Missiles = 4,
         FrontLaser = 5,
+        /// <summary>Continuous sweeping stream (Leviathan).</summary>
+        Stream = 6,
+        /// <summary>Spawns minions (Hive Queen).</summary>
+        Summon = 7,
+        /// <summary>Slow energy web that slows the player (Widow).</summary>
+        Web = 8,
     }
 
     [Serializable]
@@ -31,6 +48,10 @@ namespace Starfall.Bosses
         [Min(0f)] public float BeamDamagePerSecond;
         [Tooltip("SideCannons/Missiles: horizontal offset of the muzzles.")]
         [Min(0f)] public float MuzzleOffset;
+        [Tooltip("Summon: enemy to spawn (Count = how many).")]
+        public EnemyDefinition SummonEnemy;
+        [Tooltip("Summon: maximum minions alive before the boss stops summoning.")]
+        [Min(0)] public int SummonCap;
     }
 
     [Serializable]
@@ -42,6 +63,13 @@ namespace Starfall.Bosses
         public MovementKind Movement;
         public MovementParams MovementSettings;
         public BossAttack[] Attacks;
+        [Header("Transformation (optional)")]
+        public Sprite Sprite;
+        public Color Tint;
+        [Tooltip("0 keeps the current scale.")]
+        [Min(0f)] public float Scale;
+        [Tooltip("Seconds of invulnerability while transforming.")]
+        [Min(0f)] public float TransformSeconds;
     }
 
     /// <summary>Boss archetype: an enemy with a scripted entrance and health-driven phases.</summary>
@@ -49,6 +77,7 @@ namespace Starfall.Bosses
     public sealed class BossDefinition : EnemyDefinition
     {
         [Header("Boss")]
+        public BossId BossId = BossId.MiniBoss;
         public string Title = "BOSS";
         [Min(0.1f)] public float EntranceDuration = 2.5f;
         [Tooltip("Distance from the top of the screen (fraction of height) where the boss settles.")]
@@ -57,6 +86,13 @@ namespace Starfall.Bosses
         [Min(1)] public int DeathExplosions = 8;
         [Min(0.1f)] public float DeathSequenceSeconds = 1.6f;
 
+        [Header("Body segments (Leviathan)")]
+        [Min(0)] public int SegmentCount = 0;
+        public Sprite SegmentSprite;
+        [Min(0.1f)] public float SegmentSpacing = 0.9f;
+        [Min(0.1f)] public float SegmentScale = 0.8f;
+
         public override bool IsBoss => true;
+        public bool IsMainBoss => BossId != BossId.MiniBoss;
     }
 }

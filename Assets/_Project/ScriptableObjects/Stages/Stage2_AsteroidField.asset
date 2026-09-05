@@ -13,17 +13,26 @@ MonoBehaviour:
   m_Name: Stage2_AsteroidField
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
   DisplayName: Asteroid Field
-  Subtitle: Between Mars and Jupiter
-  Briefing: 'The Swarm is using the asteroid belt as cover.
+  Subtitle: Kuiper drift - rogue asteroids
+  Briefing: 'The Swarm is using the asteroid field as cover.
 
-    Avoid the rocks,
-    break the shielded units and take down the Sentinel-X outpost.'
+    Watch for rocks:
+    they damage your hull on contact but can be destroyed.
+
+    The Widow lurks here,
+    and something big is coiling beneath the rocks.'
+  Objectives: '- Survive the asteroid field
+
+    - Defeat the Widow
+
+    - Destroy
+    the Leviathan'
   Events:
   - Type: 2
     Wave: {fileID: 0}
     Boss: {fileID: 0}
-    Message: ASTEROID FIELD
-    Seconds: 2.2
+    Message: 'SECTOR 2: ASTEROID FIELD'
+    Seconds: 2
     Flag: 1
   - Type: 5
     Wave: {fileID: 0}
@@ -31,26 +40,14 @@ MonoBehaviour:
     Message: 
     Seconds: 2
     Flag: 1
-  - Type: 1
-    Wave: {fileID: 0}
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 1272dabe121bbfb409e8212cfe935a4c, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: 26f64b003b656f34e957795c4649061e, type: 2}
-    Boss: {fileID: 0}
-    Message: 
-    Seconds: 2
-    Flag: 1
-  - Type: 2
-    Wave: {fileID: 0}
-    Boss: {fileID: 0}
-    Message: BOMBERS DETECTED
-    Seconds: 2
-    Flag: 1
-  - Type: 0
-    Wave: {fileID: 11400000, guid: 2183b04306d156e41b8dc5247a372c75, type: 2}
+    Wave: {fileID: 11400000, guid: 8b81fde6fb9827c42b2fd6153f1ac053, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
@@ -58,35 +55,29 @@ MonoBehaviour:
   - Type: 2
     Wave: {fileID: 0}
     Boss: {fileID: 0}
-    Message: KAMIKAZE UNITS!
-    Seconds: 2
+    Message: SHIELDED UNITS DETECTED
+    Seconds: 1.5
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: bdc1ef6e1c4e8ca4ab86c34dea58c853, type: 2}
+    Wave: {fileID: 11400000, guid: 7328ab9fd41ca404e98b675e26b31f1d, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
-  - Type: 2
+  - Type: 3
     Wave: {fileID: 0}
-    Boss: {fileID: 0}
-    Message: SHIELDED UNITS - BREAK THE SHIELD FIRST
-    Seconds: 2.5
+    Boss: {fileID: 11400000, guid: 5a548cf0d8b36ad4b97d5150e945d864, type: 2}
+    Message: 'WARNING: WIDOW'
+    Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: f1360c5a95763a544824801f625a0acf, type: 2}
+    Wave: {fileID: 11400000, guid: b050dba63e88a4a4f99b5b10dbbf8441, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
     Flag: 1
   - Type: 0
-    Wave: {fileID: 11400000, guid: df395e82b403333408f67a145b836844, type: 2}
-    Boss: {fileID: 0}
-    Message: 
-    Seconds: 2
-    Flag: 1
-  - Type: 0
-    Wave: {fileID: 11400000, guid: f27b6df4d173a4047837d8de0fc52a9b, type: 2}
+    Wave: {fileID: 11400000, guid: 5aba5f881dda8c74f8257550c8b54afe, type: 2}
     Boss: {fileID: 0}
     Message: 
     Seconds: 2
@@ -97,21 +88,32 @@ MonoBehaviour:
     Message: 
     Seconds: 2
     Flag: 0
-  - Type: 3
+  - Type: 1
     Wave: {fileID: 0}
-    Boss: {fileID: 11400000, guid: c6263f1dc58fc3a4cb5d9a5cfc5846a4, type: 2}
+    Boss: {fileID: 0}
     Message: 
+    Seconds: 1.5
+    Flag: 1
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 59b4ebb1e1c076949b0b996dc44d51aa, type: 2}
+    Message: 'WARNING: LEVIATHAN'
     Seconds: 2
     Flag: 1
-  CompletionBonus: 2000
+  CompletionBonus: 1500
   Music: 3
+  Ambient: 2
   KeepBossMusicAfterDefeat: 0
-  BackgroundTop: {r: 0.1, g: 0.06, b: 0.12, a: 1}
-  BackgroundBottom: {r: 0.03, g: 0.02, b: 0.05, a: 1}
-  Fog: {r: 0, g: 0, b: 0, a: 0}
-  StarDensity: 0.5
-  StarTint: {r: 1, g: 0.95, b: 0.85, a: 1}
+  BackgroundTop: {r: 0.08, g: 0.06, b: 0.05, a: 1}
+  BackgroundBottom: {r: 0.03, g: 0.03, b: 0.06, a: 1}
+  Fog: {r: 0.5, g: 0.2, b: 0.8, a: 0}
+  StarDensity: 0.4
+  StarTint: {r: 0.9, g: 0.85, b: 0.8, a: 1}
   DebrisSprites: []
   DebrisInterval: 0
+  DebrisTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropSprite: {fileID: 0}
+  BackdropTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropScale: 6
   AsteroidDefinition: {fileID: 11400000, guid: 33764b9c5b78608439ee79c4810eedc2, type: 2}
-  AsteroidInterval: 1.4
+  AsteroidInterval: 1.2

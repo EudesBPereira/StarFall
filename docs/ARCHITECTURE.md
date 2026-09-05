@@ -85,3 +85,37 @@ Ordem de sorting (`SortingOrders`): fundo −100 · estrelas −90 · destroços
 - **Modelos puros**: as regras de aceite (escudo antes do casco, morte única, multiplicador x10, Ultimate só cheia, expiração de efeitos, save seguro) são testadas sem o Editor.
 - **Geração por script**: elimina YAML manual e mantém o repositório reproduzível.
 - **Bus estático**: simplicidade e desacoplamento; a alternativa (ScriptableObject event channels) foi considerada excessiva para o MVP.
+
+---
+
+## Versão 1.0 completa — módulos acrescentados
+
+### Progressão (lógica pura, `Scripts/Logic`)
+
+- `ProgressionRules` — recompensas por partida, custos e regras de desbloqueio de naves e armas, nível de piloto, conclusão de campanha.
+- `UpgradeTree` (`UpgradeCatalog` + `LoadoutModifiers`) — dez nós, custo por nível e os multiplicadores resultantes.
+- `AchievementRules` — avalia as cinco conquistas contra o save e a partida atual, sem repetir concessões.
+- `ProceduralWaves` — gerador determinístico de ondas por semente e índice, usado por Sobrevivência e Desafio Diário.
+- `SaveData` v2 — economia, upgrades, máscaras de naves/armas/conquistas/chefes, placar local e preferências, com migração automática do v1.
+
+Nenhuma dessas classes referencia `UnityEngine`; todas têm teste em `Tests/EditMode` e rodam também no `dotnet test`.
+
+### Ponte entre save e gameplay
+
+`PlayerLoadout` combina `ShipDefinition` + `WeaponDefinition` + `LoadoutModifiers` em uma struct só, montada uma vez quando a nave entra em cena. Movimento, arma, vida e Ultimate leem essa struct, então nenhum sistema de gameplay lê o save diretamente.
+
+### Fluxo por modo
+
+`GameSession` guarda o modo, a semente e as estatísticas da partida (`RunStats`). `StageDirector` escolhe a rotina conforme o modo: eventos da fase (campanha), ondas procedurais infinitas (Sobrevivência/Diário) ou a fila de chefes (Boss Rush). `RunTracker` alimenta as estatísticas a partir dos sinais, e `GameFlowController` fecha a partida: aplica recompensas, grava progresso e placar, e chama `AchievementService`.
+
+### Chefes
+
+`BossController` ganhou fases com transformação (troca de sprite e invulnerabilidade temporária), corpo em segmentos que seguem um rastro (Leviathan), invocação com limite (Hive Queen) e novos padrões (Stream, Web). Cada padrão é um `AttackRunner` com timer próprio, então um chefe roda vários ao mesmo tempo.
+
+### Apresentação
+
+- Quatro shaders próprios: holograma (Hangar), escudo, aditivo (neon) e feixe de energia.
+- `ParticleBurst` (pooled) para faíscas; fumaça contínua na nave em estado crítico.
+- `EngineAudio` liga o som do motor à velocidade; `AudioManager` ganhou uma trilha de ambiente por fase.
+- Telas novas: `MissionPanel`, `HangarPanel`, `UpgradesPanel`, `RankingPanel` e `AchievementToast`, todas construídas por `SceneBuilder` a partir do helper `UiBuilder.CreateListRow`.
+- `ContentFactory` foi separado de `ProjectBootstrap`: é o único lugar que define os números iniciais de todo o conteúdo.

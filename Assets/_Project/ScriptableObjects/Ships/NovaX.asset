@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d2d94aca672e53458f2a748a192dfa4, type: 3}
+  m_Name: NovaX
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Player.ShipDefinition
+  Id: 4
+  DisplayName: Nova-X
+  Description: Legendary prototype recovered from the Hive Core. Excels at everything.
+  Cost: 0
+  UnlockHint: Finish the campaign
+  MaxHull: 130
+  MaxShield: 80
+  ShieldRegenPerSecond: 2
+  ShieldRegenDelay: 4
+  MoveSpeed: 11
+  Acceleration: 85
+  Deceleration: 100
+  BankAngle: 18
+  CritChance: 0.15
+  CritMultiplier: 2.5
+  DamageMultiplier: 1.2
+  UltimateChargeMultiplier: 1.25
+  UltimatePowerMultiplier: 1.5
+  Weapon: {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
+  Sprite: {fileID: 21300000, guid: f8f597989819ed445ae3cdae123fbb92, type: 3}
+  Tint: {r: 1, g: 0.95, b: 0.75, a: 1}
+  ThrusterColor: {r: 1, g: 0.9, b: 0.5, a: 0.95}
+  HitboxRadius: 0.28
+  VisualScale: 1

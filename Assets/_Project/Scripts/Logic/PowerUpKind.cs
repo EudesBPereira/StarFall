@@ -10,5 +10,7 @@ namespace Starfall.Logic
         SpeedBoost = 3,     // Yellow
         Energy = 4,         // Purple
         Invincibility = 5,  // White
+        /// <summary>Debuff applied by Widow's energy webs (not a pickup).</summary>
+        Slowed = 6,
     }
 }

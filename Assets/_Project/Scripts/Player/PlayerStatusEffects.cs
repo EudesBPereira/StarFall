@@ -7,11 +7,13 @@ using UnityEngine;
 namespace Starfall.Player
 {
     /// <summary>
-    /// Applies power-ups to the ship and tracks temporary effects. Rules (renew, no stacking) live in
+    /// Applies power-ups and debuffs to the ship and tracks temporary effects. Rules (renew, no stacking) live in
     /// <see cref="StatusEffectTracker"/> and docs/DECISIONS.md.
     /// </summary>
     public sealed class PlayerStatusEffects : MonoBehaviour
     {
+        private const float SlowedMultiplier = 0.55f;
+
         private readonly StatusEffectTracker _tracker = new StatusEffectTracker();
         private readonly Dictionary<PowerUpKind, float> _magnitudes = new Dictionary<PowerUpKind, float>();
 
@@ -19,6 +21,7 @@ namespace Starfall.Player
         public float SpeedMultiplier { get; private set; } = 1f;
         public float DamageMultiplier { get; private set; } = 1f;
         public bool Invincible { get; private set; }
+        public bool Slowed { get; private set; }
 
         public event Action Changed;
 
@@ -47,6 +50,13 @@ namespace Starfall.Player
             _tracker.Apply(def.Kind, def.Duration);
         }
 
+        /// <summary>Applies a negative effect (e.g. Slowed by a web). Invincible ships shrug it off.</summary>
+        public void ApplyDebuff(PowerUpKind kind, float seconds)
+        {
+            if (Invincible || seconds <= 0f) return;
+            _tracker.Apply(kind, seconds);
+        }
+
         public bool IsActive(PowerUpKind kind) => _tracker.IsActive(kind);
 
         /// <summary>Removes every temporary effect (death, stage end).</summary>
@@ -60,7 +70,10 @@ namespace Starfall.Player
 
         private void Recompute()
         {
-            SpeedMultiplier = _tracker.IsActive(PowerUpKind.SpeedBoost) ? Magnitude(PowerUpKind.SpeedBoost, 1.35f) : 1f;
+            Slowed = _tracker.IsActive(PowerUpKind.Slowed);
+            float speed = _tracker.IsActive(PowerUpKind.SpeedBoost) ? Magnitude(PowerUpKind.SpeedBoost, 1.35f) : 1f;
+            if (Slowed) speed *= SlowedMultiplier;
+            SpeedMultiplier = speed;
             DamageMultiplier = _tracker.IsActive(PowerUpKind.DamageBoost) ? Magnitude(PowerUpKind.DamageBoost, 2f) : 1f;
             Invincible = _tracker.IsActive(PowerUpKind.Invincibility);
             Changed?.Invoke();

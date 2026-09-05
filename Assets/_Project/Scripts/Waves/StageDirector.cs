@@ -1,14 +1,17 @@
 using System.Collections;
+using System.Collections.Generic;
 using Starfall.Bosses;
 using Starfall.Core;
 using Starfall.Enemies;
+using Starfall.Logic;
 using UnityEngine;
 
 namespace Starfall.Waves
 {
     /// <summary>
-    /// Executes a <see cref="StageDefinition"/>: waves, delays, messages, asteroid fields and bosses, in order.
-    /// Raises <see cref="GameSignals.StageCompleted"/> when the last event finishes.
+    /// Executes a stage. Campaign: the ordered <see cref="StageDefinition"/> events. Survival / Daily: endless
+    /// procedural waves from <see cref="ProceduralWaves"/>. Boss Rush: every main boss in sequence.
+    /// Raises <see cref="GameSignals.StageCompleted"/> when a finite run ends.
     /// </summary>
     public sealed class StageDirector : MonoBehaviour
     {
@@ -18,11 +21,15 @@ namespace Starfall.Waves
         private Coroutine _asteroidRoutine;
         private bool _running;
         private int _eventIndex;
+        private int _wave;
         private BossController _activeBoss;
+        private readonly List<ProceduralSpawn> _spawnBuffer = new List<ProceduralSpawn>(8);
 
         public bool IsRunning => _running;
         public int EventIndex => _eventIndex;
         public int EventCount => _stage != null && _stage.Events != null ? _stage.Events.Length : 0;
+        /// <summary>1-based wave number in endless modes (0 in campaign).</summary>
+        public int Wave => _wave;
         public BossController ActiveBoss => _activeBoss;
 
         public void Begin(StageDefinition stage, GameplayContext ctx)
@@ -30,13 +37,32 @@ namespace Starfall.Waves
             Stop();
             _stage = stage;
             _ctx = ctx;
-            if (stage == null || ctx == null)
+            _wave = 0;
+            if (ctx == null)
             {
-                Debug.LogError("[Starfall] StageDirector.Begin called without a stage or context.");
+                Debug.LogError("[Starfall] StageDirector.Begin called without a context.");
                 return;
             }
             _running = true;
-            _routine = StartCoroutine(Run());
+            switch (GameSession.Mode)
+            {
+                case GameModeId.Survival:
+                case GameModeId.DailyChallenge:
+                    _routine = StartCoroutine(RunEndless());
+                    break;
+                case GameModeId.BossRush:
+                    _routine = StartCoroutine(RunBossRush());
+                    break;
+                default:
+                    if (stage == null)
+                    {
+                        Debug.LogError("[Starfall] Campaign stage missing.");
+                        _running = false;
+                        return;
+                    }
+                    _routine = StartCoroutine(RunCampaign());
+                    break;
+            }
         }
 
         public void Stop()
@@ -49,7 +75,9 @@ namespace Starfall.Waves
             _activeBoss = null;
         }
 
-        private IEnumerator Run()
+        // ---- Campaign ------------------------------------------------------------------------------------
+
+        private IEnumerator RunCampaign()
         {
             var events = _stage.Events;
             for (_eventIndex = 0; _eventIndex < events.Length; _eventIndex++)
@@ -59,7 +87,12 @@ namespace Starfall.Waves
                 switch (ev.Type)
                 {
                     case StageEventType.Wave:
-                        if (ev.Wave != null) yield return RunWave(ev.Wave);
+                        if (ev.Wave != null)
+                        {
+                            _wave++;
+                            GameSignals.RaiseWaveStarted(_wave);
+                            yield return RunWave(ev.Wave);
+                        }
                         break;
                     case StageEventType.Delay:
                         yield return new WaitForSeconds(ev.Seconds);
@@ -102,7 +135,11 @@ namespace Starfall.Waves
             }
 
             if (!wave.WaitForClear) yield break;
-            float timeout = wave.MaxDuration;
+            yield return WaitForClear(wave.MaxDuration);
+        }
+
+        private IEnumerator WaitForClear(float timeout)
+        {
             while (timeout > 0f && _ctx.Enemies.BlockingCount > 0)
             {
                 timeout -= Time.deltaTime;
@@ -112,7 +149,6 @@ namespace Starfall.Waves
 
         private IEnumerator RunBoss(BossDefinition boss, string warning)
         {
-            // Let the screen clear a little, then announce.
             float wait = 1.5f;
             while (wait > 0f && _ctx.Enemies.BlockingCount > 0) { wait -= Time.deltaTime; yield return null; }
             GameSignals.RaiseStageMessage(string.IsNullOrEmpty(warning) ? $"WARNING: {boss.Title}" : warning, 2.2f);
@@ -132,6 +168,83 @@ namespace Starfall.Waves
             _activeBoss = null;
             yield return new WaitForSeconds(boss.DeathSequenceSeconds + 0.5f);
         }
+
+        // ---- Endless (Survival / Daily) -----------------------------------------------------------------
+
+        private IEnumerator RunEndless()
+        {
+            var config = _ctx.Config;
+            bool daily = GameSession.Mode == GameModeId.DailyChallenge;
+            int seed = GameSession.Seed;
+            if (daily)
+            {
+                _ctx.Spawner.SpeedMultiplier = config.DailyEnemySpeedMultiplier;
+                _ctx.Spawner.DropChanceMultiplier = config.DailyDropChanceMultiplier;
+                GameSignals.RaiseStageMessage("DAILY CHALLENGE  -  FASTER ENEMIES, FEWER DROPS", 3f);
+            }
+            else
+            {
+                GameSignals.RaiseStageMessage("SURVIVAL  -  ENDLESS WAVES", 2.5f);
+            }
+            yield return new WaitForSeconds(2f);
+
+            for (int waveIndex = 0; ; waveIndex++)
+            {
+                _wave = waveIndex + 1;
+                _ctx.Spawner.StatMultiplier = ProceduralWaves.DifficultyMultiplier(waveIndex);
+                GameSignals.RaiseWaveStarted(_wave);
+                GameSignals.RaiseStageMessage($"WAVE {_wave}", 1.2f);
+
+                if (config.SurvivalMiniBossEvery > 0 && _wave % config.SurvivalMiniBossEvery == 0 && config.SurvivalMiniBosses != null && config.SurvivalMiniBosses.Length > 0)
+                {
+                    var mini = config.SurvivalMiniBosses[(_wave / config.SurvivalMiniBossEvery - 1) % config.SurvivalMiniBosses.Length];
+                    yield return RunBoss(mini, null);
+                }
+
+                ProceduralWaves.Generate(seed, waveIndex, _spawnBuffer);
+                for (int s = 0; s < _spawnBuffer.Count; s++)
+                {
+                    var spawn = _spawnBuffer[s];
+                    var def = config.GetProceduralEnemy(spawn.Enemy);
+                    if (def == null) continue;
+                    if (spawn.DelayBefore > 0f) yield return new WaitForSeconds(spawn.DelayBefore);
+                    var pattern = (SpawnPattern)(spawn.Pattern % ProceduralWaves.PatternCount);
+                    for (int i = 0; i < spawn.Count; i++)
+                    {
+                        var pos = SpawnPositionResolver.Resolve(_ctx.PlayArea, pattern, 0.5f, i, spawn.Count);
+                        _ctx.Spawner.Spawn(def, pos);
+                        if (spawn.Interval > 0f && i < spawn.Count - 1) yield return new WaitForSeconds(spawn.Interval);
+                    }
+                }
+
+                yield return WaitForClear(45f);
+                yield return new WaitForSeconds(config.SurvivalWavePause);
+            }
+        }
+
+        // ---- Boss Rush -------------------------------------------------------------------------------------
+
+        private IEnumerator RunBossRush()
+        {
+            var bosses = _ctx.Config.Bosses;
+            GameSignals.RaiseStageMessage("BOSS RUSH", 2.5f);
+            yield return new WaitForSeconds(2f);
+            if (bosses != null)
+            {
+                for (int i = 0; i < bosses.Length; i++)
+                {
+                    if (bosses[i] == null) continue;
+                    _wave = i + 1;
+                    GameSignals.RaiseWaveStarted(_wave);
+                    yield return RunBoss(bosses[i], null);
+                    yield return new WaitForSeconds(1.5f);
+                }
+            }
+            _running = false;
+            GameSignals.RaiseStageCompleted();
+        }
+
+        // ---- Asteroids -------------------------------------------------------------------------------------
 
         private void SetAsteroidField(bool enabled)
         {

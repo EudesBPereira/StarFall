@@ -18,8 +18,8 @@ namespace Starfall.Enemies
     }
 
     /// <summary>
-    /// Timer-driven projectile attack. Handles forward shots, aimed shots, spreads, bursts and rings from a single
-    /// parameter block so the five MVP enemies share one implementation.
+    /// Timer-driven projectile attack. Handles forward shots, aimed shots, spreads, bursts, rings, streams and webs
+    /// from a single parameter block so every regular enemy shares one implementation.
     /// </summary>
     public sealed class PatternAttack : IAttackStrategy
     {
@@ -28,6 +28,7 @@ namespace Starfall.Enemies
         private int _burstLeft;
         private float _burstTimer;
         private float _ringPhase;
+        private float _sweep;
 
         public PatternAttack(AttackKind kind)
         {
@@ -41,6 +42,7 @@ namespace Starfall.Enemies
             _burstLeft = 0;
             _burstTimer = 0f;
             _ringPhase = Random.Range(0f, 360f);
+            _sweep = 0f;
         }
 
         public void Tick(Enemy enemy, float dt)
@@ -78,6 +80,16 @@ namespace Starfall.Enemies
                     break;
                 case AttackKind.Aimed:
                     enemy.FireSpread(origin, enemy.DirectionToTarget(origin), p, p.Count, p.SpreadAngle);
+                    break;
+                case AttackKind.Stream:
+                {
+                    _sweep += 0.9f;
+                    float angle = Mathf.Sin(_sweep) * Mathf.Max(10f, p.SpreadAngle);
+                    enemy.FireSpread(origin, Combat.ProjectileLauncher.Rotate(Vector2.down, angle), p, 1, 0f);
+                    break;
+                }
+                case AttackKind.Web:
+                    enemy.FireWeb(origin, enemy.DirectionToTarget(origin), p);
                     break;
                 default:
                     enemy.FireSpread(origin, Vector2.down, p, p.Count, p.SpreadAngle);

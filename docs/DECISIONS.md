@@ -94,3 +94,44 @@ Registro das decisões tomadas para requisitos ambíguos do blueprint, com alter
 - **Contexto:** o Gradle (OpenJDK embutido no Unity) não conseguia resolver o Android Gradle Plugin porque o Norton Web Shield substitui os certificados TLS por uma raiz própria, desconhecida do `cacerts` do JDK. O mesmo mecanismo causava falhas intermitentes de download (Hub, UPM, curl).
 - **Decisão (ambiente local, não versionada):** a raiz "Norton Web/Mail Shield Root" foi importada em `Editor/Data/PlaybackEngines/AndroidPlayer/OpenJDK/lib/security/cacerts` (alias `norton-webshield`, backup em `cacerts.bak`). Nenhuma alteração no repositório.
 - **Alternativa:** desativar a inspeção HTTPS do antivírus para o Unity/Gradle, ou usar um `gradleTemplate.properties` com `javax.net.ssl.trustStore` (rejeitada por ser específica da máquina).
+
+## D-016 — GDD passa a ser a fonte de verdade (escopo completo)
+
+- **Contexto:** o usuário determinou que `document.md` (GDD v1.0) substitui o recorte de MVP do `blueprint.md` e pediu a implementação de tudo que faltava.
+- **Decisão:** implementados naves (5), armas (7), classe Elite, mini-chefes Widow e Reaper Wing, chefes Leviathan/Hive Queen/Omega Core, fases 4 e 5, progressão com créditos/XP/componentes, árvore de upgrades, telas Hangar/Melhorias/Ranking, conquistas locais e os modos Sobrevivência, Boss Rush e Desafio Diário.
+- **Fora do escopo (continuam no backlog):** itens da "Visão de Futuro" do próprio GDD que exigem serviços online — coop, ranking global, clãs, eventos semanais, Battle Pass, editor de fases, Steam Achievements e Cloud Save.
+
+## D-017 — Ranking local em vez de global
+
+- **Contexto:** o GDD §16 pede uma tela de Ranking, mas a Visão de Futuro coloca "ranking global" na versão 2.0.
+- **Decisão:** placar local no save (top 10 por modo), com abas Campanha / Sobrevivência / Boss Rush / Diário. Nenhum acesso à rede.
+- **Impacto:** a tela existe e é útil offline; migrar para servidor depois exige só uma fonte de dados nova.
+
+## D-018 — Nova-X desbloqueia pela campanha, não por créditos
+
+- **Contexto:** o GDD chama a Nova-X de "nave lendária desbloqueável" sem definir o critério.
+- **Decisão:** concluir a fase 5 desbloqueia a Nova-X; as outras três naves são compradas com créditos.
+- **Alternativa:** preço muito alto em créditos (rejeitada por transformar a nave lendária em grind).
+
+## D-019 — "Munição especial" do HUD mostra o efeito ativo
+
+- **Contexto:** o GDD §17 pede "munição especial" no canto inferior direito, mas nenhuma arma consome munição.
+- **Decisão:** o campo mostra o efeito temporário com maior duração restante (DANO, VELOCIDADE, INVENCÍVEL, LENTO) e o tempo em segundos. A carga do Canhão de Energia aparece como barra no canto inferior esquerdo.
+
+## D-020 — Conquistas locais sem Steam
+
+- **Contexto:** o GDD §22 lista cinco conquistas; a integração Steam é da versão 2.0.
+- **Decisão:** avaliadas em `AchievementRules` (lógica pura, testada) e persistidas como bitmask no save, com aviso na tela e listagem no Ranking.
+
+## D-021 — Shaders próprios em vez de pós-processamento
+
+- **Contexto:** o GDD §19 pede shaders de escudo, raios e hologramas e um visual neon.
+- **Decisão:** quatro shaders próprios sem dependências (`Starfall/HologramSprite`, `ShieldSprite`, `AdditiveSprite`, `EnergyBeam`). O brilho neon vem de blending aditivo, não de Bloom.
+- **Motivo:** manter o Built-in Render Pipeline (D-004) e o custo baixo em celular. URP + Bloom continua no backlog.
+
+## D-022 — Um MonoBehaviour por arquivo
+
+- **Contexto:** `GameplayPanels.cs` e `MenuPanels.cs` agrupavam vários MonoBehaviours. O Unity só cria um MonoScript por arquivo (o que combina com o nome do arquivo), então painéis como Pausa, Vitória e Game Over ficavam com referência de script quebrada na cena gerada (`m_Script` sem GUID) e chegavam como `null` em runtime.
+- **Descoberta:** teste PlayMode `Boot_LoadsMainMenu` falhou com `missionPanel` nulo; a inspeção do YAML da cena confirmou o `m_Script` sem GUID.
+- **Decisão:** cada MonoBehaviour vive no próprio arquivo, com o mesmo nome da classe. Arquivos criados: `BriefingPanel`, `PausePanel`, `VictoryPanel`, `GameOverPanel`, `MenuPanel`, `ListRow`, `MissionPanel`, `HangarPanel`, `UpgradesPanel`, `RankingPanel`.
+- **Impacto:** regra permanente do projeto; structs, enums e classes puras podem continuar compartilhando arquivo.

@@ -72,3 +72,59 @@ Executar no Editor (Game view em 1080x1920 e 1920x1080) e em pelo menos um Andro
 - [ ] Console sem NullReferenceException em um ciclo completo das 3 fases.
 - [ ] Abrir a cena Gameplay diretamente no Editor funciona (contexto cria Save/Audio).
 - [ ] Pools não instanciam durante o jogo (Hierarchy estável após o prewarm).
+
+---
+
+## Versão 1.0 completa — itens adicionais
+
+### Naves e armas (Hangar)
+- [ ] As cinco naves aparecem; as bloqueadas mostram o preço e a Nova-X mostra "FINISH THE CAMPAIGN".
+- [ ] O holograma gira/flutua e troca ao selecionar outra nave ou arma.
+- [ ] Comprar desconta os créditos e equipa na hora; sem saldo o botão fica inativo e toca o som de erro.
+- [ ] Os atributos exibidos incluem os upgrades comprados.
+- [ ] A nave e a arma equipadas são as usadas na partida seguinte (confira no briefing e no HUD).
+
+### Armas em jogo
+- [ ] Laser Duplo dispara dois canos; Spread Shot cobre o leque; Plasma é lento e forte.
+- [ ] Railgun atravessa vários inimigos enfileirados.
+- [ ] Mísseis curvam até o alvo e causam dano em área.
+- [ ] Canhão de Energia carrega (barra no canto inferior esquerdo) e dispara sozinho ao encher.
+- [ ] Acertos críticos mostram "CRIT" e um projétil maior.
+
+### Upgrades
+- [ ] Cada nó sobe até 5 e mostra os quadradinhos preenchidos.
+- [ ] A partir do nível 4 o custo inclui componentes e o botão bloqueia sem eles.
+- [ ] Comprar um upgrade de casco/escudo aumenta as barras na partida seguinte.
+- [ ] Regeneração de escudo recompõe o escudo após alguns segundos sem levar dano.
+
+### Fases 4 e 5
+- [ ] Fase 4: as turrets param na linha e disparam anéis; o fundo mostra a muralha da fortaleza.
+- [ ] Fase 5: fundo de colmeia, ondas densas, todos os tipos de inimigo.
+- [ ] Os cinco briefings mostram objetivos e a nave/arma equipadas.
+
+### Chefes novos
+- [ ] Leviathan: os segmentos seguem a cabeça sem "engessar" e somem na morte.
+- [ ] Hive Queen: invoca minions, respeita o limite e para de invocar com a tela cheia.
+- [ ] Omega Core: muda de forma três vezes, fica invulnerável durante a troca e volta a atacar.
+- [ ] Widow: a teia deixa a nave lenta e o efeito expira (indicador no canto inferior direito).
+- [ ] Reaper Wing: as investidas são legíveis e não prendem o jogador contra a borda.
+
+### Modos extras
+- [ ] Sobrevivência: as ondas continuam indefinidamente e ficam mais difíceis; mini-chefe na onda 8.
+- [ ] Boss Rush: só aparece depois de derrotar um chefe e enfileira os quatro.
+- [ ] Desafio Diário: reiniciar a fase mantém a mesma sequência de ondas do dia.
+- [ ] Game over em qualquer modo grava a linha no Ranking do modo certo.
+
+### Progressão, ranking e conquistas
+- [ ] Vitória e derrota mostram créditos, XP e componentes ganhos.
+- [ ] O menu mostra nível de piloto, créditos e componentes atualizados.
+- [ ] Ranking: as quatro abas listam apenas o modo escolhido, ordenado por pontuação.
+- [ ] Conquistas disparam o aviso na tela e ficam marcadas na lista.
+- [ ] "Sobrevivente" só é concedida quando a fase termina sem perder vida.
+
+### Feedback novo
+- [ ] Com o casco abaixo de 30 %, a nave solta fumaça, o HUD pisca "HULL CRITICAL" e toca o alarme.
+- [ ] Explosões e impactos emitem faíscas de partículas.
+- [ ] O som do motor acompanha a velocidade da nave.
+- [ ] Cada fase tem música e ambiente próprios; o chefe troca a música e ela volta ao normal depois.
+- [ ] Splash: cartão do estúdio, depois o título, sem travar.

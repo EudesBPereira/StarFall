@@ -75,3 +75,4 @@ MonoBehaviour:
   - Id: 5
     Clip: {fileID: 0}
     Volume: 1
+  Ambient: []

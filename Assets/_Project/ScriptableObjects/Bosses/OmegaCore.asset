@@ -1,0 +1,402 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ce7ad3fb0d9234db4e362d0a1df7e9, type: 3}
+  m_Name: OmegaCore
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
+  DisplayName: OMEGA CORE
+  Prefab: {fileID: 6693617233371870773, guid: 023f683ab3610e14484284a92de703f3, type: 3}
+  Sprite: {fileID: 21300000, guid: 23ad7906d4478b140b3b963ec13a5867, type: 3}
+  Tint: {r: 0.6, g: 0.9, b: 1, a: 1}
+  Scale: 2
+  ColliderRadius: 1.5
+  MaxHull: 6000
+  MaxShield: 400
+  ShieldColor: {r: 0.6, g: 0.9, b: 1, a: 0.7}
+  ContactDamage: 45
+  SelfDestructOnContact: 0
+  ScoreValue: 10000
+  EnergyOnKill: 80
+  ComponentReward: 5
+  DropTable: {fileID: 11400000, guid: 06154b06ada0eed42afa6dc384c08fdd, type: 2}
+  IsElite: 0
+  IsObstacle: 0
+  ImmuneToUltimate: 0
+  Movement: 4
+  MovementSettings:
+    Speed: 1
+    Amplitude: 1.5
+    Frequency: 2
+    HoldHeight: 0.25
+    HoldDuration: 6
+    StrafeSpeed: 2
+    TurnRate: 90
+  Attack: 0
+  AttackSettings:
+    Interval: 2
+    InitialDelay: 0.8
+    Count: 1
+    SpreadAngle: 0
+    BurstCount: 1
+    BurstInterval: 0.12
+    ProjectileSpeed: 6
+    Damage: 10
+    ProjectileScale: 1
+    Lifetime: 5
+    Color: {r: 1, g: 0.4, b: 0.3, a: 1}
+    OnlyWhenOnScreen: 1
+    SplashRadius: 0
+    SlowSeconds: 0
+  ProjectilePrefab: {fileID: 0}
+  MinLifetime: 999
+  ExplosionScale: 2.4
+  ExplosionColor: {r: 0.8, g: 0.75, b: 0.625, a: 1}
+  HasThruster: 1
+  ThrusterColor: {r: 0.76, g: 0.74, b: 0.68, a: 1}
+  BossId: 3
+  Title: OMEGA CORE
+  EntranceDuration: 4
+  EntranceHeight: 0.2
+  Phases:
+  - Name: OMEGA CORE
+    HealthThreshold: 1
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 2.2
+      Frequency: 0.5
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 0
+      Settings:
+        Interval: 2.4
+        InitialDelay: 1.5
+        Count: 12
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 4.5
+        Damage: 11
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.6, g: 0.9, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 3
+      Settings:
+        Interval: 0.8
+        InitialDelay: 1
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 7
+        Damage: 11
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.5, g: 0.8, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.9
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  - Name: 'OMEGA CORE: TRANSFORMATION'
+    HealthThreshold: 0.75
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 2.8
+      Frequency: 0.8
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 4
+      Settings:
+        Interval: 2.8
+        InitialDelay: 1
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5.5
+        Damage: 16
+        ProjectileScale: 1.2
+        Lifetime: 6
+        Color: {r: 1, g: 0.6, b: 0.4, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0.9
+        SlowSeconds: 0
+      HomingTurnRate: 90
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.6
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 6
+      Settings:
+        Interval: 0.2
+        InitialDelay: 0.5
+        Count: 1
+        SpreadAngle: 40
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 7
+        Damage: 9
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.5, b: 0.6, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 21300000, guid: 01b294fb5bbba4b43b1cd4aa9ae86a53, type: 3}
+    Tint: {r: 1, g: 0.6, b: 0.5, a: 1}
+    Scale: 1.65
+    TransformSeconds: 1.6
+  - Name: 'OMEGA CORE: ANNIHILATOR'
+    HealthThreshold: 0.5
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 3
+      Frequency: 0.9
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 5
+      Settings:
+        Interval: 6.5
+        InitialDelay: 2.5
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.35, b: 0.55, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1.2
+      BeamSeconds: 1.8
+      BeamWidth: 1.4
+      BeamDamagePerSecond: 50
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 0
+      Settings:
+        Interval: 2.2
+        InitialDelay: 1
+        Count: 16
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5
+        Damage: 11
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.9, g: 0.5, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 7
+      Settings:
+        Interval: 6
+        InitialDelay: 3
+        Count: 2
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 1, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 11400000, guid: e3c50bc843d8ddd469163359244c1a5f, type: 2}
+      SummonCap: 4
+    Sprite: {fileID: 21300000, guid: d5ba9aa36a1a6584c96340fcaac7a634, type: 3}
+    Tint: {r: 0.9, g: 0.5, b: 1, a: 1}
+    Scale: 1.8
+    TransformSeconds: 1.8
+  - Name: OMEGA OVERLOAD
+    HealthThreshold: 0.25
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 3.4
+      Frequency: 1.3
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 3
+      Settings:
+        Interval: 0.55
+        InitialDelay: 0.3
+        Count: 2
+        SpreadAngle: 12
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 8
+        Damage: 11
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.4, b: 0.4, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.9
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 4
+      Settings:
+        Interval: 3.5
+        InitialDelay: 1.5
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 6
+        Damage: 16
+        ProjectileScale: 1.2
+        Lifetime: 6
+        Color: {r: 1, g: 0.6, b: 0.4, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0.9
+        SlowSeconds: 0
+      HomingTurnRate: 100
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.6
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 5
+      Settings:
+        Interval: 5
+        InitialDelay: 3
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.35, b: 0.55, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.6
+      BeamWidth: 1.4
+      BeamDamagePerSecond: 55
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 0
+      Settings:
+        Interval: 2
+        InitialDelay: 0.5
+        Count: 18
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5.5
+        Damage: 11
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.6, b: 0.6, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 21300000, guid: 01b294fb5bbba4b43b1cd4aa9ae86a53, type: 3}
+    Tint: {r: 1, g: 0.85, b: 0.8, a: 1}
+    Scale: 1.9
+    TransformSeconds: 1.4
+  DeathExplosions: 20
+  DeathSequenceSeconds: 3.2
+  SegmentCount: 0
+  SegmentSprite: {fileID: 0}
+  SegmentSpacing: 0.9
+  SegmentScale: 0.8

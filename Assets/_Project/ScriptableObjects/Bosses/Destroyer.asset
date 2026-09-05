@@ -12,28 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ce7ad3fb0d9234db4e362d0a1df7e9, type: 3}
   m_Name: Destroyer
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
-  DisplayName: The Destroyer
+  DisplayName: THE DESTROYER
   Prefab: {fileID: 6511994032289310215, guid: ca8ea9f48728f204fadbeb1be11ac1c0, type: 3}
   Sprite: {fileID: 21300000, guid: 8c46bf7a2685e2e41a44d78dd47b4c44, type: 3}
-  Tint: {r: 1, g: 0.45, b: 0.55, a: 1}
-  Scale: 1
+  Tint: {r: 1, g: 0.45, b: 0.45, a: 1}
+  Scale: 1.8
   ColliderRadius: 1.4
-  MaxHull: 2800
+  MaxHull: 2400
   MaxShield: 0
   ShieldColor: {r: 0.4, g: 0.9, b: 1, a: 0.6}
   ContactDamage: 40
   SelfDestructOnContact: 0
   ScoreValue: 10000
-  EnergyOnKill: 50
-  DropTable: {fileID: 0}
-  IsElite: 1
+  EnergyOnKill: 60
+  ComponentReward: 3
+  DropTable: {fileID: 11400000, guid: 06154b06ada0eed42afa6dc384c08fdd, type: 2}
+  IsElite: 0
   IsObstacle: 0
   ImmuneToUltimate: 0
   Movement: 4
   MovementSettings:
-    Speed: 0
-    Amplitude: 2.5
-    Frequency: 0.6
+    Speed: 1
+    Amplitude: 1.5
+    Frequency: 2
     HoldHeight: 0.25
     HoldDuration: 6
     StrafeSpeed: 2
@@ -52,19 +53,24 @@ MonoBehaviour:
     Lifetime: 5
     Color: {r: 1, g: 0.4, b: 0.3, a: 1}
     OnlyWhenOnScreen: 1
+    SplashRadius: 0
+    SlowSeconds: 0
   ProjectilePrefab: {fileID: 0}
   MinLifetime: 999
-  ExplosionScale: 3
-  ExplosionColor: {r: 1, g: 0.5, b: 0.4, a: 1}
+  ExplosionScale: 2.16
+  ExplosionColor: {r: 1, g: 0.525, b: 0.35, a: 1}
+  HasThruster: 1
+  ThrusterColor: {r: 1, g: 0.47, b: 0.35, a: 1}
+  BossId: 0
   Title: THE DESTROYER
-  EntranceDuration: 3
+  EntranceDuration: 3.5
   EntranceHeight: 0.2
   Phases:
-  - Name: 
+  - Name: THE DESTROYER
     HealthThreshold: 1
     Movement: 4
     MovementSettings:
-      Speed: 0
+      Speed: 1
       Amplitude: 2.5
       Frequency: 0.6
       HoldHeight: 0.25
@@ -75,82 +81,62 @@ MonoBehaviour:
     - Kind: 3
       Settings:
         Interval: 0.9
-        InitialDelay: 0.6
-        Count: 1
-        SpreadAngle: 0
-        BurstCount: 1
-        BurstInterval: 0.12
-        ProjectileSpeed: 7
-        Damage: 12
-        ProjectileScale: 1
-        Lifetime: 6
-        Color: {r: 1, g: 0.45, b: 0.35, a: 1}
-        OnlyWhenOnScreen: 1
-      HomingTurnRate: 0
-      TelegraphSeconds: 0
-      BeamSeconds: 0
-      BeamWidth: 0
-      BeamDamagePerSecond: 0
-      MuzzleOffset: 1.6
-  - Name: MISSILE BAYS OPEN
-    HealthThreshold: 0.7
-    Movement: 4
-    MovementSettings:
-      Speed: 0
-      Amplitude: 3
-      Frequency: 0.9
-      HoldHeight: 0.25
-      HoldDuration: 6
-      StrafeSpeed: 2
-      TurnRate: 90
-    Attacks:
-    - Kind: 3
-      Settings:
-        Interval: 0.8
-        InitialDelay: 0
-        Count: 2
-        SpreadAngle: 12
-        BurstCount: 1
-        BurstInterval: 0.12
-        ProjectileSpeed: 7
-        Damage: 12
-        ProjectileScale: 1
-        Lifetime: 6
-        Color: {r: 1, g: 0.45, b: 0.35, a: 1}
-        OnlyWhenOnScreen: 1
-      HomingTurnRate: 0
-      TelegraphSeconds: 0
-      BeamSeconds: 0
-      BeamWidth: 0
-      BeamDamagePerSecond: 0
-      MuzzleOffset: 1.6
-    - Kind: 4
-      Settings:
-        Interval: 3.5
         InitialDelay: 1
         Count: 1
         SpreadAngle: 0
         BurstCount: 1
         BurstInterval: 0.12
-        ProjectileSpeed: 4
-        Damage: 18
-        ProjectileScale: 1.4
-        Lifetime: 6
-        Color: {r: 1, g: 0.8, b: 0.3, a: 1}
+        ProjectileSpeed: 7
+        Damage: 10
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.5, b: 0.4, a: 1}
         OnlyWhenOnScreen: 1
-      HomingTurnRate: 60
-      TelegraphSeconds: 0
-      BeamSeconds: 0
-      BeamWidth: 0
-      BeamDamagePerSecond: 0
-      MuzzleOffset: 1.2
-  - Name: CORE EXPOSED
-    HealthThreshold: 0.4
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.7
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 0
+      Settings:
+        Interval: 3.5
+        InitialDelay: 2
+        Count: 12
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 4.5
+        Damage: 10
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.35, b: 0.5, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  - Name: 'DESTROYER: MISSILE BARRAGE'
+    HealthThreshold: 0.66
     Movement: 4
     MovementSettings:
-      Speed: 0
-      Amplitude: 3.5
-      Frequency: 1.2
+      Speed: 1
+      Amplitude: 3
+      Frequency: 0.8
       HoldHeight: 0.25
       HoldDuration: 6
       StrafeSpeed: 2
@@ -159,43 +145,67 @@ MonoBehaviour:
     - Kind: 3
       Settings:
         Interval: 0.7
-        InitialDelay: 0
-        Count: 3
-        SpreadAngle: 20
+        InitialDelay: 0.4
+        Count: 2
+        SpreadAngle: 12
         BurstCount: 1
         BurstInterval: 0.12
         ProjectileSpeed: 7.5
-        Damage: 12
+        Damage: 10
         ProjectileScale: 1
-        Lifetime: 6
-        Color: {r: 1, g: 0.45, b: 0.35, a: 1}
+        Lifetime: 5
+        Color: {r: 1, g: 0.5, b: 0.4, a: 1}
         OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
       HomingTurnRate: 0
-      TelegraphSeconds: 0
-      BeamSeconds: 0
-      BeamWidth: 0
-      BeamDamagePerSecond: 0
-      MuzzleOffset: 1.6
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.7
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
     - Kind: 4
       Settings:
-        Interval: 4
-        InitialDelay: 0
+        Interval: 3
+        InitialDelay: 1
         Count: 1
         SpreadAngle: 0
         BurstCount: 1
         BurstInterval: 0.12
-        ProjectileSpeed: 4.2
-        Damage: 18
-        ProjectileScale: 1.4
+        ProjectileSpeed: 5
+        Damage: 16
+        ProjectileScale: 1.2
         Lifetime: 6
-        Color: {r: 1, g: 0.8, b: 0.3, a: 1}
+        Color: {r: 1, g: 0.7, b: 0.3, a: 1}
         OnlyWhenOnScreen: 1
-      HomingTurnRate: 70
-      TelegraphSeconds: 0
-      BeamSeconds: 0
-      BeamWidth: 0
-      BeamDamagePerSecond: 0
-      MuzzleOffset: 1.2
+        SplashRadius: 0.8
+        SlowSeconds: 0
+      HomingTurnRate: 80
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.4
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  - Name: 'DESTROYER: FINAL FURY'
+    HealthThreshold: 0.33
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 3.2
+      Frequency: 1.1
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
     - Kind: 5
       Settings:
         Interval: 6
@@ -204,17 +214,77 @@ MonoBehaviour:
         SpreadAngle: 0
         BurstCount: 1
         BurstInterval: 0.12
-        ProjectileSpeed: 0
+        ProjectileSpeed: 0.1
         Damage: 0
         ProjectileScale: 1
-        Lifetime: 6
-        Color: {r: 1, g: 0.4, b: 0.5, a: 1}
+        Lifetime: 5
+        Color: {r: 1, g: 0.35, b: 0.55, a: 1}
         OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
       HomingTurnRate: 0
       TelegraphSeconds: 1.2
       BeamSeconds: 1.6
       BeamWidth: 1.2
       BeamDamagePerSecond: 45
       MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 4
+      Settings:
+        Interval: 3.5
+        InitialDelay: 2
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5.5
+        Damage: 16
+        ProjectileScale: 1.2
+        Lifetime: 6
+        Color: {r: 1, g: 0.7, b: 0.3, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0.8
+        SlowSeconds: 0
+      HomingTurnRate: 90
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 1.4
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 0
+      Settings:
+        Interval: 2.8
+        InitialDelay: 1
+        Count: 16
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5
+        Damage: 10
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.35, b: 0.5, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
   DeathExplosions: 14
-  DeathSequenceSeconds: 2.4
+  DeathSequenceSeconds: 2.2
+  SegmentCount: 0
+  SegmentSprite: {fileID: 0}
+  SegmentSpacing: 0.9
+  SegmentScale: 0.8

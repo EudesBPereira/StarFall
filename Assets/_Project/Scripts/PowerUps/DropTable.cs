@@ -18,10 +18,10 @@ namespace Starfall.PowerUps
         public Entry[] Entries = new Entry[0];
 
         /// <summary>Returns a power-up or null when nothing drops.</summary>
-        public PowerUpDefinition Roll()
+        public PowerUpDefinition Roll(float chanceMultiplier = 1f)
         {
             if (Entries == null || Entries.Length == 0) return null;
-            if (UnityEngine.Random.value > DropChance) return null;
+            if (UnityEngine.Random.value > DropChance * chanceMultiplier) return null;
             return RollGuaranteed();
         }
 

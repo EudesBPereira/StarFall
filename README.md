@@ -1,6 +1,8 @@
-# STARFALL DEFENSE — MVP 1.0
+# STARFALL DEFENSE — 1.0
 
-Shoot'em up 2D vertical para **Android e iOS**, feito em **Unity 6**. No ano de 2237 a humanidade enfrenta The Swarm; você pilota a SF-01 Vanguard por três setores até o chefe The Destroyer.
+Shoot'em up 2D vertical para **Android e iOS**, feito em **Unity 6**. No ano de 2237 a humanidade enfrenta The Swarm; você pilota uma das cinco naves da frota terrestre por cinco setores até o Omega Core, a inteligência por trás da invasão.
+
+Campanha de 5 fases com 4 chefes e 5 mini-chefes, 7 armas, 5 naves, árvore de upgrades permanente, ranking local, conquistas e os modos Sobrevivência, Boss Rush e Desafio Diário.
 
 Documentação: [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Balanceamento](docs/BALANCING.md) · [Checklist de QA](docs/QA_CHECKLIST.md) · [Backlog](docs/BACKLOG.md) · [Blueprint original](blueprint.md)
 
@@ -70,13 +72,13 @@ docs/                    documentação obrigatória
 
 ## Como criar conteúdo
 
-**Novo inimigo:** `Create → Starfall → Enemies → Enemy Definition`. Escolha sprite/cor, vida, escudo, dano de contato, `Movement` (StraightDown, Weave, Chase, HoverStrafe, LateralPatrol) e `Attack` (None, Forward, Aimed, Ring) com seus parâmetros, pontos, energia e `DropTable`. Não é preciso criar prefab: o spawner usa o prefab genérico `Prefabs/Enemies/Enemy` (ou um override no campo `Prefab`).
+**Novo inimigo:** `Create → Starfall → Enemies → Enemy Definition`. Escolha sprite/cor, vida, escudo, dano de contato, `Movement` (StraightDown, Weave, Chase, HoverStrafe, LateralPatrol, Serpentine, Dash, Hold) e `Attack` (None, Forward, Aimed, Ring, Stream, Web) com seus parâmetros, pontos, energia, `ComponentReward`, `IsElite` e `DropTable`. Não é preciso criar prefab: o spawner usa o prefab genérico `Prefabs/Enemies/Enemy` (ou um override no campo `Prefab`).
 
 **Nova onda:** `Create → Starfall → Waves → Wave Definition`. Adicione entradas (`Enemy`, `Count`, `Interval`, `DelayBefore`, `Pattern`: TopRandom, TopCenter, TopLeft/Right, TopLine, TopVee, TopFixed, TopAlternate). `WaitForClear` segura o próximo evento até a tela limpar; `MaxDuration` é o timeout.
 
 **Nova fase:** `Create → Starfall → Stages → Stage Definition`. Preencha nome, briefing, cores de fundo/névoa, música e a lista de `Events` (Wave, Delay, Message, MiniBoss, Boss, AsteroidField). Adicione a fase ao array `Stages` em `ScriptableObjects/Config/GameConfig.asset`; o desbloqueio e o botão "Próxima fase" seguem a ordem do array.
 
-**Novo chefe:** `Create → Starfall → Bosses → Boss Definition` com prefab que contenha `BossController` (copie `Prefabs/Bosses/Destroyer`). Defina `Phases` (limiar de vida, movimento, lista de `BossAttack`: Ring, Aimed, Forward, SideCannons, Missiles, FrontLaser).
+**Novo chefe:** `Create → Starfall → Bosses → Boss Definition` com prefab que contenha `BossController` (copie `Prefabs/Bosses/Destroyer`). Defina `Phases` (limiar de vida, movimento, lista de `BossAttack`: Ring, Aimed, Forward, SideCannons, Missiles, FrontLaser, Stream, Summon, Web). Uma fase com `Sprite`/`Tint`/`Scale` preenchidos vira uma transformação, com invulnerabilidade por `TransformSeconds`. `SegmentCount` acima de zero dá ao chefe um corpo em segmentos (Leviathan). Chefes principais precisam de um `BossId` próprio; mini-chefes usam `MiniBoss`.
 
 **Áudio final:** preencha os slots de `ScriptableObjects/Audio/AudioLibrary.asset`; slots vazios usam placeholders sintetizados (desative em `UseSynthesizedPlaceholders`).
 
@@ -90,3 +92,22 @@ docs/                    documentação obrigatória
 ## Licenças e assets
 
 Todos os sprites são formas procedurais originais; todo o áudio é sintetizado em runtime. Nenhum asset de terceiros é incluído.
+
+## Modos de jogo
+
+| Modo | Como funciona |
+|---|---|
+| Campanha | 5 fases em ordem; cada uma desbloqueia a seguinte e guarda a melhor pontuação |
+| Sobrevivência | Ondas procedurais infinitas, dificuldade crescente, mini-chefe a cada 8 ondas |
+| Boss Rush | Os quatro chefes principais em sequência; desbloqueia ao derrotar qualquer chefe |
+| Desafio Diário | Semente derivada da data: mesma sequência para todos no dia, inimigos mais rápidos e menos drops |
+
+## Progressão permanente
+
+Cada partida rende **créditos** (pontuação/10), **XP** e **componentes** (elites e chefes). No menu:
+
+- **Hangar** — comprar e equipar as cinco naves e as sete armas, com prévia em holograma e comparação de atributos.
+- **Upgrades** — dez nós em cinco níveis (dano, cadência, alcance, escudo, regeneração, casco, velocidade, aceleração, recarga e potência da Ultimate). Os últimos níveis também custam componentes.
+- **Ranking** — top 10 local por modo e a lista de conquistas.
+
+Nada disso usa rede: tudo fica em `Application.persistentDataPath/starfall_save.json` (versão 2, migração automática de saves da versão 1).

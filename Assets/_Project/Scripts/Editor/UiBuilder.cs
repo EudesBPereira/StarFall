@@ -19,6 +19,7 @@ namespace Starfall.EditorTools
         public static readonly Color TextColor = new Color(0.92f, 0.96f, 1f);
 
         public static Sprite PanelSprite;
+        public static Material HologramMaterial;
 
         /// <summary>Default TMP font, or null when the TMP essentials are not imported (never throws).</summary>
         public static TMP_FontAsset DefaultFont
@@ -240,6 +241,50 @@ namespace Starfall.EditorTools
             le.preferredHeight = height;
             le.preferredWidth = 780f;
             return t;
+        }
+
+        /// <summary>Selectable row: icon (optional), title, detail line and a right-aligned cost label.</summary>
+        public static ListRow CreateListRow(Transform parent, string name, Vector2 size, bool withIcon)
+        {
+            var button = CreateButton(parent, name, "", size, 24f, new Color(0.06f, 0.1f, 0.2f, 0.92f));
+            var rt = button.GetComponent<RectTransform>();
+            rt.sizeDelta = size;
+            var row = button.gameObject.AddComponent<ListRow>();
+            row.button = button;
+            var label = button.GetComponentInChildren<TextMeshProUGUI>();
+            if (label != null) Object.DestroyImmediate(label.gameObject);
+
+            var highlight = CreateImage(rt, "Highlight", new Color(0.35f, 0.9f, 1f, 0.25f), PanelSprite);
+            highlight.type = Image.Type.Sliced;
+            Stretch(highlight.rectTransform, 2f, 2f, 2f, 2f);
+            highlight.enabled = false;
+            row.highlight = highlight;
+
+            float left = 14f;
+            if (withIcon)
+            {
+                var icon = CreateImage(rt, "Icon", Color.white, null);
+                float iconSize = size.y - 12f;
+                Place(icon.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(10f, 0f), new Vector2(iconSize, iconSize));
+                icon.preserveAspect = true;
+                row.icon = icon;
+                left = iconSize + 22f;
+            }
+
+            float titleSize = size.y >= 80f ? 30f : 24f;
+            float detailSize = size.y >= 80f ? 22f : 18f;
+            bool twoLines = size.y >= 54f;
+            var title = CreateText(rt, "Title", "", titleSize, TextColor, TextAlignmentOptions.Left, FontStyles.Bold);
+            Place(title.rectTransform, new Vector2(0f, twoLines ? 1f : 0.5f), new Vector2(0f, twoLines ? 1f : 0.5f), new Vector2(left, twoLines ? -4f : 0f), new Vector2(size.x - left - 200f, twoLines ? size.y * 0.5f : size.y));
+            row.titleText = title;
+            var detail = CreateText(rt, "Detail", "", detailSize, new Color(0.7f, 0.82f, 0.95f), TextAlignmentOptions.Left);
+            Place(detail.rectTransform, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(left, 2f), new Vector2(size.x - left - 200f, twoLines ? size.y * 0.5f : 0f));
+            if (!twoLines) detail.enabled = false;
+            row.detailText = detail;
+            var cost = CreateText(rt, "Cost", "", detailSize + 2f, new Color(1f, 0.85f, 0.3f), TextAlignmentOptions.Right, FontStyles.Bold);
+            Place(cost.rectTransform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-14f, 0f), new Vector2(190f, size.y));
+            row.costText = cost;
+            return row;
         }
     }
 }

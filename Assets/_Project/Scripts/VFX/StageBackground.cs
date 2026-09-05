@@ -7,8 +7,8 @@ using UnityEngine;
 namespace Starfall.VFX
 {
     /// <summary>
-    /// Procedural background: gradient, scrolling star layers, optional drifting debris and a fog overlay.
-    /// Everything is built from a single white sprite so no art assets are required (placeholder look).
+    /// Procedural background: gradient, optional slow backdrop silhouette, scrolling star layers, drifting debris
+    /// and a fog overlay. Everything is built from placeholder sprites so no art assets are required.
     /// </summary>
     public sealed class StageBackground : MonoBehaviour
     {
@@ -30,6 +30,7 @@ namespace Starfall.VFX
         private readonly List<Transform> _debris = new List<Transform>(8);
         private SpriteRenderer _gradient;
         private SpriteRenderer _fog;
+        private SpriteRenderer _backdrop;
         private Transform _starRoot;
         private StageDefinition _stage;
         private float _debrisTimer;
@@ -55,6 +56,16 @@ namespace Starfall.VFX
             EnsureLayer(ref _gradient, "Gradient", SortingOrders.Background, gradientSprite);
             _gradient.color = stage.BackgroundTop;
             FitToScreen(_gradient.transform, gradientSprite);
+
+            EnsureLayer(ref _backdrop, "Backdrop", SortingOrders.Background + 1, stage.BackdropSprite);
+            _backdrop.sprite = stage.BackdropSprite;
+            _backdrop.enabled = stage.BackdropSprite != null;
+            _backdrop.color = stage.BackdropTint;
+            if (stage.BackdropSprite != null)
+            {
+                _backdrop.transform.localScale = Vector3.one * stage.BackdropScale;
+                _backdrop.transform.position = new Vector3(area.Center.x, area.Top + 2f, 6f);
+            }
 
             EnsureLayer(ref _fog, "Fog", SortingOrders.Fog, dotSprite);
             _fog.color = stage.Fog;
@@ -134,6 +145,14 @@ namespace Starfall.VFX
                 s.T.position = p;
             }
 
+            if (_backdrop != null && _backdrop.enabled)
+            {
+                var p = _backdrop.transform.position;
+                p.y -= 0.12f * dt;
+                if (p.y < area.Bottom - 6f) p.y = area.Top + 6f;
+                _backdrop.transform.position = p;
+            }
+
             for (int i = _debris.Count - 1; i >= 0; i--)
             {
                 var t = _debris[i];
@@ -166,7 +185,7 @@ namespace Starfall.VFX
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
             sr.sortingOrder = SortingOrders.Debris;
-            sr.color = new Color(0.6f, 0.65f, 0.75f, 0.55f);
+            sr.color = _stage.DebrisTint;
             go.transform.localScale = Vector3.one * Random.Range(0.8f, 1.8f);
             go.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0f, 360f));
             go.transform.position = new Vector3(Random.Range(area.Left, area.Right), area.Top + 2f, 3f);

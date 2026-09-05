@@ -19,8 +19,47 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 30be411063f6c9741b63b53134ee4f50, type: 2}
   - {fileID: 11400000, guid: 6bde68cb39c945847b40e8d5814e65f0, type: 2}
   - {fileID: 11400000, guid: 3a84dd4d4bb5c3240bf6cac36cc5ec47, type: 2}
+  - {fileID: 11400000, guid: ffefcea07b979e7428a7209b6f9523d7, type: 2}
+  - {fileID: 11400000, guid: e9b7a7591d79596469e15be2ac5f3d64, type: 2}
   StartingLives: 3
   MaxLives: 9
+  Ships:
+  - {fileID: 11400000, guid: 009bae843c0e4614bb7abc1784050419, type: 2}
+  - {fileID: 11400000, guid: b01070d5a878abe40a61b411911e2136, type: 2}
+  - {fileID: 11400000, guid: 7ec9d861b9ee36c48899969eef4f084b, type: 2}
+  - {fileID: 11400000, guid: 908187bf0f5d1374e80a2101d3a54722, type: 2}
+  - {fileID: 11400000, guid: 74168d3ae361abe47881346d6273425d, type: 2}
+  Weapons:
+  - {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
+  - {fileID: 11400000, guid: 121a5773ab5ef1643a4bb3fa2ec632cd, type: 2}
+  - {fileID: 11400000, guid: e5490d4d38feaac4b91ef6cc7370eec5, type: 2}
+  - {fileID: 11400000, guid: 2dd41a617728d6c4aac309e5c26f4856, type: 2}
+  - {fileID: 11400000, guid: f2f8f9f24fbbaa745b303986a7d072da, type: 2}
+  - {fileID: 11400000, guid: a52fe2a5f79d48e45ab9802d41fce0ce, type: 2}
+  - {fileID: 11400000, guid: b41fc46d9d54da14d80be60d88e502b9, type: 2}
+  Bosses:
+  - {fileID: 11400000, guid: ba548743a4f21fc46a2f99e892c51b1b, type: 2}
+  - {fileID: 11400000, guid: 59b4ebb1e1c076949b0b996dc44d51aa, type: 2}
+  - {fileID: 11400000, guid: 083924980c292b34299822877fa03d02, type: 2}
+  - {fileID: 11400000, guid: d60a853a50cb78f42892f02cb138bb3d, type: 2}
+  SurvivalLook: {fileID: 11400000, guid: ce73c1759e417ef43a988f684faadc48, type: 2}
+  ProceduralEnemies:
+  - {fileID: 11400000, guid: 1766c11a60bc3874f92b0988fda61ebf, type: 2}
+  - {fileID: 11400000, guid: 9c1037501eccd074dbdb4ec7f94d27f7, type: 2}
+  - {fileID: 11400000, guid: c7cdc128b88bcac40ad967005c897c55, type: 2}
+  - {fileID: 11400000, guid: e3c50bc843d8ddd469163359244c1a5f, type: 2}
+  - {fileID: 11400000, guid: c5ae09b110a209448bcce3238e97309a, type: 2}
+  - {fileID: 11400000, guid: fac6019fa50e0da40ab428348150fe54, type: 2}
+  - {fileID: 11400000, guid: 4938e25c29ffeef4785015c88d65ccef, type: 2}
+  - {fileID: 11400000, guid: 7cde71cef5556264f8000f6ec586adaa, type: 2}
+  SurvivalWavePause: 2.5
+  SurvivalMiniBossEvery: 8
+  SurvivalMiniBosses:
+  - {fileID: 11400000, guid: c6263f1dc58fc3a4cb5d9a5cfc5846a4, type: 2}
+  - {fileID: 11400000, guid: 5a548cf0d8b36ad4b97d5150e945d864, type: 2}
+  - {fileID: 11400000, guid: ff8d02e2fcc4915408752a88a5039f6e, type: 2}
+  DailyEnemySpeedMultiplier: 1.15
+  DailyDropChanceMultiplier: 0.6
   RespawnDelay: 1.5
   RespawnInvulnerability: 2.5
   HitInvulnerability: 1
