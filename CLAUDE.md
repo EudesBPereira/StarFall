@@ -6,7 +6,7 @@ Guia para agentes (Claude Code) trabalhando neste repositório. Leia também `bl
 
 Shoot'em up 2D vertical para **Android/iOS** em **Unity 6000.3.23f1** (Unity 6.3 LTS), orientação portrait.
 
-Escopo atual (v1.0, GDD completo): 5 naves, 7 armas, 6 tipos de inimigo comum + elites + turret + asteroide, 5 mini-chefes, 4 chefes (Destroyer, Leviathan, Hive Queen, Omega Core), 5 fases, vidas/escudo/casco com crítico, multiplicador x1–x10, 6 power-ups, Ultimate, progressão permanente (créditos/XP/componentes, árvore de 10 upgrades), Hangar, Ranking local, conquistas, modos Sobrevivência/Boss Rush/Desafio Diário, áudio placeholder e save local v2.
+Direção: `docs/product/IMPLEMENTATION_MASTER_PLAN.md` (Plano Mestre STAR RISK, D-023) — núcleo = Zona de Risco, Overdrive, graze, facções; fases A–G; nada de monetização/serviços fora da fase F. Escopo atual (v1.0, GDD completo + fase B do plano): 5 naves, 7 armas, 6 tipos de inimigo comum + elites + turret + asteroide, 5 mini-chefes, 4 chefes (Destroyer, Leviathan, Hive Queen, Omega Core), 5 fases, vidas/escudo/casco com crítico, multiplicador x1–x10, 6 power-ups, Ultimate, progressão permanente (créditos/XP/componentes, árvore de 10 upgrades), Hangar, Ranking local, conquistas, modos Sobrevivência/Boss Rush/Desafio Diário, áudio placeholder e save local v2.
 
 **A fonte de verdade é `document.md` (GDD)** desde D-016; o `blueprint.md` foi só o recorte inicial de MVP. Plataforma mobile foi pedida pelo usuário e sobrepõe o "Windows" do GDD (D-001/D-002). Fora do escopo: a "Visão de Futuro" do GDD (coop, ranking global, clãs, Battle Pass, editor de fases, Steam).
 
@@ -14,10 +14,10 @@ Escopo atual (v1.0, GDD completo): 5 naves, 7 armas, 6 tipos de inimigo comum + 
 
 ```
 Assets/_Project/Scripts/
-  Logic/    regras puras (sem UnityEngine) — testadas por dotnet e EditMode
+  Logic/    regras puras (sem UnityEngine) — testadas por dotnet e EditMode; inclui RiskModel, OverdriveModel, GrazeRules, StageResultRules
   Core/     GameFlowController, GameplayContext, GameSignals, PlayArea, GameConfig, GameSession
   Input/    IGameInput, GameInputReader (teclado+gamepad+toque), TouchPad
-  Player/   PlayerShip, PlayerMovement, WeaponController, PlayerStatusEffects, UltimateController
+  Player/   PlayerShip, PlayerMovement, WeaponController, PlayerStatusEffects, UltimateController, RiskSensor (risco+overdrive+graze)
   Combat/   IDamageable, Health, Projectile, ProjectileSpec/Launcher, WeaponDefinition, GameLayers
   Enemies/  Enemy (genérico, orientado a dados), EnemyDefinition, estratégias de movimento/ataque, registry, spawner
   Bosses/   BossController (fases), BossDefinition, LaserBeam

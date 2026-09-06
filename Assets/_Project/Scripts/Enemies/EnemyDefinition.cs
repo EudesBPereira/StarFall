@@ -132,6 +132,10 @@ namespace Starfall.Enemies
         [Tooltip("Seconds before off-screen checks despawn the enemy (lets it enter from above).")]
         [Min(0f)] public float MinLifetime = 1.5f;
 
+        [Header("Risk Zone")]
+        [Tooltip("How much this enemy contributes to the player Risk Zone when close (1 = standard, kamikaze > 1).")]
+        [Min(0f)] public float RiskWeight = 1f;
+
         [Header("Feedback")]
         [Min(0.1f)] public float ExplosionScale = 1f;
         public Color ExplosionColor = new Color(1f, 0.6f, 0.25f);

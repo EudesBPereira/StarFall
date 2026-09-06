@@ -1,8 +1,9 @@
+using Starfall.Save;
 using UnityEngine;
 
 namespace Starfall.VFX
 {
-    /// <summary>Small positional shake on the camera. Uses scaled time so pausing freezes it.</summary>
+    /// <summary>Small positional shake on the camera. Uses scaled time so pausing freezes it. Scaled by the "screen shake" setting (plan §15.2).</summary>
     public sealed class CameraShake : MonoBehaviour
     {
         private Vector3 _origin;
@@ -17,6 +18,8 @@ namespace Starfall.VFX
 
         public void Shake(float amplitude, float seconds)
         {
+            var data = SaveService.Data;
+            if (data != null) amplitude *= data.screenShake;
             if (amplitude <= 0f || seconds <= 0f) return;
             _amplitude = Mathf.Max(_amplitude, amplitude);
             _remaining = Mathf.Max(_remaining, seconds);

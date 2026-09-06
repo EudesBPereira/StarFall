@@ -7,14 +7,18 @@ using UnityEngine.UI;
 
 namespace Starfall.UI
 {
-    /// <summary>Audio + control preferences. Writes to the save when closed.</summary>
+    /// <summary>Audio, control and accessibility preferences (plan §15.2). Writes to the save when closed.</summary>
     public sealed class SettingsPanel : UiPanel
     {
         [SerializeField] internal Slider masterSlider;
         [SerializeField] internal Slider musicSlider;
         [SerializeField] internal Slider sfxSlider;
         [SerializeField] internal Slider sensitivitySlider;
+        [SerializeField] internal Slider shakeSlider;
         [SerializeField] internal Toggle autoFireToggle;
+        [SerializeField] internal Toggle reducedEffectsToggle;
+        [SerializeField] internal Toggle grazeFeedbackToggle;
+        [SerializeField] internal Toggle showHitboxToggle;
         [SerializeField] internal Button resetProgressButton;
         [SerializeField] internal TMP_Text resetFeedbackText;
         [SerializeField] internal Button backButton;
@@ -28,7 +32,11 @@ namespace Starfall.UI
             if (musicSlider != null) musicSlider.onValueChanged.AddListener(_ => ApplyLive());
             if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(_ => ApplyLive());
             if (sensitivitySlider != null) sensitivitySlider.onValueChanged.AddListener(_ => ApplyLive());
+            if (shakeSlider != null) shakeSlider.onValueChanged.AddListener(_ => ApplyLive());
             if (autoFireToggle != null) autoFireToggle.onValueChanged.AddListener(_ => ApplyLive());
+            if (reducedEffectsToggle != null) reducedEffectsToggle.onValueChanged.AddListener(_ => ApplyLive());
+            if (grazeFeedbackToggle != null) grazeFeedbackToggle.onValueChanged.AddListener(_ => ApplyLive());
+            if (showHitboxToggle != null) showHitboxToggle.onValueChanged.AddListener(_ => ApplyLive());
             if (resetProgressButton != null) resetProgressButton.onClick.AddListener(ResetProgress);
             if (backButton != null) backButton.onClick.AddListener(Close);
         }
@@ -43,7 +51,11 @@ namespace Starfall.UI
                 if (musicSlider != null) musicSlider.value = data.musicVolume;
                 if (sfxSlider != null) sfxSlider.value = data.sfxVolume;
                 if (sensitivitySlider != null) sensitivitySlider.value = data.touchSensitivity;
+                if (shakeSlider != null) shakeSlider.value = data.screenShake;
                 if (autoFireToggle != null) autoFireToggle.isOn = data.autoFire;
+                if (reducedEffectsToggle != null) reducedEffectsToggle.isOn = data.reducedEffects;
+                if (grazeFeedbackToggle != null) grazeFeedbackToggle.isOn = data.grazeFeedback;
+                if (showHitboxToggle != null) showHitboxToggle.isOn = data.showHitbox;
             }
             if (resetFeedbackText != null) resetFeedbackText.text = "";
             _suppress = false;
@@ -59,7 +71,11 @@ namespace Starfall.UI
             if (musicSlider != null) data.musicVolume = musicSlider.value;
             if (sfxSlider != null) data.sfxVolume = sfxSlider.value;
             if (sensitivitySlider != null) data.touchSensitivity = sensitivitySlider.value;
+            if (shakeSlider != null) data.screenShake = shakeSlider.value;
             if (autoFireToggle != null) data.autoFire = autoFireToggle.isOn;
+            if (reducedEffectsToggle != null) data.reducedEffects = reducedEffectsToggle.isOn;
+            if (grazeFeedbackToggle != null) data.grazeFeedback = grazeFeedbackToggle.isOn;
+            if (showHitboxToggle != null) data.showHitbox = showHitboxToggle.isOn;
             if (AudioManager.Instance != null) AudioManager.Instance.SetVolumes(data.masterVolume, data.musicVolume, data.sfxVolume);
         }
 

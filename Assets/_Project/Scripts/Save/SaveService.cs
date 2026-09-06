@@ -64,6 +64,10 @@ namespace Starfall.Save
                 ship = shipId,
                 wave = run.WavesSurvived,
                 date = DateTime.Now.ToString("yyyy-MM-dd"),
+                rank = (int)run.Rank,
+                seed = Core.GameSession.Seed,
+                balance = SaveData.BalanceVersion,
+                revive = run.UsedRevive,
             };
             int rank = Leaderboard.Insert(Data.leaderboard, entry);
             switch (run.Mode)

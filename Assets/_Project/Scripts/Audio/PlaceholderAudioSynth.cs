@@ -88,6 +88,13 @@ namespace Starfall.Audio
                 case SfxId.Summon: return Arpeggio("ph_summon", new[] { 220f, 330f, 440f }, 0.1f, 0.35f);
                 case SfxId.Achievement: return Arpeggio("ph_achievement", new[] { 523f, 659f, 784f, 1047f }, 0.11f, 0.45f);
                 case SfxId.Purchase: return Arpeggio("ph_purchase", new[] { 784f, 1047f }, 0.08f, 0.4f);
+                case SfxId.Graze: return Tone("ph_graze", 0.05f, 2200f, 3200f, 0.22f, Wave.Sine);
+                case SfxId.RiskUp: return Arpeggio("ph_riskUp", new[] { 660f, 990f }, 0.05f, 0.3f);
+                case SfxId.RiskDown: return Arpeggio("ph_riskDown", new[] { 990f, 660f }, 0.05f, 0.2f);
+                case SfxId.OverdriveStart: return Sweep("ph_odStart", 0.7f, 300f, 2400f, 0.55f);
+                case SfxId.OverdriveEnd: return Sweep("ph_odEnd", 0.5f, 1800f, 300f, 0.4f);
+                case SfxId.ComboUp: return Arpeggio("ph_combo", new[] { 880f, 1320f }, 0.05f, 0.3f);
+                case SfxId.RankReveal: return Arpeggio("ph_rank", new[] { 523f, 659f, 784f, 1047f, 1319f }, 0.1f, 0.45f);
                 default: return Tone("ph_default", 0.08f, 800f, 800f, 0.3f, Wave.Sine);
             }
         }
@@ -102,6 +109,7 @@ namespace Starfall.Audio
                 new[] { 130.8f, 164.8f, 196f }, // C major
                 new[] { 98f, 123.5f, 146.8f },  // G major
             };
+            if (id == MusicId.OverdriveLayer) return BuildOverdriveLayer();
             bool boss = id == MusicId.Boss || id == MusicId.FinalBoss;
             bool electronic = id == MusicId.Stage2 || id == MusicId.Survival;
             bool synthwave = id == MusicId.Stage3;
@@ -146,6 +154,22 @@ namespace Starfall.Audio
                 }
             }
             return Make("ph_music_" + id, data);
+        }
+
+        /// <summary>Rhythmic pulse layer mixed on top of the stage music while Overdrive is active (plan §14.2).</summary>
+        private static AudioClip BuildOverdriveLayer()
+        {
+            int n = SampleRate * 2;
+            var data = new float[n];
+            for (int i = 0; i < n; i++)
+            {
+                float t = (float)i / SampleRate;
+                float beat = 1f - (t * 4f - Mathf.Floor(t * 4f));
+                float s = Osc(Wave.Saw, 110f * t) * 0.25f * beat * beat + Sign(Mathf.Sin(2f * Mathf.PI * 55f * t)) * 0.12f * beat;
+                s += Mathf.Sin(2f * Mathf.PI * 880f * t) * 0.05f * (beat > 0.9f ? 1f : 0f);
+                data[i] = s * 0.6f;
+            }
+            return Make("ph_music_overdrive", data);
         }
 
         private static AudioClip BuildAmbient(AmbientId id)

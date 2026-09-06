@@ -83,3 +83,26 @@ Concluídos e removidos do backlog: cinco naves, sete armas, classe Elite, mini-
 - `PlaceholderAudioSynth` gera clipes na primeira reprodução; pré-gerar no boot evitaria um pico de CPU.
 - Os segmentos do Leviathan usam um rastro em lista; com muitos chefes segmentados valeria um buffer circular.
 - Não há teste PlayMode para os modos Sobrevivência/Boss Rush/Diário (só para a campanha).
+
+---
+
+## Plano Mestre STAR RISK — quadro de acompanhamento (docs/product/IMPLEMENTATION_MASTER_PLAN.md)
+
+| ID | Item | Prioridade | Status | Observação |
+|---|---|---|---|---|
+| SR-PROD-001 | Confirmar nome comercial | P0 | Blocked | Exige pesquisa nas lojas/marca pelo responsável do produto; projeto segue "Starfall Defense" |
+| SR-GAME-001 | Zona de Risco | P0 | QA | Implementada com testes; falta validação em aparelho |
+| SR-GAME-002 | Overdrive | P0 | QA | Implementado com testes, camada musical e reações por facção |
+| SR-GAME-003 | Graze | P1 | QA | Implementado com testes e opção de acessibilidade |
+| SR-DESIGN-001 | Reestruturar facções | P0 | In Progress | Federação e Cyber definidas em dados (Phantom → Cyber); Biomecânica sem nave até a fase C |
+| SR-BAL-001 | Reequilibrar Nova-X | P0 | QA | Horizontal; falta teste com jogadores |
+| SR-ECO-001 | Separar créditos de score | P0 | QA | Nova fórmula testada e simulada |
+| SR-QA-001 | Teste em aparelhos reais | P0 | Backlog | Nunca executado |
+| — | Ranks D–SSS | P1 | QA | Limiares por fase; partes de chefe e dificuldade reservados |
+| — | Tutorial do núcleo | P0 | In Progress | Dicas contextuais na fase 1 (risco, overdrive, graze); faltam desviar/upgrade/rank |
+| — | Dez fases / dez chefes | P1 | Backlog | Fase E |
+| — | Builds temporárias | P1 | Backlog | Fase E |
+| SR-MON-001/002/003 | Ads, Pacote Comandante, loja cosmética | P1 | Backlog | Fase F; SDK atrás de interface |
+| — | Analytics, política de privacidade com coleta | P1 | Backlog | Fase F |
+| — | Ranking online | P2 | Backlog | Modelo de dados já carimba seed, versão de balanceamento e revive |
+| — | Fatia de arte final | P0 | Backlog | Fase D |

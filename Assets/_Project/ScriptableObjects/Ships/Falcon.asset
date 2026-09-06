@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Falcon
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Player.ShipDefinition
   Id: 1
+  Faction: 0
   DisplayName: SF-02 Falcon
   Description: Very fast strike craft. Thin hull, sharp reflexes.
   Cost: 2500
@@ -31,6 +32,11 @@ MonoBehaviour:
   UltimateChargeMultiplier: 1.15
   UltimatePowerMultiplier: 0.9
   Weapon: {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
+  OverdriveGainMultiplier: 1
+  OverdriveFireRateBonus: 1.2
+  OverdriveShieldRegen: 0
+  OverdriveCritBonus: 0
+  PrecisionBonusPerHit: 0.01
   Sprite: {fileID: 21300000, guid: 12216f113c81f9c4dabdc243649284fd, type: 3}
   Tint: {r: 1, g: 0.85, b: 0.5, a: 1}
   ThrusterColor: {r: 1, g: 0.7, b: 0.3, a: 0.9}

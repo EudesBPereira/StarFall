@@ -18,6 +18,9 @@ MonoBehaviour:
   Objectives: 
   Events: []
   CompletionBonus: 0
+  ParTimeSeconds: 180
+  RankTargetScore: 20000
+  BaseCredits: 300
   Music: 1
   Ambient: 1
   KeepBossMusicAfterDefeat: 0

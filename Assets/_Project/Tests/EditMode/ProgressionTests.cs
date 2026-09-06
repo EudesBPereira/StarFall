@@ -67,16 +67,16 @@ namespace Starfall.Tests.EditMode
     public class ProgressionRulesTests
     {
         [Test]
-        public void Rewards_ScaleWithScoreAndCompletion()
+        public void Rewards_UseStageBaseNotScore()
         {
-            var win = new RunStats { Score = 10000, Kills = 40, BossKills = 1, Completed = true, ComponentsCollected = 2 };
-            var loss = new RunStats { Score = 10000, Kills = 40, Completed = false };
-            var rw = ProgressionRules.ComputeRewards(win, 1000);
-            var rl = ProgressionRules.ComputeRewards(loss, 1000);
+            var win = new RunStats { Mode = GameModeId.Campaign, Score = 10000, Kills = 40, BossKills = 1, Completed = true, ComponentsCollected = 2, Rank = StageRank.A };
+            var loss = new RunStats { Mode = GameModeId.Campaign, Score = 10000, Kills = 40, Completed = false };
+            var rw = ProgressionRules.ComputeRewards(win, 300, false);
+            var rl = ProgressionRules.ComputeRewards(loss, 300, false);
             Assert.That(rw.Credits, Is.GreaterThan(rl.Credits));
             Assert.That(rw.Xp, Is.EqualTo(40 * 5 + 200 + 150));
             Assert.That(rw.Components, Is.EqualTo(2));
-            Assert.That(rl.Credits, Is.EqualTo(500));
+            Assert.That(rl.Credits, Is.EqualTo(120), "40% of the base on a loss");
         }
 
         [Test]

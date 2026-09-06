@@ -135,3 +135,42 @@ Registro das decisões tomadas para requisitos ambíguos do blueprint, com alter
 - **Descoberta:** teste PlayMode `Boot_LoadsMainMenu` falhou com `missionPanel` nulo; a inspeção do YAML da cena confirmou o `m_Script` sem GUID.
 - **Decisão:** cada MonoBehaviour vive no próprio arquivo, com o mesmo nome da classe. Arquivos criados: `BriefingPanel`, `PausePanel`, `VictoryPanel`, `GameOverPanel`, `MenuPanel`, `ListRow`, `MissionPanel`, `HangarPanel`, `UpgradesPanel`, `RankingPanel`.
 - **Impacto:** regra permanente do projeto; structs, enums e classes puras podem continuar compartilhando arquivo.
+
+## D-023 — Plano Mestre STAR RISK vira a direção do produto
+
+- **Contexto:** o usuário entregou `docs/product/IMPLEMENTATION_MASTER_PLAN.md`, que reposiciona o jogo em torno de Zona de Risco, Overdrive, graze, facções, dez fases e monetização ética.
+- **Decisão:** o plano é a fonte de direção; o GDD (`document.md`) continua a especificação detalhada. A ordem segue as fases A–G do plano. Esta entrega cobre a **Fase B (núcleo)** e os P0 de dados (Nova-X, facções, economia separada do score).
+- **Nome:** ainda não trocado. O plano exige pesquisa de disponibilidade antes (SR-PROD-001); o projeto segue como "Starfall Defense" até a confirmação.
+
+## D-024 — Zona de Risco: sensor por distância com histerese
+
+- **Como:** `RiskSensor` na nave amostra a cada 0,1 s um círculo de 3,6 u com `OverlapCircleNonAlloc` (inimigos, obstáculos, projéteis inimigos). Cada objeto contribui `peso × (1 - d/R)²`; projéteis pesam 0,55 e inimigos usam `EnemyDefinition.RiskWeight` (kamikaze 1,6; elites 1,4; chefes 2,0 ×1,25).
+- **Estabilidade:** `RiskModel` suaviza o valor bruto (sobe a 3,5/s, desce a 1,2/s) e segura cada estado por 0,35 s antes de cair, evitando oscilação. Limiares 0,25 / 0,6 / 1,1.
+- **Efeito:** multiplicador x1/x2/x3/x5 aplicado a cada abate (`base × combo × risco`); Overdrive escala por 1,6 com teto x8.
+- **Feedback sem HUD:** `RiskVignette` tinge as bordas da tela com a paleta do plano; o rótulo do HUD usa "!", "!!", "!!!" além da cor (acessibilidade).
+- **Alternativa rejeitada:** risco por contagem de inimigos na tela (não recompensa proximidade, que é a promessa do produto).
+
+## D-025 — Overdrive automático ao encher
+
+- **Como:** `OverdriveModel` carrega em Perigo (7/s) e Extremo (14/s), com graze (+4), abate próximo (+5), abate em combo (+1) e parte de chefe (+10); drena em Seguro (5/s); dano tira 30 pontos carregando ou metade do tempo restante se ativo; morte zera. Ativa sozinho ao encher e dura 8 s.
+- **Por que automático:** no toque não há botão sobrando e o plano define o estado como "conquistado por habilidade", não como escolha.
+- **Facções (plano §6):** Federação ganha cadência (x1,15; Falcon x1,2; Titan x1,1; Nova-X x1,3), Cyber ganha +20 % de crítico, Biomecânica regenera escudo. A Nova-X carrega 30 % mais devagar (`OverdriveGainMultiplier 0,7`).
+- **Feedback:** camada musical rítmica (`MusicId.OverdriveLayer`) com fade, propulsor pulsando magenta, vinheta ciano/magenta, atração de itens, Ultimate carrega x1,5. Tudo reduzível pela opção "Reduced effects".
+
+## D-026 — Graze com confirmação de saída
+
+- **Como:** o projétil que entra no anel (hitbox + 0,42 u) fica pendente; só pontua quando sai do anel ou expira **sem ter atingido a nave**. Um graze por projétil (`Projectile.Grazed`), nenhum com a nave invulnerável, nenhum com projétil abaixo de 2,5 u/s.
+- **Pontos:** 50 × multiplicador de risco, somados fora do combo (fórmula do plano §9.2). Também +4 de Overdrive e +2 XP.
+- **Acessibilidade:** som e texto "GRAZE" desligáveis em "Graze feedback".
+
+## D-027 — Créditos separados do score (SR-ECO-001)
+
+- **Antes:** créditos = pontuação ÷ 10.
+- **Agora:** `recompensa-base da fase + bônus de rank + bônus de risco (teto 150) + primeira conclusão (= base)`; derrota paga 40 % da base; revive reduz o bônus de rank à metade; modos infinitos pagam por onda com teto. Score fica só para ranking.
+- **Simulação (teste `Progression_SimulatedCampaign_...`):** uma campanha completa em rank A rende o suficiente para a primeira nave, não para todas.
+- **Migração:** saldos existentes são mantidos; `SaveData.BalanceVersion = 3` é carimbado em cada linha do placar junto com seed e flag de revive (plano §9.4).
+
+## D-028 — Ranks D–SSS por fase e composição do score
+
+- **Como:** `StageResultRules` compõe `abates + graze + objetivo + tempo + sem dano` e classifica pelos limiares derivados de `RankTargetScore` da fase (C 25 %, B 45 %, A 70 %, S 100 %, SS 140 %, SSS 200 %). Bônus de tempo: 40 pontos por segundo abaixo do par, teto 6 000. Sem dano: 5 000. Derrota = D.
+- **Reservado:** partes de chefe e dificuldade ficam a zero até existirem chefes com componentes destrutíveis e níveis de dificuldade.

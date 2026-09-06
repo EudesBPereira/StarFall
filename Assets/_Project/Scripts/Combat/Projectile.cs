@@ -34,6 +34,11 @@ namespace Starfall.Combat
 
         public Faction Faction => _spec.Faction;
         public ProjectileSpec Spec => _spec;
+        public bool IsLaunched => _launched;
+        /// <summary>Set once by the RiskSensor so a projectile never grazes twice (plan §5.3).</summary>
+        public bool Grazed { get; set; }
+        /// <summary>True after this projectile damaged (or was blocked by) the player; cancels a pending graze.</summary>
+        public bool HitPlayer { get; private set; }
 
         private void Awake()
         {
@@ -54,6 +59,8 @@ namespace Starfall.Combat
             _age = 0f;
             _pierceLeft = Mathf.Max(0, spec.Pierce);
             _launched = true;
+            Grazed = false;
+            HitPlayer = false;
 
             transform.position = position;
             transform.rotation = Quaternion.FromToRotation(Vector3.up, _direction);
@@ -120,6 +127,7 @@ namespace Starfall.Combat
             var info = new DamageInfo(_spec.Damage, _spec.Source, _spec.Type, critical: _spec.Critical);
             Vector2 hit = other.ClosestPoint(transform.position);
             var result = target.ApplyDamage(info, hit);
+            if (target.Faction == Faction.Player) HitPlayer = true;
 
             if (_spec.SlowSeconds > 0f && result.Applied && other.TryGetComponent<PlayerShip>(out var ship))
                 ship.Effects.ApplyDebuff(PowerUpKind.Slowed, _spec.SlowSeconds);

@@ -52,8 +52,18 @@ namespace Starfall.PowerUps
             if (_definition == null) return;
             _age += Time.deltaTime;
             var p = transform.position;
-            p.y -= _definition.FallSpeed * Time.deltaTime;
-            p.x = _startX + Mathf.Sin(_age * 2.2f) * _definition.SwayAmplitude;
+            var ctx = GameplayContext.Current;
+            var ship = ctx != null ? ctx.Player : null;
+            // Overdrive attracts pickups (plan §5.2 "atração de itens").
+            if (ship != null && ship.IsAlive && ship.Risk != null && ship.Risk.Overdrive.IsActive)
+            {
+                p = Vector3.MoveTowards(p, ship.transform.position, 9f * Time.deltaTime);
+            }
+            else
+            {
+                p.y -= _definition.FallSpeed * Time.deltaTime;
+                p.x = _startX + Mathf.Sin(_age * 2.2f) * _definition.SwayAmplitude;
+            }
             transform.position = p;
             if (ring != null) ring.transform.localScale = Vector3.one * (1f + 0.12f * Mathf.Sin(_age * 6f));
 

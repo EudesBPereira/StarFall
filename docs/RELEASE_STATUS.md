@@ -1,5 +1,7 @@
 # Starfall Defense — estado do projeto e caminho até as lojas
 
+> **Direção do produto:** desde 2026-09-05 o [Plano Mestre STAR RISK](product/IMPLEMENTATION_MASTER_PLAN.md) define o que é produto completo (Zona de Risco, Overdrive, graze, facções, dez fases, monetização ética). Este documento descreve o estado técnico; a priorização oficial (P0–P3) está no plano e o quadro de acompanhamento em `BACKLOG.md`.
+
 Documento único com **tudo que está implementado** e **tudo que falta para publicar** na Google Play e na App Store.
 
 - Versão atual: `0.2.0` (Android `versionCode 2`, iOS `buildNumber 2`)
@@ -43,7 +45,7 @@ Documento único com **tudo que está implementado** e **tudo que falta para pub
 | SF-02 Falcon | Rápida, frágil | 2 500 créditos |
 | SF-03 Titan | Resistente, lenta, regenera escudo | 4 000 créditos |
 | SF-04 Phantom | Especialista em crítico (25 % / x3) | 6 000 créditos |
-| Nova-X | Lendária, superior em tudo | Concluir a campanha |
+| Nova-X | Híbrida experimental: teto de score alto, defesa fina, Overdrive exigente (reequilibrada, D-023) | Concluir a campanha |
 
 **Sete armas**, todas com cinco níveis de evolução dentro da fase.
 
@@ -73,7 +75,7 @@ Documento único com **tudo que está implementado** e **tudo que falta para pub
 
 **Ultimate.** Barra que enche com abates, escalada por nave e por upgrades, ativável só quando cheia. Elimina inimigos comuns, causa dano configurável a elites e chefes e limpa os projéteis inimigos.
 
-**Economia.** Cada partida rende créditos (pontuação ÷ 10), experiência e componentes. Nível de piloto por curva quadrática.
+**Economia.** Cada partida rende créditos por base da fase, rank, risco limitado e primeira conclusão (separados do score, D-027), mais experiência e componentes. Nível de piloto por curva quadrática.
 
 **Árvore de upgrades permanentes.** Dez nós em cinco níveis cada, cobrindo dano, cadência, alcance, capacidade e regeneração de escudo, casco, velocidade, aceleração, recarga e potência da Ultimate. Os últimos níveis também custam componentes.
 
@@ -235,3 +237,20 @@ Continuam no backlog e podem entrar depois: coop online, ranking global, clãs, 
 **Caminho mais curto até a Play Store:** arte e áudio finais, ícone, keystore de release, app bundle com API alvo fixa, política de privacidade publicada, conta de desenvolvedor, teste fechado com 12 pessoas por 14 dias, então produção.
 
 **Caminho até a App Store:** o mesmo trabalho de arte e ícone, mais acesso a um Mac com Xcode e a assinatura anual da Apple.
+
+---
+
+# Adendo — Fase B do Plano Mestre (núcleo STAR RISK)
+
+Implementado após a redação original deste documento:
+
+- **Zona de Risco** com cinco estados (Seguro, Alerta, Perigo, Extremo, Overdrive), sensor por distância com histerese, multiplicador de score x1 a x8, vinheta de tela, rótulo acessível e sons de transição.
+- **Overdrive** conquistado por habilidade: medidor, ativação automática, 8 s de duração, penalidade por dano, reações por facção (cadência, crítico, regeneração), atração de itens, carga acelerada do Ultimate e camada musical.
+- **Graze** com um registro por projétil, confirmação de saída sem dano, pontos escalados pelo risco e opção de acessibilidade.
+- **Score composto** conforme o plano: abates × combo × risco + graze + objetivo + tempo + sem dano, com **ranks D a SSS** por fase.
+- **Economia separada do score:** créditos por base de fase, rank, risco limitado e primeira conclusão. Linhas do placar carimbam seed, versão de balanceamento e revive.
+- **Nova-X reequilibrada** e **facções** definidas em dados (Federação: Vanguard, Falcon, Titan, Nova-X; Cyber: Phantom; Biomecânica: fase C).
+- **Configurações novas:** intensidade do screen shake, efeitos reduzidos, feedback de graze e exibição da hitbox.
+- **Tutorial contextual** do laço de risco na fase 1.
+
+Continua pendente, na ordem do plano: confirmação do nome (SR-PROD-001), teste em aparelho real (SR-QA-001), nave Biomecânica e especiais por facção (fase C), fatia de arte final (fase D), dez fases e dez chefes (fase E), monetização, analytics e privacidade (fase F), e preparação de loja (fase G).

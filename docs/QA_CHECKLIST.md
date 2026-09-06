@@ -128,3 +128,43 @@ Executar no Editor (Game view em 1080x1920 e 1920x1080) e em pelo menos um Andro
 - [ ] O som do motor acompanha a velocidade da nave.
 - [ ] Cada fase tem música e ambiente próprios; o chefe troca a música e ela volta ao normal depois.
 - [ ] Splash: cartão do estúdio, depois o título, sem travar.
+
+---
+
+## Fase B do Plano Mestre — Zona de Risco, Overdrive, Graze
+
+### Zona de Risco
+- [ ] Aproximar-se de um drone muda o rótulo para "RISK ALERT! x2" e a borda da tela fica amarela.
+- [ ] Com vários inimigos e projéteis perto, o estado sobe para DANGER (laranja) e EXTREME (magenta).
+- [ ] Ao se afastar, o estado demora um instante para cair (sem piscar entre estados).
+- [ ] Um abate em EXTREME mostra "+pontos" em magenta e a pontuação sobe pelo multiplicador.
+- [ ] O som de subida/descida de risco toca uma vez por transição.
+- [ ] Na fase 1, as dicas "RISK ALERT", "DANGER", "EXTREME" aparecem só na primeira vez.
+- [ ] Sem perda de quadros visível com a tela cheia (sensor a 10 Hz).
+
+### Overdrive
+- [ ] A barra OVERDRIVE enche em DANGER/EXTREME e drena em SAFE.
+- [ ] Ao encher, ativa sozinha: som, camada musical rítmica, propulsor pulsando, vinheta ciano/magenta.
+- [ ] Durante o Overdrive a cadência sobe (Federação) e os itens são atraídos para a nave.
+- [ ] Levar dano corta o tempo restante pela metade; morrer zera tudo.
+- [ ] A camada musical some suavemente ao terminar.
+- [ ] Com "Reduced effects" ligado, a vinheta fica bem mais discreta.
+- [ ] Phantom em Overdrive mostra mais acertos "CRIT".
+
+### Graze
+- [ ] Um projétil passando rente sem acertar mostra "GRAZE", toca o som e conta no HUD.
+- [ ] Um projétil que acerta a nave não conta graze.
+- [ ] Durante a invulnerabilidade de respawn nenhum graze é contado.
+- [ ] O mesmo projétil nunca conta duas vezes.
+- [ ] Desligar "Graze feedback" remove o som e o texto, mas os pontos continuam.
+
+### Resultado e ranks
+- [ ] A tela de vitória mostra RANK, a decomposição (abates, graze, objetivo, tempo, sem dano) e melhor risco.
+- [ ] Terminar sem levar dano soma 5 000 e terminar abaixo do par soma bônus de tempo.
+- [ ] Créditos exibidos como BASE + RANK + RISK (+ FIRST CLEAR na primeira vez) e não mudam com a pontuação.
+- [ ] Refazer a fase não paga FIRST CLEAR de novo.
+- [ ] A seleção de missão mostra o melhor rank quando implementado na lista (hoje só a pontuação).
+
+### Configurações
+- [ ] "Screen shake" em 0 elimina o tremor; em 1 volta ao normal.
+- [ ] "Show hitbox" desenha o anel branco no centro da nave.

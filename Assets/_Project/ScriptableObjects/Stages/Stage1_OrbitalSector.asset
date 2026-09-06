@@ -99,6 +99,9 @@ MonoBehaviour:
     Seconds: 2
     Flag: 1
   CompletionBonus: 1000
+  ParTimeSeconds: 170
+  RankTargetScore: 18000
+  BaseCredits: 300
   Music: 2
   Ambient: 1
   KeepBossMusicAfterDefeat: 0

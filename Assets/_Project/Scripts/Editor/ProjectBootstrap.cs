@@ -534,6 +534,11 @@ namespace Starfall.EditorTools
             var chargeGlow = AddSprite(muzzle, "ChargeGlow", art.Dot, new Color(0.6f, 0.9f, 1f, 0.6f), SortingOrders.Projectile, 0.3f, materials.Additive);
             chargeGlow.enabled = false;
             var smoke = AddSmoke(go, materials);
+            var hitboxVisual = AddSprite(go, "HitboxVisual", art.Ring, new Color(1f, 1f, 1f, 0.85f), SortingOrders.Player + 2, 0.56f, materials.Additive);
+            hitboxVisual.enabled = false;
+            var riskSensor = go.AddComponent<RiskSensor>();
+            riskSensor.hitbox = col;
+            riskSensor.hitboxVisual = hitboxVisual;
 
             var movement = go.AddComponent<PlayerMovement>();
             movement.bankTarget = visual.transform;
@@ -559,6 +564,7 @@ namespace Starfall.EditorTools
             ship.thruster = thruster;
             ship.smoke = smoke;
             ship.engineAudio = engine;
+            ship.riskSensor = riskSensor;
 
             var saved = PrefabUtility.SaveAsPrefabAsset(go, $"{PrefabRoot}/Player/Player.prefab");
             UnityEngine.Object.DestroyImmediate(go);

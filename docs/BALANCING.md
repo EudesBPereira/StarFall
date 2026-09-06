@@ -198,3 +198,98 @@ Transformações do Omega Core trocam o sprite e dão 1,4–1,8 s de invulnerabi
 |---|---|---|---|
 | 4 — Fortaleza Mecânica | 2 500 | turrets, elites em massa | Destroyer Mk.II (mini: Sentinel-X Mk.II) |
 | 5 — Núcleo da Colmeia | 4 000 | ondas densas com todos os tipos | Omega Core (mini: Widow Prime) |
+
+---
+
+# Fase B do Plano Mestre — Zona de Risco, Overdrive, Graze, Ranks e Economia
+
+Valores em `RiskSettings.Default`, `OverdriveSettings.Default`, `GrazeRules`, `StageResultRules` e `ProgressionRules`. ⚠️ Nenhum deles foi jogado por uma pessoa ainda.
+
+## Zona de Risco (`RiskModel`)
+
+| Parâmetro | Valor |
+|---|---|
+| Raio do sensor | 3,6 u |
+| Contribuição por objeto | `peso × (1 − d/R)²` |
+| Peso de projétil inimigo | 0,55 |
+| Peso de inimigo | Drone/Interceptor/Shield 1,0 · Bomber 1,2 · Turret 1,2 · Kamikaze 1,6 · Elite 1,4 · Chefe 2,0 (×1,25) · Asteroide 0,7 · Supply 0,2 |
+| Limiar Alerta / Perigo / Extremo | 0,25 / 0,6 / 1,1 |
+| Subida / descida do nível | 3,5 / 1,2 por segundo |
+| Retenção mínima de estado | 0,35 s |
+| Multiplicador | Seguro x1 · Alerta x2 · Perigo x3 · Extremo x5 · Overdrive ×1,6 até x8 |
+
+⚠️ Um único drone a 1 u já dá Alerta; dois kamikazes próximos chegam a Extremo. Verificar se Extremo é alcançável demais na fase 1.
+
+## Overdrive (`OverdriveModel`)
+
+| Parâmetro | Valor |
+|---|---|
+| Medidor | 100 |
+| Ganho em Perigo / Extremo | 7 / 14 por segundo |
+| Drenagem em Seguro | 5 por segundo (Alerta segura) |
+| Graze / abate próximo (≤ 2,2 u) / abate em combo / parte de chefe | +4 / +5 / +1 / +10 |
+| Dano carregando / ativo | −30 / metade do tempo restante |
+| Duração ativa | 8 s |
+| Cadência Federação | Vanguard x1,15 · Falcon x1,2 · Titan x1,1 · Nova-X x1,3 |
+| Crítico Cyber (Phantom) | +20 % |
+| Carga do Ultimate | x1,5 |
+| Ganho da Nova-X | x0,7 |
+
+Do zero, 7 s em Extremo ativam o Overdrive. ⚠️ Medir quantas ativações por fase um jogador mediano consegue.
+
+## Graze (`GrazeRules`)
+
+| Parâmetro | Valor |
+|---|---|
+| Margem além da hitbox | 0,42 u (hitbox 0,28 → anel de 0,70 u) |
+| Pontos | 50 × multiplicador de risco, fora do combo |
+| Velocidade mínima do projétil | 2,5 u/s |
+| Invulnerável | nunca pontua |
+
+## Ranks e composição do score (`StageResultRules`)
+
+| Parâmetro | Valor |
+|---|---|
+| Bônus sem dano | 5 000 |
+| Bônus de tempo | 40 pontos/s abaixo do par, teto 6 000 |
+| Limiares | C 25 % · B 45 % · A 70 % · S 100 % · SS 140 % · SSS 200 % do alvo da fase |
+
+| Fase | Par (s) | Alvo de rank S | Créditos-base |
+|---|---:|---:|---:|
+| 1 Orbital | 170 | 18 000 | 300 |
+| 2 Asteroides | 200 | 26 000 | 380 |
+| 3 Nebulosa | 220 | 34 000 | 460 |
+| 4 Fortaleza | 240 | 44 000 | 560 |
+| 5 Colmeia | 280 | 60 000 | 700 |
+
+⚠️ Alvos estimados por contagem de inimigos × 100 × combo médio 4 × risco médio 2. Recalibrar após playtest.
+
+## Economia (`ProgressionRules`, plano §11.5)
+
+| Parcela | Regra |
+|---|---|
+| Base | créditos-base da fase (40 % em derrota) |
+| Rank | D 0 · C 50 · B 120 · A 220 · S 350 · SS 500 · SSS 700 (metade com revive) |
+| Risco | 2 créditos por segundo em Perigo/Extremo, teto 150 |
+| Primeira conclusão | = créditos-base |
+| Modos infinitos | 12 por onda, teto 600 |
+| XP | 5 por abate, 20 por elite, 200 por chefe, 2 por graze, +150 ao concluir |
+
+Uma campanha completa em rank A com primeira conclusão rende ≈ 5 300 créditos: compra a Falcon (2 500), não a Titan e a Phantom juntas.
+
+## Nova-X reequilibrada (SR-BAL-001)
+
+| Atributo | Antes | Agora |
+|---|---:|---:|
+| Casco | 130 | 90 |
+| Escudo | 80 | 40 |
+| Regeneração | 2,0/s | 0 |
+| Velocidade | 11 | 11 |
+| Crítico | 15 % x2,5 | 12 % x2,2 |
+| Dano | x1,20 | x1,15 |
+| Carga do Ultimate | x1,25 | x1,00 |
+| Potência do Ultimate | x1,50 | x1,40 |
+| Ganho de Overdrive | x1,0 | x0,7 |
+| Cadência em Overdrive | x1,15 | x1,30 |
+
+Função: teto de score mais alto quando o piloto sustenta Extremo; defesa menor que a Vanguard. ⚠️ Comparar com Phantom (25 % de crítico) em playtest.

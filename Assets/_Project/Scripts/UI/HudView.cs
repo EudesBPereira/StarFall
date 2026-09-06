@@ -1,3 +1,4 @@
+using Starfall.Logic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,13 @@ namespace Starfall.UI
     /// <summary>Pure view: references to HUD widgets. Populated by <see cref="HudPresenter"/>.</summary>
     public sealed class HudView : MonoBehaviour
     {
+        // Plan palette (§13.4)
+        public static readonly Color AllyColor = new Color(0.14f, 0.84f, 1f);
+        public static readonly Color AlertColor = new Color(1f, 0.82f, 0.4f);
+        public static readonly Color DangerColor = new Color(1f, 0.48f, 0.21f);
+        public static readonly Color ExtremeColor = new Color(1f, 0.24f, 0.67f);
+        public static readonly Color CritColor = new Color(1f, 0.3f, 0.35f);
+
         [Header("Top left")]
         [SerializeField] internal TMP_Text livesText;
         [SerializeField] internal Image hullFill;
@@ -17,6 +25,13 @@ namespace Starfall.UI
         [SerializeField] internal TMP_Text scoreText;
         [SerializeField] internal TMP_Text multiplierText;
         [SerializeField] internal TMP_Text waveText;
+
+        [Header("Risk / Overdrive")]
+        [SerializeField] internal TMP_Text riskText;
+        [SerializeField] internal Image riskFill;
+        [SerializeField] internal Image overdriveFill;
+        [SerializeField] internal TMP_Text overdriveLabel;
+        [SerializeField] internal TMP_Text grazeText;
 
         [Header("Bottom")]
         [SerializeField] internal Image energyFill;
@@ -45,7 +60,7 @@ namespace Starfall.UI
             if (criticalText != null)
             {
                 criticalText.enabled = critical;
-                if (critical) criticalText.color = new Color(1f, 0.3f, 0.3f, 0.5f + 0.5f * blink);
+                if (critical) criticalText.color = new Color(CritColor.r, CritColor.g, CritColor.b, 0.5f + 0.5f * blink);
             }
             if (hullFill != null) hullFill.color = critical ? Color.Lerp(_hullColor, Color.white, blink * 0.6f) : _hullColor;
         }
@@ -55,11 +70,65 @@ namespace Starfall.UI
         public void SetMultiplier(int m)
         {
             if (multiplierText == null) return;
-            multiplierText.text = $"x{m}";
-            multiplierText.color = m >= 10 ? new Color(1f, 0.85f, 0.2f) : m >= 5 ? new Color(0.6f, 1f, 0.8f) : Color.white;
+            multiplierText.text = $"COMBO x{m}";
+            multiplierText.color = m >= 10 ? AlertColor : m >= 5 ? new Color(0.6f, 1f, 0.8f) : Color.white;
         }
 
         public void SetWave(string text) { if (waveText != null) waveText.text = text; }
+
+        public static Color RiskColor(RiskState state)
+        {
+            switch (state)
+            {
+                case RiskState.Alert: return AlertColor;
+                case RiskState.Danger: return DangerColor;
+                case RiskState.Extreme: return ExtremeColor;
+                default: return AllyColor;
+            }
+        }
+
+        public static string RiskLabel(RiskState state)
+        {
+            switch (state)
+            {
+                case RiskState.Alert: return "ALERT";
+                case RiskState.Danger: return "DANGER";
+                case RiskState.Extreme: return "EXTREME";
+                default: return "SAFE";
+            }
+        }
+
+        /// <summary>Risk state with its multiplier. The glyph count (!, !!, !!!) conveys the level without relying on color.</summary>
+        public void SetRisk(RiskState state, float multiplier, float fraction, bool overdrive)
+        {
+            if (riskText != null)
+            {
+                string marks = state == RiskState.Safe ? "" : new string('!', (int)state);
+                riskText.text = overdrive ? $"OVERDRIVE x{multiplier:0.#}" : $"RISK {RiskLabel(state)}{marks} x{multiplier:0.#}";
+                riskText.color = overdrive ? Color.Lerp(AllyColor, ExtremeColor, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 8f)) : RiskColor(state);
+            }
+            if (riskFill != null)
+            {
+                riskFill.fillAmount = Mathf.Clamp01(fraction);
+                riskFill.color = overdrive ? AllyColor : RiskColor(state);
+            }
+        }
+
+        public void SetOverdrive(float fraction, bool active, float remainingSeconds)
+        {
+            if (overdriveFill != null)
+            {
+                overdriveFill.fillAmount = Mathf.Clamp01(fraction);
+                overdriveFill.color = active ? Color.Lerp(AllyColor, ExtremeColor, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 10f)) : AllyColor;
+            }
+            if (overdriveLabel != null)
+                overdriveLabel.text = active ? $"OVERDRIVE {remainingSeconds:0.0}s" : fraction >= 0.999f ? "OVERDRIVE READY" : "OVERDRIVE";
+        }
+
+        public void SetGrazes(int grazes)
+        {
+            if (grazeText != null) grazeText.text = grazes > 0 ? $"GRAZE {grazes}" : "";
+        }
 
         public void SetEnergy(float f, bool ready)
         {

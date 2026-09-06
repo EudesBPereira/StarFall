@@ -31,6 +31,7 @@ namespace Starfall.Player
         [SerializeField] internal ThrusterFlicker thruster;
         [SerializeField] internal ParticleSystem smoke;
         [SerializeField] internal EngineAudio engineAudio;
+        [SerializeField] internal RiskSensor riskSensor;
 
         private Health _health;
         private GameplayContext _ctx;
@@ -50,6 +51,8 @@ namespace Starfall.Player
         public WeaponController Weapon => weapon;
         public PlayerStatusEffects Effects => effects;
         public UltimateController Ultimate => ultimate;
+        /// <summary>Risk Zone + Overdrive owner (plan §5). Null-safe for tests that spawn a bare ship.</summary>
+        public RiskSensor Risk => riskSensor;
         public bool IsAlive => _health != null && _health.IsAlive;
         public bool ControlEnabled => _controlEnabled;
         public bool IsCritical => _critical;
@@ -105,6 +108,7 @@ namespace Starfall.Player
             if (engineAudio != null) engineAudio.Configure(movement);
 
             var save = SaveService.Data;
+            if (riskSensor != null) riskSensor.Configure(_loadout, save != null && save.showHitbox);
             _dragSensitivity = save != null ? save.touchSensitivity : 1.4f;
             if (ctx.Input != null) ctx.Input.AutoFire = save == null || save.autoFire;
 
@@ -126,12 +130,14 @@ namespace Starfall.Player
             SetVisible(true);
             if (hitbox != null) hitbox.enabled = true;
             StartTimedInvulnerability(invulnerabilitySeconds);
+            if (riskSensor != null) riskSensor.BeginRun();
             OnHealthChanged();
         }
 
         public void SetControlEnabled(bool enabled)
         {
             _controlEnabled = enabled;
+            if (!enabled && riskSensor != null) riskSensor.EndRun();
             if (!enabled && movement != null) movement.ResetMotion();
             if (engineAudio != null) engineAudio.SetActive(enabled && IsAlive);
         }
@@ -141,10 +147,32 @@ namespace Starfall.Player
             if (!IsAlive || !_controlEnabled || _ctx == null || _ctx.Input == null) return;
             var input = _ctx.Input;
 
+            ApplyOverdriveEffects();
             movement.Tick(input, effects.SpeedMultiplier, _dragSensitivity);
             weapon.Tick(input.FireHeld, effects.DamageMultiplier);
             if (input.UltimatePressed) ultimate.TryActivate();
             TickShieldRegen(Time.deltaTime);
+        }
+
+        /// <summary>Faction reaction to Overdrive (plan §6): Federation = fire rate, Biomech = shield regen, Cyber = crit.</summary>
+        private void ApplyOverdriveEffects()
+        {
+            bool active = riskSensor != null && riskSensor.Overdrive.IsActive;
+            var def = definition;
+            float fireRate = 1f, crit = 0f;
+            if (active && def != null)
+            {
+                switch (def.Faction)
+                {
+                    case FactionId.Cyber: crit = def.OverdriveCritBonus > 0f ? def.OverdriveCritBonus : 0.15f; fireRate = 1.05f; break;
+                    case FactionId.Biomech: fireRate = 1.05f; if (def.OverdriveShieldRegen > 0f) _health.RestoreShield(def.OverdriveShieldRegen * Time.deltaTime); break;
+                    default: fireRate = def.OverdriveFireRateBonus; break;
+                }
+            }
+            weapon.ExternalFireRateMultiplier = fireRate;
+            weapon.ExternalCritBonus = crit;
+            ultimate.ExternalChargeMultiplier = riskSensor != null ? riskSensor.Overdrive.UltimateChargeMultiplier : 1f;
+            if (thruster != null && def != null) thruster.SetColor(active ? Color.Lerp(def.ThrusterColor, new Color(1f, 0.24f, 0.67f, 0.95f), 0.5f + 0.5f * Mathf.Sin(Time.time * 12f)) : def.ThrusterColor);
         }
 
         private void TickShieldRegen(float dt)
@@ -190,6 +218,7 @@ namespace Starfall.Player
         private void OnDamaged(DamageInfo info, DamageResult result, Vector2 hitPoint)
         {
             _regenTimer = 0f;
+            if (riskSensor != null) riskSensor.OnPlayerDamaged();
             GameSignals.RaisePlayerDamaged(info, result);
             AudioManager.PlaySfx(result.ShieldDamage > 0f && result.HullDamage <= 0f ? SfxId.ShieldHit : SfxId.PlayerHit);
 
@@ -218,6 +247,8 @@ namespace Starfall.Player
         private void OnDied(DamageInfo info)
         {
             _controlEnabled = false;
+            if (riskSensor != null) riskSensor.OnPlayerDied();
+            if (weapon != null) { weapon.ExternalFireRateMultiplier = 1f; weapon.ExternalCritBonus = 0f; }
             if (hitbox != null) hitbox.enabled = false;
             StopInvulnerabilityRoutine();
             effects.ClearTemporary();

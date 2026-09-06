@@ -86,7 +86,11 @@ namespace Starfall.EditorTools
             panel.musicSlider = UiBuilder.CreateSlider(column, "Music", "MUSIC", 0f, 1f, out _);
             panel.sfxSlider = UiBuilder.CreateSlider(column, "Sfx", "EFFECTS", 0f, 1f, out _);
             panel.sensitivitySlider = UiBuilder.CreateSlider(column, "Sensitivity", "TOUCH SENSITIVITY", 0.5f, 3f, out _);
+            panel.shakeSlider = UiBuilder.CreateSlider(column, "Shake", "SCREEN SHAKE", 0f, 1f, out _);
             panel.autoFireToggle = UiBuilder.CreateToggle(column, "AutoFire", "AUTO FIRE");
+            panel.reducedEffectsToggle = UiBuilder.CreateToggle(column, "ReducedEffects", "REDUCED EFFECTS");
+            panel.grazeFeedbackToggle = UiBuilder.CreateToggle(column, "GrazeFeedback", "GRAZE FEEDBACK");
+            panel.showHitboxToggle = UiBuilder.CreateToggle(column, "ShowHitbox", "SHOW HITBOX");
             panel.resetProgressButton = UiBuilder.CreateButton(column, "ResetProgress", "RESET PROGRESS", new Vector2(560f, 88f), 34f, new Color(0.35f, 0.1f, 0.15f, 0.95f));
             panel.resetFeedbackText = UiBuilder.AddColumnText(column, "ResetFeedback", "", 28f, UiBuilder.Accent2, 40f);
             panel.backButton = UiBuilder.CreateButton(column, "Back", "BACK", new Vector2(560f, 96f));
@@ -402,6 +406,17 @@ namespace Starfall.EditorTools
             vfx.sparksPrefab = prefabs.Sparks;
             vfx.screenFlash = flash;
 
+            // Risk Zone vignette (plan §5.1): edge tint that follows the risk state.
+            var vignetteGo = new GameObject("RiskVignette");
+            vignetteGo.transform.SetParent(services.transform, false);
+            var vignetteRing = vignetteGo.AddComponent<SpriteRenderer>();
+            vignetteRing.sprite = art.Ring;
+            vignetteRing.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(ProjectBootstrap.MaterialRoot + "/Additive.mat");
+            vignetteRing.color = new Color(0f, 0f, 0f, 0f);
+            vignetteRing.enabled = false;
+            var vignette = vignetteGo.AddComponent<RiskVignette>();
+            vignette.ring = vignetteRing;
+
             // Player
             var playerGo = (GameObject)PrefabUtility.InstantiatePrefab(prefabs.Player);
             playerGo.name = "Player";
@@ -494,6 +509,22 @@ namespace Starfall.EditorTools
             view.waveText = UiBuilder.CreateText(topRight, "Wave", "", 22f, new Color(0.7f, 0.85f, 1f), TextAlignmentOptions.Right);
             UiBuilder.Place(view.waveText.rectTransform, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(0f, -140f), new Vector2(420f, 32f));
 
+            // Risk Zone + Overdrive (plan §5): above the energy bar so the eye stays near the ship.
+            var riskGroup = UiBuilder.CreateRect(root, "RiskGroup");
+            UiBuilder.Place(riskGroup, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, margin + 100f), new Vector2(560f, 92f));
+            view.riskText = UiBuilder.CreateText(riskGroup, "RiskText", "RISK SAFE x1", 30f, HudView.AllyColor, TextAlignmentOptions.Center, FontStyles.Bold);
+            UiBuilder.Place(view.riskText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(560f, 40f));
+            var riskBar = UiBuilder.CreateBar(riskGroup, "RiskBar", new Vector2(520f, 12f), new Color(0.06f, 0.16f, 0.24f, 0.85f), HudView.AllyColor, out view.riskFill);
+            UiBuilder.Place(riskBar.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -42f), new Vector2(520f, 12f));
+            view.riskFill.fillAmount = 0f;
+            var odBar = UiBuilder.CreateBar(riskGroup, "OverdriveBar", new Vector2(520f, 16f), new Color(0.06f, 0.16f, 0.24f, 0.85f), HudView.AllyColor, out view.overdriveFill);
+            UiBuilder.Place(odBar.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -60f), new Vector2(520f, 16f));
+            view.overdriveFill.fillAmount = 0f;
+            view.overdriveLabel = UiBuilder.CreateText(odBar.transform, "Label", "OVERDRIVE", 14f, Color.white, TextAlignmentOptions.Center, FontStyles.Bold);
+            UiBuilder.Stretch(view.overdriveLabel.rectTransform);
+            view.grazeText = UiBuilder.CreateText(riskGroup, "Graze", "", 22f, HudView.AllyColor, TextAlignmentOptions.Right, FontStyles.Bold);
+            UiBuilder.Place(view.grazeText.rectTransform, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(0f, 0f), new Vector2(200f, 40f));
+
             // Top-center: pause
             view.pauseButton = UiBuilder.CreateButton(root, "PauseButton", "II", new Vector2(96f, 72f), 36f, new Color(0.08f, 0.12f, 0.22f, 0.8f));
             UiBuilder.Place(view.pauseButton.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -margin), new Vector2(96f, 72f));
@@ -580,7 +611,9 @@ namespace Starfall.EditorTools
             var root = UiBuilder.CreatePanelRoot(canvas, "VictoryPanel", out var column);
             var panel = root.gameObject.AddComponent<VictoryPanel>();
             panel.titleText = UiBuilder.AddColumnText(column, "Title", "SECTOR CLEARED", 56f, UiBuilder.Accent, 84f, FontStyles.Bold);
+            panel.rankText = UiBuilder.AddColumnText(column, "Rank", "RANK S", 96f, UiBuilder.Accent2, 110f, FontStyles.Bold);
             panel.scoreText = UiBuilder.AddColumnText(column, "Score", "SCORE 0", 40f, UiBuilder.TextColor, 56f, FontStyles.Bold);
+            panel.breakdownText = UiBuilder.AddColumnText(column, "Breakdown", "", 22f, new Color(0.7f, 0.85f, 1f), 60f);
             panel.multiplierText = UiBuilder.AddColumnText(column, "Multiplier", "", 30f, UiBuilder.TextColor, 44f);
             panel.enemiesText = UiBuilder.AddColumnText(column, "Enemies", "", 30f, UiBuilder.TextColor, 44f);
             panel.damageText = UiBuilder.AddColumnText(column, "Damage", "", 30f, UiBuilder.TextColor, 44f);

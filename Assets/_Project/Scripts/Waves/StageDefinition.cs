@@ -47,6 +47,12 @@ namespace Starfall.Waves
         public StageEvent[] Events = new StageEvent[0];
         [Tooltip("Bonus points granted on completion (not multiplied).")]
         [Min(0)] public int CompletionBonus = 1000;
+        [Tooltip("Seconds a good run takes; finishing faster grants the time bonus (plan §9.2).")]
+        [Min(0f)] public float ParTimeSeconds = 180f;
+        [Tooltip("Score of a good run; rank thresholds C..SSS derive from it (plan §9.3).")]
+        [Min(1000)] public int RankTargetScore = 20000;
+        [Tooltip("Credits granted for completing the stage, independent of score (plan §11.5).")]
+        [Min(0)] public int BaseCredits = 300;
         public MusicId Music = MusicId.Stage1;
         public AmbientId Ambient = AmbientId.Space;
         public bool KeepBossMusicAfterDefeat = false;

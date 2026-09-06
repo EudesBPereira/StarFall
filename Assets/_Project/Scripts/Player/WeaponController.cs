@@ -69,6 +69,13 @@ namespace Starfall.Player
             if (chargeGlow != null) chargeGlow.enabled = false;
         }
 
+        /// <summary>Extra fire-rate multiplier from temporary states (Overdrive). 1 = none.</summary>
+        public float ExternalFireRateMultiplier { get; set; } = 1f;
+        /// <summary>Extra critical chance from temporary states (Cyber Overdrive).</summary>
+        public float ExternalCritBonus { get; set; }
+
+        private float FireRate => Mathf.Max(0.1f, _loadout.FireRateMultiplier * ExternalFireRateMultiplier);
+
         public void Tick(bool fireHeld, float damageMultiplier)
         {
             if (_definition == null) return;
@@ -82,13 +89,13 @@ namespace Starfall.Player
             }
 
             if (!fireHeld || _cooldown > 0f) return;
-            _cooldown = _definition.FireInterval / Mathf.Max(0.1f, _loadout.FireRateMultiplier);
+            _cooldown = _definition.FireInterval / FireRate;
             Fire(damageMultiplier, 1f, 1f);
         }
 
         private void TickCharge(bool fireHeld, float damageMultiplier, float dt)
         {
-            float chargeTime = _definition.ChargeSeconds / Mathf.Max(0.1f, _loadout.FireRateMultiplier);
+            float chargeTime = _definition.ChargeSeconds / FireRate;
             if (fireHeld && _cooldown <= 0f)
             {
                 if (!_charging) AudioManager.PlaySfx(SfxId.Charge, 0.5f);
@@ -121,7 +128,7 @@ namespace Starfall.Player
             if (k < 0.2f) return; // tap: nothing happens
             float dmgMult = Mathf.Lerp(1f, _definition.ChargeDamageMultiplier, k);
             float scaleMult = Mathf.Lerp(1f, _definition.ChargeScaleMultiplier, k);
-            _cooldown = _definition.FireInterval / Mathf.Max(0.1f, _loadout.FireRateMultiplier);
+            _cooldown = _definition.FireInterval / FireRate;
             Fire(damageMultiplier, dmgMult, scaleMult);
         }
 
@@ -138,7 +145,7 @@ namespace Starfall.Player
             var shots = levelData.Shots;
             for (int i = 0; i < shots.Length; i++)
             {
-                float damage = DamageInfo.ApplyCritical(baseDamage, _loadout.CritChance, _loadout.CritMultiplier, Random.value, out bool crit);
+                float damage = DamageInfo.ApplyCritical(baseDamage, Mathf.Clamp01(_loadout.CritChance + ExternalCritBonus), _loadout.CritMultiplier, Random.value, out bool crit);
                 var spec = new ProjectileSpec
                 {
                     Speed = def.ProjectileSpeed,

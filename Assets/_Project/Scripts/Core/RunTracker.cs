@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Starfall.Core
 {
-    /// <summary>Feeds <see cref="GameSession.Run"/> from game signals (kills, hits, waves, components).</summary>
+    /// <summary>Feeds <see cref="GameSession.Run"/> from game signals (kills, hits, waves, components, risk, grazes).</summary>
     public sealed class RunTracker : MonoBehaviour
     {
         public RunStats Stats => GameSession.Run;
@@ -15,6 +15,9 @@ namespace Starfall.Core
             GameSignals.PlayerDied += OnPlayerDied;
             GameSignals.WaveStarted += OnWaveStarted;
             GameSignals.BossDefeated += OnBossDefeated;
+            GameSignals.Graze += OnGraze;
+            GameSignals.OverdriveChanged += OnOverdriveChanged;
+            GameSignals.RiskStateChanged += OnRiskStateChanged;
         }
 
         private void OnDisable()
@@ -24,6 +27,18 @@ namespace Starfall.Core
             GameSignals.PlayerDied -= OnPlayerDied;
             GameSignals.WaveStarted -= OnWaveStarted;
             GameSignals.BossDefeated -= OnBossDefeated;
+            GameSignals.Graze -= OnGraze;
+            GameSignals.OverdriveChanged -= OnOverdriveChanged;
+            GameSignals.RiskStateChanged -= OnRiskStateChanged;
+        }
+
+        private void Update()
+        {
+            var ctx = GameplayContext.Current;
+            if (ctx == null || ctx.Player == null || ctx.Player.Risk == null) return;
+            if (Time.timeScale <= 0f) return;
+            var risk = ctx.Player.Risk.Risk;
+            if (risk.State >= RiskState.Danger) Stats.SecondsInDanger += Time.deltaTime;
         }
 
         private void OnEnemyDestroyed(EnemyKilledInfo info)
@@ -52,6 +67,21 @@ namespace Starfall.Core
         private void OnBossDefeated(Bosses.BossController boss)
         {
             if (boss != null && boss.Boss != null) Stats.BossesDefeatedMask |= 1 << (int)boss.Boss.BossId;
+        }
+
+        private void OnGraze(Vector2 position, float riskMultiplier) => Stats.Grazes++;
+
+        private void OnOverdriveChanged(bool active)
+        {
+            if (active) Stats.OverdriveActivations++;
+        }
+
+        private void OnRiskStateChanged(RiskState from, RiskState to)
+        {
+            var ctx = GameplayContext.Current;
+            if (ctx == null || ctx.Player == null || ctx.Player.Risk == null) return;
+            float m = ctx.Player.Risk.Risk.MultiplierFor(to);
+            if (m > Stats.HighestRiskMultiplier) Stats.HighestRiskMultiplier = m;
         }
     }
 }

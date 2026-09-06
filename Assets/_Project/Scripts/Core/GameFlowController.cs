@@ -201,7 +201,8 @@ namespace Starfall.Core
             ctx.StageDirector.Stop();
 
             var run = FinalizeRun(false);
-            var rewards = ProgressionRules.ComputeRewards(run, _stage != null ? _stage.CompletionBonus : 0);
+            var result = ComposeResult(run, false);
+            var rewards = ProgressionRules.ComputeRewards(run, _stage != null ? _stage.BaseCredits : 0, false);
             RecordRun(run, rewards, out bool record, out int rank);
 
             Time.timeScale = 0f;
@@ -227,10 +228,12 @@ namespace Starfall.Core
             GameSignals.RaiseStageMessage(GameSession.Mode == GameModeId.BossRush ? "ALL BOSSES DESTROYED" : "SECTOR CLEARED", 2f);
             yield return new WaitForSeconds(2f);
 
-            if (_stage != null) ctx.Score.AddBonus(_stage.CompletionBonus);
             var run = FinalizeRun(true);
-            var rewards = ProgressionRules.ComputeRewards(run, _stage != null ? _stage.CompletionBonus : 0);
+            var result = ComposeResult(run, true);
+            bool firstClear = GameSession.Mode == GameModeId.Campaign && SaveService.Data != null && !SaveService.Data.IsStageCompleted(GameSession.CurrentStageIndex);
+            var rewards = ProgressionRules.ComputeRewards(run, _stage != null ? _stage.BaseCredits : 0, firstClear);
             RecordRun(run, rewards, out bool record, out int rank);
+            AudioManager.PlaySfx(SfxId.RankReveal);
 
             int stageIndex = GameSession.CurrentStageIndex;
             int stageCount = ctx.Config.StageCount;
@@ -241,9 +244,24 @@ namespace Starfall.Core
             {
                 string title = GameSession.Mode == GameModeId.BossRush ? "BOSS RUSH COMPLETE"
                     : hasNext ? "SECTOR CLEARED" : "THE SWARM IS DEFEATED";
-                victoryPanel.Show(title, run, ctx.Score.Model, _lives.Lives, rewards, record, rank, hasNext);
+                victoryPanel.Show(title, run, ctx.Score.Model, result, _lives.Lives, rewards, record, rank, hasNext);
             }
             _transition = null;
+        }
+
+        /// <summary>Score composition (plan §9.2): kills x combo x risk + graze + bonuses, then rank (§9.3).</summary>
+        private StageResult ComposeResult(RunStats run, bool completed)
+        {
+            var thresholds = RankThresholds.FromTarget(_stage != null ? _stage.RankTargetScore : 20000);
+            float par = _stage != null ? _stage.ParTimeSeconds : 0f;
+            int bonus = _stage != null && GameSession.Mode == GameModeId.Campaign ? _stage.CompletionBonus : 0;
+            var result = StageResultRules.Compose(ctx.Score.Model, completed, ctx.Score.Model.DamageTakenCount, ctx.Score.Elapsed, par, bonus, thresholds, run.UsedRevive);
+            // Bonuses become part of the score so the leaderboard and high score reflect the composed total.
+            int extra = result.Total - ctx.Score.Model.Score;
+            if (extra > 0) ctx.Score.AddBonus(extra);
+            run.Score = ctx.Score.RunTotal;
+            run.Rank = result.Rank;
+            return result;
         }
 
         /// <summary>Copies score/multiplier into the run stats and marks completion.</summary>
@@ -252,6 +270,9 @@ namespace Starfall.Core
             var run = GameSession.Run;
             run.Score = ctx.Score.RunTotal;
             run.HighestMultiplier = Mathf.Max(run.HighestMultiplier, ctx.Score.Model.HighestMultiplier);
+            run.HighestRiskMultiplier = Mathf.Max(run.HighestRiskMultiplier, ctx.Score.Model.HighestRiskMultiplier);
+            run.Grazes = Mathf.Max(run.Grazes, ctx.Score.Model.Grazes);
+            run.ElapsedSeconds = ctx.Score.Elapsed;
             run.Completed = completed;
             run.Mode = GameSession.Mode;
             run.StageIndex = GameSession.CurrentStageIndex;
@@ -273,7 +294,7 @@ namespace Starfall.Core
             save.totalKills += run.Kills;
             save.bossesDefeatedMask |= run.BossesDefeatedMask;
             if (run.Mode == GameModeId.Campaign && run.Completed)
-                ProgressionRules.RecordCampaignStage(save, run.StageIndex, ctx.Config.StageCount, ctx.Score.Model.Score);
+                ProgressionRules.RecordCampaignStage(save, run.StageIndex, ctx.Config.StageCount, ctx.Score.Model.Score, run.Rank);
 
             record = SaveService.RecordScore(run.Score);
             // Endless / boss rush rank on game over or completion; campaign only when the run ends.

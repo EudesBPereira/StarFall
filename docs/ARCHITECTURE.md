@@ -119,3 +119,32 @@ Nenhuma dessas classes referencia `UnityEngine`; todas têm teste em `Tests/Edit
 - `EngineAudio` liga o som do motor à velocidade; `AudioManager` ganhou uma trilha de ambiente por fase.
 - Telas novas: `MissionPanel`, `HangarPanel`, `UpgradesPanel`, `RankingPanel` e `AchievementToast`, todas construídas por `SceneBuilder` a partir do helper `UiBuilder.CreateListRow`.
 - `ContentFactory` foi separado de `ProjectBootstrap`: é o único lugar que define os números iniciais de todo o conteúdo.
+
+---
+
+## Fase B do Plano Mestre — núcleo STAR RISK
+
+### Lógica pura (`Scripts/Logic`)
+
+- `RiskModel` — suaviza a leitura bruta de ameaça em um estado estável (Seguro, Alerta, Perigo, Extremo) com histerese e retenção mínima; expõe o multiplicador (com escala de Overdrive e teto x8) e a fórmula de contribuição por distância.
+- `OverdriveModel` — medidor que enche por risco, graze e abates, drena em segurança, sofre penalidade por dano, ativa sozinho ao encher e drena durante os 8 s ativos.
+- `GrazeRules` — raio do anel, regras de elegibilidade (uma vez por projétil, nunca invulnerável, velocidade mínima) e pontos.
+- `StageResultRules` — composição do score (abates × combo × risco + graze + objetivo + tempo + sem dano) e ranks D–SSS por limiares derivados do alvo da fase.
+- `ProgressionRules` — recompensa por base de fase, rank, risco limitado e primeira conclusão; `FactionId`.
+- `ScoreModel` — `RegisterKill(base, risco)` e `RegisterGraze(risco)`.
+
+### Runtime
+
+- `RiskSensor` (na nave) é o único ponto que conhece a física: a cada 0,1 s faz um `OverlapCircleNonAlloc`, soma contribuições ponderadas (`EnemyDefinition.RiskWeight`), alimenta `RiskModel` e `OverdriveModel`, detecta grazes com lista de pendentes (confirmados só quando o projétil sai do anel sem acertar) e emite `GameSignals.RiskStateChanged`, `OverdriveChanged`, `OverdriveMeter` e `Graze`.
+- `PlayerShip.ApplyOverdriveEffects` aplica a reação da facção: cadência (Federação), crítico (Cyber) ou regeneração (Biomecânica), além de carga do Ultimate e propulsor pulsante.
+- `ScoreService` lê o multiplicador do sensor a cada abate e registra grazes; `RunTracker` acumula segundos em perigo, grazes, ativações e maior risco.
+- `GameFlowController.ComposeResult` fecha a fase com `StageResultRules`, aplica os bônus ao score, calcula o rank e chama `ProgressionRules.ComputeRewards` com a base de créditos da fase.
+- `Projectile` guarda `Grazed` e `HitPlayer` para a regra de um graze por projétil.
+
+### Apresentação
+
+- `RiskVignette` — anel aditivo nas bordas da tela tingido pela paleta do plano; pulsa em ciano/magenta no Overdrive; respeita "Reduced effects".
+- `HudView.SetRisk/SetOverdrive/SetGrazes` — rótulo com "!" por estado (informação não depende só de cor), barras de risco e Overdrive, contador de grazes.
+- `HudPresenter` — dicas contextuais únicas na fase 1 (Alerta, Perigo, Extremo, Overdrive, Graze).
+- `AudioManager` — fonte extra `OverdriveLayer` com fade; sons `RiskUp/RiskDown/Graze/OverdriveStart/OverdriveEnd/RankReveal`.
+- `SettingsPanel` — screen shake, efeitos reduzidos, feedback de graze e hitbox visível (`CameraShake` e `RiskSensor` leem o save).

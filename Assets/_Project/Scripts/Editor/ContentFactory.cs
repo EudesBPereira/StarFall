@@ -115,9 +115,18 @@ namespace Starfall.EditorTools
                 160f, 90f, 1.5f, 6.8f, 40f, 55f, 0.03f, 1.8f, 1.1f, 0.9f, 1.3f, laser, new Color(0.5f, 0.6f, 1f, 0.9f));
             var phantom = Ship(ShipId.Phantom, "SF-04 Phantom", "Precision specialist. High critical chance and brutal criticals.", ProgressionRules.ShipCreditCost(ShipId.Phantom), art.Phantom, new Color(0.85f, 0.6f, 1f),
                 85f, 45f, 0.5f, 10f, 70f, 90f, 0.25f, 3f, 0.95f, 1f, 1f, laser, new Color(0.8f, 0.4f, 1f, 0.9f));
-            var novax = Ship(ShipId.NovaX, "Nova-X", "Legendary prototype recovered from the Hive Core. Excels at everything.", 0, art.NovaX, new Color(1f, 0.95f, 0.75f),
-                130f, 80f, 2f, 11f, 85f, 100f, 0.15f, 2.5f, 1.2f, 1.25f, 1.5f, laser, new Color(1f, 0.9f, 0.5f, 0.95f));
+            // Nova-X (plan SR-BAL-001): horizontal, not superior. Huge score ceiling, thin defense, demanding Overdrive.
+            var novax = Ship(ShipId.NovaX, "Nova-X", "Experimental hybrid prototype. Enormous score potential and a devastating Ultimate, but thin armor, no shield regeneration and an Overdrive that only rewards relentless aggression.", 0, art.NovaX, new Color(1f, 0.95f, 0.75f),
+                90f, 40f, 0f, 11f, 95f, 110f, 0.12f, 2.2f, 1.15f, 1f, 1.4f, laser, new Color(1f, 0.9f, 0.5f, 0.95f));
             novax.UnlockHint = "Finish the campaign";
+            novax.OverdriveGainMultiplier = 0.7f;
+            novax.OverdriveFireRateBonus = 1.3f;
+            // Factions (plan §6). Biomech ships arrive in phase C; Phantom becomes the first Cyber hull.
+            data.Vanguard.Faction = FactionId.Federation; data.Vanguard.OverdriveFireRateBonus = 1.15f; data.Vanguard.PrecisionBonusPerHit = 0.01f;
+            falcon.Faction = FactionId.Federation; falcon.OverdriveFireRateBonus = 1.2f; falcon.PrecisionBonusPerHit = 0.01f;
+            titan.Faction = FactionId.Federation; titan.OverdriveFireRateBonus = 1.1f; titan.PrecisionBonusPerHit = 0.01f;
+            phantom.Faction = FactionId.Cyber; phantom.OverdriveCritBonus = 0.2f; phantom.Description = "Corporate stealth interceptor. Precision systems: high critical chance, and Overdrive pushes criticals even further.";
+            novax.Faction = FactionId.Federation;
             data.Ships.AddRange(new[] { data.Vanguard, falcon, titan, phantom, novax });
 
             // ---------------------------------------------------------------- Power-ups (GDD §6)
@@ -139,22 +148,27 @@ namespace Starfall.EditorTools
                 MovementKind.Weave, Move(4f, amplitude: 1.6f, frequency: 2.4f), AttackKind.Aimed, Attack(1.5f, 0.6f, 8f, 8f, new Color(1f, 0.7f, 0.2f), count: 1, burst: 2, burstInterval: 0.12f), dropStandard);
             var bomber = Enemy("Bomber", art.Bomber, new Color(0.8f, 0.55f, 1f), 1.25f, 0.5f, 60f, 0f, 30f, 100, 12f,
                 MovementKind.StraightDown, Move(1.4f), AttackKind.Forward, Attack(2.6f, 1.2f, 18f, 4.5f, new Color(1f, 0.35f, 0.6f), count: 3, spread: 30f, scale: 1.7f, splash: 0.9f), dropStandard);
+            bomber.RiskWeight = 1.2f;
             var kamikaze = Enemy("Kamikaze", art.Kamikaze, new Color(1f, 0.45f, 0.35f), 0.8f, 0.34f, 10f, 0f, 35f, 100, 6f,
                 MovementKind.Chase, Move(5.5f, turnRate: 140f), AttackKind.None, Attack(), dropStandard, selfDestruct: true);
+            kamikaze.RiskWeight = 1.6f;
             var shieldDrone = Enemy("ShieldDrone", art.ShieldDrone, new Color(0.5f, 1f, 0.85f), 1f, 0.42f, 20f, 30f, 22f, 100, 10f,
                 MovementKind.HoverStrafe, Move(2.5f, holdHeight: 0.28f, holdDuration: 7f, strafeSpeed: 2f), AttackKind.Forward, Attack(2f, 1f, 10f, 6f, new Color(0.4f, 1f, 0.9f), count: 2, spread: 14f), dropStandard);
             shieldDrone.ShieldColor = new Color(0.4f, 1f, 0.85f, 0.7f);
             var turret = Enemy("Turret", art.Turret, new Color(0.75f, 0.75f, 0.8f), 1.1f, 0.45f, 55f, 0f, 25f, 100, 10f,
                 MovementKind.Hold, Move(2.2f, holdHeight: 0.22f), AttackKind.Ring, Attack(2.4f, 1.2f, 9f, 5f, new Color(1f, 0.6f, 0.2f), count: 8), dropStandard);
             turret.HasThruster = false;
+            turret.RiskWeight = 1.2f;
             turret.MinLifetime = 4f;
             var supply = Enemy("SupplyDrone", art.Drone, new Color(0.5f, 1f, 0.6f), 0.8f, 0.36f, 8f, 0f, 0f, 50, 2f,
                 MovementKind.Weave, Move(1.8f, amplitude: 2.5f, frequency: 1.2f), AttackKind.None, Attack(), dropGuaranteed);
+            supply.RiskWeight = 0.2f;
             var asteroid = Enemy("Asteroid", art.Asteroid, new Color(0.6f, 0.55f, 0.5f), 1.1f, 0.45f, 40f, 0f, 30f, 0, 0f,
                 MovementKind.StraightDown, Move(2.2f), AttackKind.None, Attack(), null);
             asteroid.IsObstacle = true;
             asteroid.ImmuneToUltimate = true;
             asteroid.HasThruster = false;
+            asteroid.RiskWeight = 0.7f;
             asteroid.ExplosionColor = new Color(0.7f, 0.65f, 0.6f);
 
             var droneElite = Elite(drone, "DroneElite", "Elite Drone", dropRich);
@@ -363,6 +377,12 @@ namespace Starfall.EditorTools
                     Ev.Boss(omega, "WARNING: OMEGA CORE"),
                 });
             data.Stages.AddRange(new[] { s1, s2, s3, s4, s5 });
+            // Rank targets, par times and base credits (plan §9.3, §11.5). Credits no longer come from score.
+            Tune(s1, 170f, 18000, 300);
+            Tune(s2, 200f, 26000, 380);
+            Tune(s3, 220f, 34000, 460);
+            Tune(s4, 240f, 44000, 560);
+            Tune(s5, 280f, 60000, 700);
 
             data.MenuLook = Stage("MenuLook", "Menu", "", "", "", MusicId.Menu, AmbientId.Space, new Color(0.03f, 0.05f, 0.14f), new Color(0.05f, 0.02f, 0.12f), new Color(0.5f, 0.2f, 0.8f, 0f), 0.8f, Color.white,
                 null, 0f, Color.white, art.Planet, new Color(0.15f, 0.35f, 0.6f, 0.35f), 14f, 0, null, new StageEvent[0]);
@@ -547,6 +567,7 @@ namespace Starfall.EditorTools
             e.ExplosionColor = Color.Lerp(tint, new Color(1f, 0.6f, 0.25f), 0.5f);
             e.HasThruster = true;
             e.ThrusterColor = Color.Lerp(tint, new Color(1f, 0.5f, 0.2f), 0.4f);
+            e.RiskWeight = 1f;
         }
 
         private static EnemyDefinition Elite(EnemyDefinition source, string assetName, string displayName, DropTable drop)
@@ -561,6 +582,7 @@ namespace Starfall.EditorTools
                 source.ContactDamage * 1.3f, 500, source.EnergyOnKill * 1.5f, source.Movement, move, source.Attack, atk, drop, source.SelfDestructOnContact);
             e.IsElite = true;
             e.ComponentReward = 1;
+            e.RiskWeight = 1.4f;
             e.ShieldColor = new Color(1f, 0.85f, 0.4f, 0.7f);
             e.ThrusterColor = new Color(1f, 0.85f, 0.3f, 0.95f);
             return e;
@@ -602,6 +624,7 @@ namespace Starfall.EditorTools
             b.SegmentSpacing = segmentSpacing;
             b.SegmentScale = segmentScale;
             b.HasThruster = segments == 0;
+            b.RiskWeight = 2f;
             return b;
         }
 
@@ -658,6 +681,14 @@ namespace Starfall.EditorTools
             public static StageEvent MiniBoss(BossDefinition b, string warning) => new StageEvent { Type = StageEventType.MiniBoss, Boss = b, Message = warning };
             public static StageEvent Boss(BossDefinition b, string warning) => new StageEvent { Type = StageEventType.Boss, Boss = b, Message = warning };
             public static StageEvent Asteroids(bool on) => new StageEvent { Type = StageEventType.AsteroidField, Flag = on };
+        }
+
+        private static void Tune(StageDefinition s, float parSeconds, int rankTarget, int baseCredits)
+        {
+            s.ParTimeSeconds = parSeconds;
+            s.RankTargetScore = rankTarget;
+            s.BaseCredits = baseCredits;
+            EditorUtility.SetDirty(s);
         }
 
         private static StageDefinition Stage(string asset, string name, string subtitle, string briefing, string objectives, MusicId music, AmbientId ambient,

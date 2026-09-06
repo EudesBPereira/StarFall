@@ -10,6 +10,7 @@ namespace Starfall.Player
     {
         [Header("Identity")]
         public ShipId Id = ShipId.Vanguard;
+        public FactionId Faction = FactionId.Federation;
         public string DisplayName = "SF-01 Vanguard";
         [TextArea] public string Description = "Experimental interceptor of the Earth Defense Fleet.";
         [Tooltip("Credits to unlock in the Hangar (0 = starter or campaign reward).")]
@@ -41,6 +42,18 @@ namespace Starfall.Player
         [Min(0.1f)] public float UltimatePowerMultiplier = 1f;
         [Tooltip("Default weapon when none is selected.")]
         public WeaponDefinition Weapon;
+
+        [Header("Risk / Overdrive (plan §5.2, §6)")]
+        [Tooltip("Scales how fast the Overdrive meter fills. Below 1 = more demanding (Nova-X).")]
+        [Min(0.1f)] public float OverdriveGainMultiplier = 1f;
+        [Tooltip("Federation: fire-rate multiplier while Overdrive is active.")]
+        [Min(1f)] public float OverdriveFireRateBonus = 1.15f;
+        [Tooltip("Biomech: shield regenerated per second while Overdrive is active.")]
+        [Min(0f)] public float OverdriveShieldRegen = 0f;
+        [Tooltip("Cyber: extra critical chance while Overdrive is active.")]
+        [Range(0f, 1f)] public float OverdriveCritBonus = 0f;
+        [Tooltip("Federation passive: damage bonus per consecutive hit without missing (capped).")]
+        [Range(0f, 0.05f)] public float PrecisionBonusPerHit = 0f;
 
         [Header("Visuals")]
         public Sprite Sprite;

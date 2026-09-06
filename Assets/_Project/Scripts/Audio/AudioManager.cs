@@ -22,6 +22,8 @@ namespace Starfall.Audio
         private AudioSource _musicB;
         private AudioSource _activeMusic;
         private AudioSource _ambient;
+        private AudioSource _overdriveLayer;
+        private Coroutine _layerFade;
         private AudioSource[] _sfx;
         private int _nextSfx;
         private MusicId _currentMusic = MusicId.None;
@@ -67,6 +69,7 @@ namespace Starfall.Audio
             _musicA = CreateSource("MusicA", true);
             _musicB = CreateSource("MusicB", true);
             _ambient = CreateSource("Ambient", true);
+            _overdriveLayer = CreateSource("OverdriveLayer", true);
             _sfx = new AudioSource[SfxSourceCount];
             for (int i = 0; i < SfxSourceCount; i++) _sfx[i] = CreateSource("Sfx" + i, false);
             ApplySavedSettings();
@@ -74,6 +77,7 @@ namespace Starfall.Audio
             GameSignals.BossSpawned += OnBossSpawned;
             GameSignals.BossDefeated += OnBossDefeated;
             GameSignals.AchievementUnlocked += OnAchievementUnlocked;
+            GameSignals.OverdriveChanged += OnOverdriveChanged;
         }
 
         private void OnDestroy()
@@ -83,6 +87,7 @@ namespace Starfall.Audio
             GameSignals.BossSpawned -= OnBossSpawned;
             GameSignals.BossDefeated -= OnBossDefeated;
             GameSignals.AchievementUnlocked -= OnAchievementUnlocked;
+            GameSignals.OverdriveChanged -= OnOverdriveChanged;
             Instance = null;
         }
 
@@ -259,5 +264,35 @@ namespace Starfall.Audio
         }
 
         private void OnAchievementUnlocked(AchievementId id) => PlaySfxInternal(SfxId.Achievement, 1f);
+
+        /// <summary>Overdrive adds a rhythmic layer that fades in and out smoothly (plan §14.3).</summary>
+        private void OnOverdriveChanged(bool active)
+        {
+            if (_overdriveLayer == null) return;
+            if (_layerFade != null) StopCoroutine(_layerFade);
+            _layerFade = StartCoroutine(FadeLayer(active));
+        }
+
+        private IEnumerator FadeLayer(bool on)
+        {
+            if (on)
+            {
+                AudioClip clip = null;
+                float volume = 1f;
+                if (_library != null && _library.TryGetMusic(MusicId.OverdriveLayer, out var libClip, out var libVol)) { clip = libClip; volume = libVol; }
+                else if (_library == null || _library.UseSynthesizedPlaceholders) clip = PlaceholderAudioSynth.GetMusic(MusicId.OverdriveLayer);
+                if (clip == null) yield break;
+                if (_overdriveLayer.clip != clip) { _overdriveLayer.clip = clip; }
+                if (!_overdriveLayer.isPlaying) { _overdriveLayer.volume = 0f; _overdriveLayer.Play(); }
+                float target = MusicGain * volume * 0.8f;
+                while (_overdriveLayer.volume < target) { _overdriveLayer.volume = Mathf.MoveTowards(_overdriveLayer.volume, target, Time.unscaledDeltaTime * 1.5f); yield return null; }
+            }
+            else
+            {
+                while (_overdriveLayer.volume > 0f) { _overdriveLayer.volume = Mathf.MoveTowards(_overdriveLayer.volume, 0f, Time.unscaledDeltaTime * 1.2f); yield return null; }
+                _overdriveLayer.Stop();
+            }
+            _layerFade = null;
+        }
     }
 }

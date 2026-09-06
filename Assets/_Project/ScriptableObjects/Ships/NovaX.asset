@@ -13,24 +13,32 @@ MonoBehaviour:
   m_Name: NovaX
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Player.ShipDefinition
   Id: 4
+  Faction: 0
   DisplayName: Nova-X
-  Description: Legendary prototype recovered from the Hive Core. Excels at everything.
+  Description: Experimental hybrid prototype. Enormous score potential and a devastating
+    Ultimate, but thin armor, no shield regeneration and an Overdrive that only rewards
+    relentless aggression.
   Cost: 0
   UnlockHint: Finish the campaign
-  MaxHull: 130
-  MaxShield: 80
-  ShieldRegenPerSecond: 2
+  MaxHull: 90
+  MaxShield: 40
+  ShieldRegenPerSecond: 0
   ShieldRegenDelay: 4
   MoveSpeed: 11
-  Acceleration: 85
-  Deceleration: 100
+  Acceleration: 95
+  Deceleration: 110
   BankAngle: 18
-  CritChance: 0.15
-  CritMultiplier: 2.5
-  DamageMultiplier: 1.2
-  UltimateChargeMultiplier: 1.25
-  UltimatePowerMultiplier: 1.5
+  CritChance: 0.12
+  CritMultiplier: 2.2
+  DamageMultiplier: 1.15
+  UltimateChargeMultiplier: 1
+  UltimatePowerMultiplier: 1.4
   Weapon: {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
+  OverdriveGainMultiplier: 0.7
+  OverdriveFireRateBonus: 1.3
+  OverdriveShieldRegen: 0
+  OverdriveCritBonus: 0
+  PrecisionBonusPerHit: 0
   Sprite: {fileID: 21300000, guid: f8f597989819ed445ae3cdae123fbb92, type: 3}
   Tint: {r: 1, g: 0.95, b: 0.75, a: 1}
   ThrusterColor: {r: 1, g: 0.9, b: 0.5, a: 0.95}

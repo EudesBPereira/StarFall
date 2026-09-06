@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Vanguard
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Player.ShipDefinition
   Id: 0
+  Faction: 0
   DisplayName: SF-01 Vanguard
   Description: Balanced experimental interceptor of the Earth Defense Fleet.
   Cost: 0
@@ -31,6 +32,11 @@ MonoBehaviour:
   UltimateChargeMultiplier: 1
   UltimatePowerMultiplier: 1
   Weapon: {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
+  OverdriveGainMultiplier: 1
+  OverdriveFireRateBonus: 1.15
+  OverdriveShieldRegen: 0
+  OverdriveCritBonus: 0
+  PrecisionBonusPerHit: 0.01
   Sprite: {fileID: 21300000, guid: 5ab9e7b140c234e46b157c4b9e5c300f, type: 3}
   Tint: {r: 1, g: 1, b: 1, a: 1}
   ThrusterColor: {r: 0.4, g: 0.8, b: 1, a: 0.9}

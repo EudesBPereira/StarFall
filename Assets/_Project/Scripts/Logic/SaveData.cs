@@ -14,6 +14,10 @@ namespace Starfall.Logic
         public int ship;      // ShipId
         public int wave;      // waves survived (endless modes)
         public string date = "";
+        public int rank;      // StageRank (campaign)
+        public int seed;
+        public int balance;   // SaveData.BalanceVersion at the time
+        public bool revive;   // separate board (plan §12.3)
     }
 
     /// <summary>
@@ -34,6 +38,7 @@ namespace Starfall.Logic
         public int unlockedStage = 0;
         public int highScore = 0;
         public int[] stageBestScores = new int[StageSlots];
+        public int[] stageBestRanks = new int[StageSlots];
         public int stagesCompletedMask = 0;
         public int bossesDefeatedMask = 0;
 
@@ -63,6 +68,12 @@ namespace Starfall.Logic
         public float sfxVolume = 1f;
         public bool autoFire = true;
         public float touchSensitivity = 1.4f;
+        public bool reducedEffects = false;
+        public bool grazeFeedback = true;
+        public bool showHitbox = false;
+        public float screenShake = 1f;
+        // Competitive integrity (plan §9.4): balancing version stamped on every leaderboard row.
+        public const int BalanceVersion = 3;
 
         public static SaveData CreateDefault() => new SaveData();
 
@@ -147,6 +158,14 @@ namespace Starfall.Logic
                     Array.Copy(data.stageBestScores, best, Math.Min(best.Length, data.stageBestScores.Length));
                 data.stageBestScores = best;
             }
+            if (data.stageBestRanks == null || data.stageBestRanks.Length != SaveData.StageSlots)
+            {
+                var ranks = new int[SaveData.StageSlots];
+                if (data.stageBestRanks != null)
+                    Array.Copy(data.stageBestRanks, ranks, Math.Min(ranks.Length, data.stageBestRanks.Length));
+                data.stageBestRanks = ranks;
+            }
+            data.screenShake = float.IsNaN(data.screenShake) ? 1f : Math.Clamp(data.screenShake, 0f, 1f);
 
             if (!data.IsShipUnlocked(data.selectedShip)) data.selectedShip = 0;
             if (!data.IsWeaponUnlocked(data.selectedWeapon)) data.selectedWeapon = 0;

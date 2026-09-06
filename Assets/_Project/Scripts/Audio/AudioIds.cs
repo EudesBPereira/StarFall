@@ -27,6 +27,13 @@ namespace Starfall.Audio
         Achievement = 22,
         Purchase = 23,
         Spread = 24,
+        Graze = 25,
+        RiskUp = 26,
+        RiskDown = 27,
+        OverdriveStart = 28,
+        OverdriveEnd = 29,
+        ComboUp = 30,
+        RankReveal = 31,
     }
 
     public enum MusicId
@@ -41,6 +48,8 @@ namespace Starfall.Audio
         Stage5 = 7,
         Survival = 8,
         FinalBoss = 9,
+        /// <summary>Extra rhythmic layer mixed on top of the current track while Overdrive is active.</summary>
+        OverdriveLayer = 10,
     }
 
     /// <summary>Looping ambience per environment (GDD §20 "Ambiente").</summary>

@@ -51,6 +51,10 @@ namespace Starfall.Core
         public static event Action<int> LivesChanged;
         public static event Action<int> WeaponLevelChanged;
         public static event Action<AchievementId> AchievementUnlocked;
+        public static event Action<RiskState, RiskState> RiskStateChanged;
+        public static event Action<bool> OverdriveChanged;
+        public static event Action<float, bool> OverdriveMeter;
+        public static event Action<Vector2, float> Graze;
 
         public static void RaiseEnemyDestroyed(in EnemyKilledInfo info) => EnemyDestroyed?.Invoke(info);
         public static void RaisePlayerDamaged(in DamageInfo info, in DamageResult result) => PlayerDamaged?.Invoke(info, result);
@@ -70,6 +74,10 @@ namespace Starfall.Core
         public static void RaiseLivesChanged(int lives) => LivesChanged?.Invoke(lives);
         public static void RaiseWeaponLevelChanged(int level) => WeaponLevelChanged?.Invoke(level);
         public static void RaiseAchievementUnlocked(AchievementId id) => AchievementUnlocked?.Invoke(id);
+        public static void RaiseRiskStateChanged(RiskState from, RiskState to) => RiskStateChanged?.Invoke(from, to);
+        public static void RaiseOverdriveChanged(bool active) => OverdriveChanged?.Invoke(active);
+        public static void RaiseOverdriveMeter(float fraction, bool active) => OverdriveMeter?.Invoke(fraction, active);
+        public static void RaiseGraze(Vector2 position, float riskMultiplier) => Graze?.Invoke(position, riskMultiplier);
 
         /// <summary>Drops every subscriber. Used by the Boot scene and by tests.</summary>
         public static void ClearAll()
@@ -92,6 +100,10 @@ namespace Starfall.Core
             LivesChanged = null;
             WeaponLevelChanged = null;
             AchievementUnlocked = null;
+            RiskStateChanged = null;
+            OverdriveChanged = null;
+            OverdriveMeter = null;
+            Graze = null;
         }
     }
 }

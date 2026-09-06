@@ -3,6 +3,7 @@ using Starfall.Bosses;
 using Starfall.Core;
 using Starfall.Logic;
 using Starfall.PowerUps;
+using Starfall.Save;
 using UnityEngine;
 
 namespace Starfall.UI
@@ -20,6 +21,8 @@ namespace Starfall.UI
         private bool _critical;
         private string _lastSpecial = "";
         private float _specialRefresh;
+        private float _riskRefresh;
+        private int _tutorialMask;
 
         public void Bind(GameplayContext ctx, LivesModel lives)
         {
@@ -42,6 +45,9 @@ namespace Starfall.UI
             GameSignals.PlayerCriticalChanged += OnCriticalChanged;
             GameSignals.WaveStarted += OnWaveStarted;
             GameSignals.ComponentCollected += OnComponentCollected;
+            GameSignals.RiskStateChanged += OnRiskStateChanged;
+            GameSignals.OverdriveChanged += OnOverdriveChanged;
+            GameSignals.Graze += OnGraze;
 
             if (view.ultimateButton != null) view.ultimateButton.onClick.AddListener(() => ctx.Input.PressUltimate());
             if (view.pauseButton != null) view.pauseButton.onClick.AddListener(() => ctx.Input.PressPause());
@@ -58,6 +64,9 @@ namespace Starfall.UI
             view.SetBoss(false, "", 0f);
             view.SetCritical(false, 0f);
             view.SetCharge(0f);
+            view.SetRisk(RiskState.Safe, 1f, 0f, false);
+            view.SetOverdrive(0f, false, 0f);
+            view.SetGrazes(0);
             view.SetWave(GameSession.Mode == GameModeId.Campaign ? $"STAGE {GameSession.CurrentStageIndex + 1}" : "");
         }
 
@@ -86,6 +95,9 @@ namespace Starfall.UI
             GameSignals.PlayerCriticalChanged -= OnCriticalChanged;
             GameSignals.WaveStarted -= OnWaveStarted;
             GameSignals.ComponentCollected -= OnComponentCollected;
+            GameSignals.RiskStateChanged -= OnRiskStateChanged;
+            GameSignals.OverdriveChanged -= OnOverdriveChanged;
+            GameSignals.Graze -= OnGraze;
         }
 
         private void Update()
@@ -96,6 +108,19 @@ namespace Starfall.UI
 
             if (_critical) view.SetCritical(true, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 8f));
             view.SetCharge(_ctx.Player.Weapon.ChargeFraction);
+
+            // Risk / Overdrive bars refresh 20x per second (they change continuously).
+            _riskRefresh -= Time.unscaledDeltaTime;
+            if (_riskRefresh <= 0f)
+            {
+                _riskRefresh = 0.05f;
+                var sensor = _ctx.Player.Risk;
+                if (sensor != null)
+                {
+                    view.SetRisk(sensor.Risk.State, sensor.Risk.Multiplier, sensor.Risk.Fraction, sensor.Overdrive.IsActive);
+                    view.SetOverdrive(sensor.Overdrive.Fraction, sensor.Overdrive.IsActive, sensor.Overdrive.RemainingSeconds);
+                }
+            }
 
             // Special indicator refreshes 10x per second to avoid per-frame string allocation.
             _specialRefresh -= Time.unscaledDeltaTime;
@@ -144,6 +169,45 @@ namespace Starfall.UI
         }
 
         private void OnComponentCollected(int amount) => OnStageMessage($"+{amount} COMPONENT", 0.9f);
+
+        private void OnGraze(Vector2 position, float riskMultiplier)
+        {
+            var sensor = _ctx.Player.Risk;
+            view.SetGrazes(sensor != null ? sensor.Grazes : 0);
+            var data = SaveService.Data;
+            if (data == null || data.grazeFeedback)
+            {
+                Audio.AudioManager.PlaySfx(Audio.SfxId.Graze, 0.6f);
+                if (_ctx.Vfx != null) _ctx.Vfx.SpawnFloatingText(position + Vector2.up * 0.5f, "GRAZE", HudView.AllyColor, 0.45f);
+            }
+            TutorialHint(4, "GRAZE! DODGE CLOSE TO BULLETS FOR BONUS POINTS AND OVERDRIVE");
+        }
+
+        /// <summary>Contextual tutorial for the risk loop, shown once per hint on the first stage (plan §15.1).</summary>
+        private void OnRiskStateChanged(RiskState from, RiskState to)
+        {
+            if (to <= from) return;
+            switch (to)
+            {
+                case RiskState.Alert: TutorialHint(0, "RISK ALERT x2 - CLOSER TO ENEMIES = MORE POINTS"); break;
+                case RiskState.Danger: TutorialHint(1, "DANGER x3 - OVERDRIVE IS CHARGING"); break;
+                case RiskState.Extreme: TutorialHint(2, "EXTREME x5 - MAXIMUM RISK"); break;
+            }
+        }
+
+        private void OnOverdriveChanged(bool active)
+        {
+            if (active) TutorialHint(3, "OVERDRIVE! SCORE UP TO x8 - DAMAGE SHORTENS IT");
+            else if (_tutorialMask != 0) OnStageMessage("OVERDRIVE ENDED", 0.8f);
+        }
+
+        private void TutorialHint(int bit, string text)
+        {
+            if (GameSession.Mode != GameModeId.Campaign || GameSession.CurrentStageIndex != 0) return;
+            if ((_tutorialMask & (1 << bit)) != 0) return;
+            _tutorialMask |= 1 << bit;
+            OnStageMessage(text, 2.4f);
+        }
 
         private void OnHealthChanged()
         {

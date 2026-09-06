@@ -57,6 +57,7 @@ MonoBehaviour:
     SlowSeconds: 0
   ProjectilePrefab: {fileID: 0}
   MinLifetime: 1.5
+  RiskWeight: 1
   ExplosionScale: 0.85
   ExplosionColor: {r: 1, g: 0.675, b: 0.3, a: 1}
   HasThruster: 1
