@@ -55,6 +55,17 @@ namespace Starfall.Player
         [Tooltip("Federation passive: damage bonus per consecutive hit without missing (capped).")]
         [Range(0f, 0.05f)] public float PrecisionBonusPerHit = 0f;
 
+        [Header("Faction kit (plan §6)")]
+        public UltimateKind Ultimate = UltimateKind.OrbitalStrike;
+        [Tooltip("Cyber: hits mark the target for extra damage.")]
+        public bool MarksTargets = false;
+        [Tooltip("Cyber: orbiting drone that fires on its own.")]
+        public bool HasCompanionDrone = false;
+        [Min(0f)] public float DroneDamage = 4f;
+        [Min(0.05f)] public float DroneInterval = 0.5f;
+        [Tooltip("Biomech: fraction of max hull restored per kill (capped at 5%).")]
+        [Range(0f, 0.05f)] public float LifestealPerKill = 0f;
+
         [Header("Visuals")]
         public Sprite Sprite;
         public Color Tint = Color.white;

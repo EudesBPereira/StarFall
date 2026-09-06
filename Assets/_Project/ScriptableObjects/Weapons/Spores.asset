@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae6dd8985bfec43af214453ccdf696, type: 3}
+  m_Name: Spores
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Combat.WeaponDefinition
+  Id: 7
+  DisplayName: Spore Launcher
+  Description: Living spores that seek the nearest enemy. Weak alone, relentless
+    in numbers.
+  Cost: 3500
+  ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 7727e79b237967b479d2405d3866bac6, type: 3}
+  FireInterval: 0.18
+  Damage: 3
+  ProjectileSpeed: 7.5
+  ProjectileLifetime: 3
+  ProjectileScale: 0.75
+  ProjectileColor: {r: 0.36, g: 1, b: 0.62, a: 1}
+  DamageType: 4
+  FireSfx: 14
+  Pierce: 0
+  Homing: 1
+  HomingTurnRate: 200
+  ChargeSeconds: 0
+  ChargeDamageMultiplier: 4
+  ChargeScaleMultiplier: 2.5
+  SplashRadius: 0
+  Levels:
+  - Shots:
+    - OffsetX: -0.15
+      Angle: -8
+    - OffsetX: 0.15
+      Angle: 8
+    DamageMultiplier: 1
+  - Shots:
+    - OffsetX: -0.15
+      Angle: -8
+    - OffsetX: 0.15
+      Angle: 8
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.1
+  - Shots:
+    - OffsetX: -0.25
+      Angle: -14
+    - OffsetX: 0.25
+      Angle: 14
+    - OffsetX: -0.08
+      Angle: -3
+    - OffsetX: 0.08
+      Angle: 3
+    DamageMultiplier: 1.2
+  - Shots:
+    - OffsetX: -0.25
+      Angle: -14
+    - OffsetX: 0.25
+      Angle: 14
+    - OffsetX: -0.08
+      Angle: -3
+    - OffsetX: 0.08
+      Angle: 3
+    - OffsetX: 0
+      Angle: 0
+    DamageMultiplier: 1.3
+  - Shots:
+    - OffsetX: -0.3
+      Angle: -20
+    - OffsetX: 0.3
+      Angle: 20
+    - OffsetX: -0.15
+      Angle: -8
+    - OffsetX: 0.15
+      Angle: 8
+    - OffsetX: 0
+      Angle: 0
+    - OffsetX: -0.35
+      Angle: -30
+    - OffsetX: 0.35
+      Angle: 30
+    DamageMultiplier: 1.4

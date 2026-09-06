@@ -38,6 +38,8 @@ namespace Starfall.Enemies
         private float _contactCooldown;
         private float _statMultiplier = 1f;
         private Coroutine _flashRoutine;
+        private float _markTimer;
+        private float _stunTimer;
 
         public EnemyDefinition Definition => _definition;
         public Health Health => _health;
@@ -53,6 +55,8 @@ namespace Starfall.Enemies
         public Vector2 MuzzlePosition => (Vector2)transform.position + Vector2.down * (_definition != null ? _definition.ColliderRadius * _definition.Scale : 0.3f);
         /// <summary>Speed scale from the difficulty of endless modes / daily modifiers.</summary>
         public float SpeedMultiplier { get; private set; } = 1f;
+        public bool IsMarked => _markTimer > 0f;
+        public bool IsStunned => _stunTimer > 0f;
 
         protected GameplayContext Context => _ctx;
         protected bool Dying => _dying;
@@ -84,6 +88,8 @@ namespace Starfall.Enemies
             _initialized = true;
             _statMultiplier = Mathf.Max(0.1f, statMultiplier);
             SpeedMultiplier = Mathf.Max(0.1f, speedMultiplier);
+            _markTimer = 0f;
+            _stunTimer = 0f;
 
             gameObject.layer = definition.IsObstacle ? GameLayers.Obstacle : GameLayers.Enemy;
             transform.localScale = Vector3.one * definition.Scale;
@@ -134,9 +140,13 @@ namespace Starfall.Enemies
             float dt = Time.deltaTime;
             _age += dt;
             if (_contactCooldown > 0f) _contactCooldown -= dt;
+            TickStatus(dt);
 
-            _movement.Tick(this, dt);
-            _attack?.Tick(this, dt);
+            if (!IsStunned)
+            {
+                _movement.Tick(this, dt);
+                _attack?.Tick(this, dt);
+            }
 
             var area = Area;
             if (_age > _definition.MinLifetime && area != null && area.IsOutside(transform.position, area.DespawnMargin))
@@ -288,6 +298,40 @@ namespace Starfall.Enemies
                 if (e != null && _ctx != null && _ctx.Vfx != null) _ctx.Vfx.SpawnPickupBurst(e.transform.position, minion.Tint);
             }
             AudioManager.PlaySfx(SfxId.Summon, 0.8f);
+        }
+
+        // ---- Status (Cyber mark, EMP stun) ------------------------------------------------------------------
+
+        /// <summary>Marked targets take extra damage for a while (plan §6, Cyber).</summary>
+        public void ApplyMark(float seconds)
+        {
+            if (!IsActiveInstance || seconds <= 0f) return;
+            _markTimer = Mathf.Max(_markTimer, seconds);
+            _health.IncomingDamageMultiplier = FactionRules.MarkDamageMultiplier;
+        }
+
+        /// <summary>EMP: movement and attacks pause; bosses are stunned for half the time.</summary>
+        public void Stun(float seconds)
+        {
+            if (!IsActiveInstance || seconds <= 0f) return;
+            _stunTimer = Mathf.Max(_stunTimer, IsBoss ? seconds * 0.5f : seconds);
+        }
+
+        protected void TickStatus(float dt)
+        {
+            if (_markTimer > 0f)
+            {
+                _markTimer -= dt;
+                if (_markTimer <= 0f) _health.IncomingDamageMultiplier = 1f;
+                else if (body != null && _flashRoutine == null) body.color = Color.Lerp(CurrentTint, new Color(0.14f, 0.84f, 1f), 0.35f + 0.25f * Mathf.Sin(Time.time * 14f));
+            }
+            if (_stunTimer > 0f)
+            {
+                _stunTimer -= dt;
+                if (body != null && _flashRoutine == null) body.color = Color.Lerp(CurrentTint, Color.white, Mathf.PingPong(Time.time * 10f, 1f) * 0.6f);
+                if (_stunTimer <= 0f && body != null && _flashRoutine == null) body.color = CurrentTint;
+            }
+            else if (_markTimer <= 0f && body != null && _flashRoutine == null && body.color != CurrentTint && !_dying) body.color = CurrentTint;
         }
 
         // ---- Visuals -----------------------------------------------------------------------------------

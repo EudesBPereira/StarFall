@@ -43,6 +43,9 @@ namespace Starfall.Player
             _enemies = enemies;
             _charge = 0f;
             _charging = false;
+            _precisionPerHit = loadout.Ship != null ? loadout.Ship.PrecisionBonusPerHit : 0f;
+            _markSeconds = loadout.Ship != null && loadout.Ship.MarksTargets ? FactionRules.MarkSeconds : 0f;
+            Precision.Reset();
             if (chargeGlow != null) chargeGlow.enabled = false;
             SetLevel(1);
         }
@@ -73,6 +76,18 @@ namespace Starfall.Player
         public float ExternalFireRateMultiplier { get; set; } = 1f;
         /// <summary>Extra critical chance from temporary states (Cyber Overdrive).</summary>
         public float ExternalCritBonus { get; set; }
+        /// <summary>Federation precision passive: consecutive hits raise damage (plan §6).</summary>
+        public PrecisionModel Precision { get; } = new PrecisionModel();
+        private float _precisionPerHit;
+        private float _markSeconds;
+
+        /// <summary>Called by projectiles when they despawn: did the shot connect?</summary>
+        public void ReportShot(bool hit)
+        {
+            if (_precisionPerHit <= 0f) return;
+            if (hit) Precision.RegisterHit();
+            else Precision.RegisterMiss();
+        }
 
         private float FireRate => Mathf.Max(0.1f, _loadout.FireRateMultiplier * ExternalFireRateMultiplier);
 
@@ -137,7 +152,8 @@ namespace Starfall.Player
             var def = _definition;
             var levelData = def.GetLevel(_level);
             Vector2 origin = muzzle != null ? (Vector2)muzzle.position : (Vector2)transform.position;
-            float baseDamage = def.Damage * levelData.DamageMultiplier * damageMultiplier * _loadout.DamageMultiplier * extraDamageMultiplier;
+            float baseDamage = def.Damage * levelData.DamageMultiplier * damageMultiplier * _loadout.DamageMultiplier * extraDamageMultiplier
+                               * Precision.Multiplier(_precisionPerHit, FactionRules.PrecisionCap);
             float lifetime = def.ProjectileLifetime * _loadout.RangeMultiplier;
 
             Transform homingTarget = def.Homing ? FindNearestEnemy(origin) : null;
@@ -163,6 +179,7 @@ namespace Starfall.Player
                     Critical = crit,
                     Sprite = def.ProjectileSprite,
                     SplashRadius = def.SplashRadius,
+                    MarkSeconds = _markSeconds,
                 };
                 Vector2 dir = ProjectileLauncher.Rotate(Vector2.up, shots[i].Angle);
                 Vector2 pos = origin + new Vector2(shots[i].OffsetX, 0f);

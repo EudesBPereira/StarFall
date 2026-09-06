@@ -168,3 +168,16 @@ Executar no Editor (Game view em 1080x1920 e 1920x1080) e em pelo menos um Andro
 ### Configurações
 - [ ] "Screen shake" em 0 elimina o tremor; em 1 volta ao normal.
 - [ ] "Show hitbox" desenha o anel branco no centro da nave.
+
+---
+
+## Fase C — Facções
+
+- [ ] Hangar lista sete naves e oito armas; cada nave mostra facção, Ultimate e passiva.
+- [ ] Comprar a Symbiont desbloqueia o Spore Launcher automaticamente.
+- [ ] Symbiont: esporos curvam até os inimigos; cada abate restaura um pouco de casco; a Ultimate solta dez esporos que caçam por alguns segundos sem limpar a tela.
+- [ ] Nexus: o drone orbita e dispara sozinho; inimigos atingidos ficam com tom ciano (marcados) e morrem mais rápido; a EMP congela tudo, limpa os projéteis e marca a tela inteira.
+- [ ] Phantom: usa EMP e marca alvos.
+- [ ] Federação: acertos consecutivos aumentam o dano (observar inimigos morrendo mais rápido após uma sequência sem errar); errar zera.
+- [ ] Chefes atordoados pela EMP ficam parados metade do tempo e o laser frontal some.
+- [ ] Nenhuma nave vence em todos os atributos na comparação do Hangar.

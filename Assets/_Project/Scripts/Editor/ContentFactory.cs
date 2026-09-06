@@ -103,7 +103,16 @@ namespace Starfall.EditorTools
                     Level(1.6f, S(0, 0)),
                     Level(1.8f, S(0, 0)),
                 }, chargeSeconds: 1.2f, chargeDamage: 4f, chargeScale: 2.6f, pierce: 1);
-            data.Weapons.AddRange(new[] { laser, doubleLaser, plasma, spread, railgun, missiles, cannon });
+            var spores = Weapon(WeaponId.Spores, "Spore Launcher", "Living spores that seek the nearest enemy. Weak alone, relentless in numbers.", ProgressionRules.WeaponCreditCost(WeaponId.Spores), art, prefabs,
+                0.18f, 3f, 7.5f, 3f, 0.75f, new Color(0.36f, 1f, 0.62f), SfxId.Plasma, DamageType.Plasma, art.Spore, new[]
+                {
+                    Level(1f, S(-0.15f, -8f), S(0.15f, 8f)),
+                    Level(1.1f, S(-0.15f, -8f), S(0.15f, 8f), S(0, 0)),
+                    Level(1.2f, S(-0.25f, -14f), S(0.25f, 14f), S(-0.08f, -3f), S(0.08f, 3f)),
+                    Level(1.3f, S(-0.25f, -14f), S(0.25f, 14f), S(-0.08f, -3f), S(0.08f, 3f), S(0, 0)),
+                    Level(1.4f, S(-0.3f, -20f), S(0.3f, 20f), S(-0.15f, -8f), S(0.15f, 8f), S(0, 0), S(-0.35f, -30f), S(0.35f, 30f)),
+                }, homing: true, homingTurnRate: 200f);
+            data.Weapons.AddRange(new[] { laser, doubleLaser, plasma, spread, railgun, missiles, cannon, spores });
 
             // ---------------------------------------------------------------- Ships (GDD §15)
             data.Vanguard = Ship(ShipId.Vanguard, "SF-01 Vanguard", "Balanced experimental interceptor of the Earth Defense Fleet.", 0, art.Ship, Color.white,
@@ -127,7 +136,28 @@ namespace Starfall.EditorTools
             titan.Faction = FactionId.Federation; titan.OverdriveFireRateBonus = 1.1f; titan.PrecisionBonusPerHit = 0.01f;
             phantom.Faction = FactionId.Cyber; phantom.OverdriveCritBonus = 0.2f; phantom.Description = "Corporate stealth interceptor. Precision systems: high critical chance, and Overdrive pushes criticals even further.";
             novax.Faction = FactionId.Federation;
-            data.Ships.AddRange(new[] { data.Vanguard, falcon, titan, phantom, novax });
+
+            // Faction starters (plan §6 / fase C).
+            var symbiont = Ship(ShipId.Symbiont, "BX-01 Symbiont", "Biomechanical organism grafted to a hull. Its spores hunt on their own, every kill feeds the ship, and its swarm Ultimate keeps hunting after you fire it.", ProgressionRules.ShipCreditCost(ShipId.Symbiont), art.Symbiont, new Color(0.6f, 1f, 0.7f),
+                110f, 30f, 1f, 8.5f, 55f, 70f, 0.04f, 1.8f, 1f, 1.1f, 1f, spores, new Color(0.36f, 1f, 0.62f, 0.9f));
+            symbiont.Faction = FactionId.Biomech;
+            symbiont.Ultimate = UltimateKind.Swarm;
+            symbiont.LifestealPerKill = 0.02f;
+            symbiont.OverdriveShieldRegen = 8f;
+            symbiont.OverdriveFireRateBonus = 1.05f;
+            var nexus = Ship(ShipId.Nexus, "CX-7 Nexus", "Corporate command frame with a combat drone. Everything it hits is marked and takes extra damage; its EMP freezes the battlefield.", ProgressionRules.ShipCreditCost(ShipId.Nexus), art.Nexus, new Color(0.75f, 0.95f, 1f),
+                85f, 60f, 0.8f, 10f, 75f, 95f, 0.1f, 2f, 0.9f, 1f, 1f, laser, new Color(0.14f, 0.84f, 1f, 0.9f));
+            nexus.Faction = FactionId.Cyber;
+            nexus.Ultimate = UltimateKind.Emp;
+            nexus.MarksTargets = true;
+            nexus.HasCompanionDrone = true;
+            nexus.DroneDamage = 4f;
+            nexus.DroneInterval = 0.5f;
+            nexus.OverdriveCritBonus = 0.15f;
+            phantom.Ultimate = UltimateKind.Emp;
+            phantom.MarksTargets = true;
+            data.Vanguard.Ultimate = UltimateKind.OrbitalStrike; falcon.Ultimate = UltimateKind.OrbitalStrike; titan.Ultimate = UltimateKind.OrbitalStrike; novax.Ultimate = UltimateKind.OrbitalStrike;
+            data.Ships.AddRange(new[] { data.Vanguard, falcon, titan, phantom, novax, symbiont, nexus });
 
             // ---------------------------------------------------------------- Power-ups (GDD §6)
             var puBlue = PowerUp(PowerUpKind.LaserLevel, "Weapon Power", "WEAPON UP", new Color(0.35f, 0.6f, 1f), 0f, 1f, 1.2f, prefabs);

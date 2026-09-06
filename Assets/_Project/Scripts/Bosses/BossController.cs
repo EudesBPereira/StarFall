@@ -79,6 +79,13 @@ namespace Starfall.Bosses
         {
             if (!IsActiveInstance) return;
             float dt = Time.deltaTime;
+            TickStatus(dt);
+            if (IsStunned && !_entering)
+            {
+                if (frontLaser != null) frontLaser.Hide();
+                UpdateSegments(dt);
+                return;
+            }
 
             if (_entering)
             {

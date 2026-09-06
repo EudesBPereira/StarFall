@@ -10,42 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d2d94aca672e53458f2a748a192dfa4, type: 3}
-  m_Name: Phantom
+  m_Name: Nexus
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Player.ShipDefinition
-  Id: 3
+  Id: 6
   Faction: 2
-  DisplayName: SF-04 Phantom
-  Description: 'Corporate stealth interceptor. Precision systems: high critical chance,
-    and Overdrive pushes criticals even further.'
-  Cost: 6000
+  DisplayName: CX-7 Nexus
+  Description: Corporate command frame with a combat drone. Everything it hits is
+    marked and takes extra damage; its EMP freezes the battlefield.
+  Cost: 5000
   UnlockHint: 
   MaxHull: 85
-  MaxShield: 45
-  ShieldRegenPerSecond: 0.5
+  MaxShield: 60
+  ShieldRegenPerSecond: 0.8
   ShieldRegenDelay: 4
   MoveSpeed: 10
-  Acceleration: 70
-  Deceleration: 90
+  Acceleration: 75
+  Deceleration: 95
   BankAngle: 18
-  CritChance: 0.25
-  CritMultiplier: 3
-  DamageMultiplier: 0.95
+  CritChance: 0.1
+  CritMultiplier: 2
+  DamageMultiplier: 0.9
   UltimateChargeMultiplier: 1
   UltimatePowerMultiplier: 1
   Weapon: {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
   OverdriveGainMultiplier: 1
   OverdriveFireRateBonus: 1.15
   OverdriveShieldRegen: 0
-  OverdriveCritBonus: 0.2
+  OverdriveCritBonus: 0.15
   PrecisionBonusPerHit: 0
   Ultimate: 2
   MarksTargets: 1
-  HasCompanionDrone: 0
+  HasCompanionDrone: 1
   DroneDamage: 4
   DroneInterval: 0.5
   LifestealPerKill: 0
-  Sprite: {fileID: 21300000, guid: ceeee1ae030fad142ab84789fc7382df, type: 3}
-  Tint: {r: 0.85, g: 0.6, b: 1, a: 1}
-  ThrusterColor: {r: 0.8, g: 0.4, b: 1, a: 0.9}
+  Sprite: {fileID: 21300000, guid: a6398386fef094545af6cdacd6bc0799, type: 3}
+  Tint: {r: 0.75, g: 0.95, b: 1, a: 1}
+  ThrusterColor: {r: 0.14, g: 0.84, b: 1, a: 0.9}
   HitboxRadius: 0.28
   VisualScale: 1

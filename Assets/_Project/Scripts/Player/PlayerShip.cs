@@ -32,6 +32,7 @@ namespace Starfall.Player
         [SerializeField] internal ParticleSystem smoke;
         [SerializeField] internal EngineAudio engineAudio;
         [SerializeField] internal RiskSensor riskSensor;
+        [SerializeField] internal CompanionDrone companionDrone;
 
         private Health _health;
         private GameplayContext _ctx;
@@ -56,6 +57,24 @@ namespace Starfall.Player
         public bool IsAlive => _health != null && _health.IsAlive;
         public bool ControlEnabled => _controlEnabled;
         public bool IsCritical => _critical;
+
+        private void OnEnable()
+        {
+            GameSignals.EnemyDestroyed += OnEnemyDestroyedLifesteal;
+        }
+
+        private void OnDisable()
+        {
+            GameSignals.EnemyDestroyed -= OnEnemyDestroyedLifesteal;
+        }
+
+        /// <summary>Biomech passive (plan §6): kills restore a small, capped fraction of hull.</summary>
+        private void OnEnemyDestroyedLifesteal(EnemyKilledInfo info)
+        {
+            if (!IsAlive || definition == null || definition.LifestealPerKill <= 0f || !info.CountsForScore) return;
+            if (info.Definition == null || info.Definition.IsObstacle) return;
+            _health.RestoreHull(FactionRules.LifestealAmount(_health.MaxHull, definition.LifestealPerKill));
+        }
 
         private void Awake()
         {
@@ -109,6 +128,12 @@ namespace Starfall.Player
 
             var save = SaveService.Data;
             if (riskSensor != null) riskSensor.Configure(_loadout, save != null && save.showHitbox);
+            if (companionDrone != null)
+            {
+                bool hasDrone = definition != null && definition.HasCompanionDrone;
+                companionDrone.Configure(this, definition != null ? definition.DroneDamage : 4f, definition != null ? definition.DroneInterval : 0.5f, definition != null ? definition.ThrusterColor : Color.cyan);
+                companionDrone.SetActive(hasDrone);
+            }
             _dragSensitivity = save != null ? save.touchSensitivity : 1.4f;
             if (ctx.Input != null) ctx.Input.AutoFire = save == null || save.autoFire;
 

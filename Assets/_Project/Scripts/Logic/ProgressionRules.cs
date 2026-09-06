@@ -18,6 +18,10 @@ namespace Starfall.Logic
         Titan = 2,
         Phantom = 3,
         NovaX = 4,
+        /// <summary>Biomech faction starter (plan §6).</summary>
+        Symbiont = 5,
+        /// <summary>Cyber faction starter with companion drone (plan §6).</summary>
+        Nexus = 6,
     }
 
     public enum WeaponId
@@ -29,6 +33,8 @@ namespace Starfall.Logic
         Railgun = 4,
         Missiles = 5,
         EnergyCannon = 6,
+        /// <summary>Biomech: living, seeking spores. Unlocked with the Symbiont.</summary>
+        Spores = 7,
     }
 
     /// <summary>Playable factions (plan §6). Each reacts differently to Risk and Overdrive.</summary>
@@ -81,11 +87,11 @@ namespace Starfall.Logic
     /// <summary>Rewards, unlock costs and pilot level rules (plan §11, §13). Values in docs/BALANCING.md.</summary>
     public static class ProgressionRules
     {
-        public const int ShipCount = 5;
-        public const int WeaponCount = 7;
+        public const int ShipCount = 7;
+        public const int WeaponCount = 8;
 
-        private static readonly int[] ShipCost = { 0, 2500, 4000, 6000, 0 };
-        private static readonly int[] WeaponCost = { 0, 1500, 3000, 2500, 4500, 5000, 7000 };
+        private static readonly int[] ShipCost = { 0, 2500, 4000, 6000, 0, 3500, 5000 };
+        private static readonly int[] WeaponCost = { 0, 1500, 3000, 2500, 4500, 5000, 7000, 3500 };
         private static readonly int[] RankCreditBonus = { 0, 50, 120, 220, 350, 500, 700 }; // D..SSS
 
         /// <summary>Risk bonus is capped so it never dominates the economy (plan §11.5 "bônus de risco limitado").</summary>
@@ -160,6 +166,8 @@ namespace Starfall.Logic
             if (!CanBuyShip(save, ship)) return false;
             save.credits -= ShipCreditCost(ship);
             save.UnlockShip((int)ship);
+            // Faction starters bring their signature weapon (plan §6: arma primária própria).
+            if (ship == ShipId.Symbiont) save.UnlockWeapon((int)WeaponId.Spores);
             return true;
         }
 

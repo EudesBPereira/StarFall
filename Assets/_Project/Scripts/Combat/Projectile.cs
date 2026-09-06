@@ -30,6 +30,7 @@ namespace Starfall.Combat
         private PlayArea _area;
         private VfxSpawner _vfx;
         private bool _launched;
+        private bool _hitAnything;
         private Sprite _defaultSprite;
 
         public Faction Faction => _spec.Faction;
@@ -61,6 +62,7 @@ namespace Starfall.Combat
             _launched = true;
             Grazed = false;
             HitPlayer = false;
+            _hitAnything = false;
 
             transform.position = position;
             transform.rotation = Quaternion.FromToRotation(Vector3.up, _direction);
@@ -128,6 +130,9 @@ namespace Starfall.Combat
             Vector2 hit = other.ClosestPoint(transform.position);
             var result = target.ApplyDamage(info, hit);
             if (target.Faction == Faction.Player) HitPlayer = true;
+            if (result.Applied) _hitAnything = true;
+            if (_spec.MarkSeconds > 0f && result.Applied && other.TryGetComponent<Enemies.Enemy>(out var markedEnemy))
+                markedEnemy.ApplyMark(_spec.MarkSeconds);
 
             if (_spec.SlowSeconds > 0f && result.Applied && other.TryGetComponent<PlayerShip>(out var ship))
                 ship.Effects.ApplyDebuff(PowerUpKind.Slowed, _spec.SlowSeconds);
@@ -171,6 +176,12 @@ namespace Starfall.Combat
         {
             if (!_launched) return;
             _launched = false;
+            // Federation precision passive: the weapon learns whether this shot connected.
+            if (_spec.Faction == Faction.Player && _spec.Source == DamageSource.Player)
+            {
+                var ctx = GameplayContext.Current;
+                if (ctx != null && ctx.Player != null && ctx.Player.Weapon != null) ctx.Player.Weapon.ReportShot(_hitAnything);
+            }
             _pooled.Release();
         }
 

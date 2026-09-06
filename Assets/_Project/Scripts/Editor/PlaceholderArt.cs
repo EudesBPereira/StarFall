@@ -17,8 +17,8 @@ namespace Starfall.EditorTools
         public sealed class Set
         {
             public Sprite Pixel, Dot, Circle, Ring, Gradient, Panel, Spark;
-            public Sprite Ship, Falcon, Titan, Phantom, NovaX, Flame;
-            public Sprite Projectile, Bullet, Plasma, Missile, Rail, Web;
+            public Sprite Ship, Falcon, Titan, Phantom, NovaX, Symbiont, Nexus, Drone2, Flame;
+            public Sprite Projectile, Bullet, Plasma, Missile, Rail, Web, Spore;
             public Sprite Drone, Interceptor, Bomber, Kamikaze, ShieldDrone, Asteroid, Turret;
             public Sprite SentinelX, Widow, ReaperWing, Destroyer, LeviathanHead, LeviathanSegment, HiveQueen, OmegaCore, OmegaCoreForm2, OmegaCoreForm3;
             public Sprite Satellite, Planet, FortressWall, HiveWall, Logo;
@@ -58,6 +58,19 @@ namespace Starfall.EditorTools
                 Star(x, y, 4, 1f, 0.32f),
                 Polygon(x, y, P(0f, 1f), P(0.2f, -0.1f), P(-0.2f, -0.1f)),
                 Circle(x, y - 0.1f, 0.22f)));
+            // Biomech: organic hull with tendrils. Cyber: hard hexagon with wing blades and a small drone.
+            set.Symbiont = Save("symbiont", 96, (x, y) => Union(
+                Capsule(x, y + 0.05f, 0.34f, 0.55f), Circle(x, y + 0.55f, 0.3f),
+                Leg(x, y, 0.25f, 0.1f, 0.85f, -0.5f, 0.09f), Leg(x, y, -0.25f, 0.1f, -0.85f, -0.5f, 0.09f),
+                Leg(x, y, 0.2f, -0.3f, 0.55f, -0.95f, 0.08f), Leg(x, y, -0.2f, -0.3f, -0.55f, -0.95f, 0.08f),
+                Circle(x + 0.85f, y - 0.5f, 0.13f), Circle(x - 0.85f, y - 0.5f, 0.13f)));
+            set.Nexus = Save("nexus", 96, (x, y) => Union(
+                RegularPolygon(x, y, 6, 0.5f), Polygon(x, y, P(0f, 1f), P(0.2f, 0.4f), P(-0.2f, 0.4f)),
+                Polygon(x, y, P(0.35f, 0.1f), P(0.98f, -0.3f), P(0.85f, -0.7f), P(0.3f, -0.4f)),
+                Polygon(x, y, P(-0.35f, 0.1f), P(-0.98f, -0.3f), P(-0.85f, -0.7f), P(-0.3f, -0.4f)),
+                Ring(x, y, 0.28f, 0.05f) * -1f + 0.1f));
+            set.Drone2 = Save("companiondrone", 40, (x, y) => Union(RegularPolygon(x, y, 6, 0.8f), Circle(x, y, 0.3f) * -1f + 0.12f));
+            set.Spore = Save("spore", 32, (x, y) => Union(SoftCircle(x, y, 0.75f), SoftCircle(x + 0.35f, y + 0.3f, 0.35f), SoftCircle(x - 0.3f, y - 0.35f, 0.3f)), soft: true);
             set.Flame = Save("flame", 32, (x, y) => Union(Polygon(x, y, P(-0.5f, 1f), P(0.5f, 1f), P(0f, -1f)), Circle(x, y - 0.6f, 0.45f)), soft: true);
 
             // ---- Projectiles ----

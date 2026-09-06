@@ -162,8 +162,8 @@ namespace Starfall.Tests.EditMode
             save.components = 1000;
             for (int i = 0; i < 5; i++) ProgressionRules.RecordCampaignStage(save, i, 5, 100);
             for (int i = 0; i < 4; i++) save.MarkBossDefeated(i);
-            for (int s = 1; s < 4; s++) ProgressionRules.BuyShip(save, (ShipId)s);
-            for (int w = 1; w < 7; w++) ProgressionRules.BuyWeapon(save, (WeaponId)w);
+            for (int s = 1; s < ProgressionRules.ShipCount; s++) ProgressionRules.BuyShip(save, (ShipId)s);
+            for (int w = 1; w < ProgressionRules.WeaponCount; w++) ProgressionRules.BuyWeapon(save, (WeaponId)w);
             for (int n = 0; n < UpgradeCatalog.NodeCount; n++)
                 while (UpgradeCatalog.Purchase(save, (UpgradeNode)n)) { }
             var run = new RunStats { Mode = GameModeId.Campaign, Kills = 1, Completed = true, LivesLost = 0 };

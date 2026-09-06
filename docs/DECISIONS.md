@@ -140,7 +140,7 @@ Registro das decisões tomadas para requisitos ambíguos do blueprint, com alter
 
 - **Contexto:** o usuário entregou `docs/product/IMPLEMENTATION_MASTER_PLAN.md`, que reposiciona o jogo em torno de Zona de Risco, Overdrive, graze, facções, dez fases e monetização ética.
 - **Decisão:** o plano é a fonte de direção; o GDD (`document.md`) continua a especificação detalhada. A ordem segue as fases A–G do plano. Esta entrega cobre a **Fase B (núcleo)** e os P0 de dados (Nova-X, facções, economia separada do score).
-- **Nome:** ainda não trocado. O plano exige pesquisa de disponibilidade antes (SR-PROD-001); o projeto segue como "Starfall Defense" até a confirmação.
+- **Nome:** confirmado como "Starfall Defense" pelo responsável (D-029).
 
 ## D-024 — Zona de Risco: sensor por distância com histerese
 
@@ -174,3 +174,22 @@ Registro das decisões tomadas para requisitos ambíguos do blueprint, com alter
 
 - **Como:** `StageResultRules` compõe `abates + graze + objetivo + tempo + sem dano` e classifica pelos limiares derivados de `RankTargetScore` da fase (C 25 %, B 45 %, A 70 %, S 100 %, SS 140 %, SSS 200 %). Bônus de tempo: 40 pontos por segundo abaixo do par, teto 6 000. Sem dano: 5 000. Derrota = D.
 - **Reservado:** partes de chefe e dificuldade ficam a zero até existirem chefes com componentes destrutíveis e níveis de dificuldade.
+
+## D-029 — Nome comercial confirmado: Starfall Defense (SR-PROD-001)
+
+- **Contexto:** o Plano Mestre recomendava "STAR RISK" e pedia pesquisa de disponibilidade antes de decidir.
+- **Decisão do responsável do produto (2026-09-05):** manter **Starfall Defense** como nome comercial. Identificador `com.starfallteam.starfalldefense`, título, menus e documentação permanecem.
+- **Impacto:** "STAR RISK" continua apenas como nome do plano de direção e do laço de risco; nenhuma renomeação no projeto.
+
+## D-030 — Teste em aparelho real adiado para o produto completo (SR-QA-001)
+
+- **Decisão do responsável do produto:** a validação em celular será feita quando o jogo estiver completo (fases C–F concluídas), não a cada entrega.
+- **Consequência:** itens de gameplay ficam no status "QA" (validados por testes automatizados e build) até a bateria final em aparelho; o plano §20 exige "Device Validation" antes de "Done", então nenhum item de gameplay será marcado como Done antes disso.
+
+## D-031 — Facções em dados e comportamento (fase C, SR-DESIGN-001)
+
+- **Federação** (Vanguard, Falcon, Titan, Nova-X): passiva de precisão — acertos consecutivos sem errar somam +1 % de dano por acerto até +25 % (`PrecisionModel`; o projétil reporta ao despawn se acertou); Overdrive dá cadência; Ultimate **Orbital Strike** (o antigo).
+- **Biomecânica** (BX-01 Symbiont, 3 500 créditos): arma própria Spore Launcher (esporos teleguiados, desbloqueada junto com a nave); passiva de absorção — cada abate restaura 2 % do casco (teto 5 %); Overdrive regenera escudo a 8/s; Ultimate **Spore Swarm** — dez esporos buscadores de 45 de dano com área, sem limpar a tela.
+- **Corporação Cyber** (CX-7 Nexus 5 000 créditos; Phantom convertida): marcação — todo acerto deixa o alvo 4 s recebendo +25 % de dano (`Health.IncomingDamageMultiplier`); Nexus tem drone companheiro que orbita e dispara sozinho (também marca); Overdrive dá crítico; Ultimate **EMP Burst** — atordoa 3 s (chefes 1,5 s), limpa projéteis, marca tudo por 6 s e causa 90 de dano.
+- **Por que a Phantom virou Cyber:** a identidade de precisão/crítico casa com a corporação; a Federação ficou com quatro cascos (o plano permite mais naves humanas depois das outras facções, não antes — nenhuma nova foi criada).
+- **Regra do plano respeitada:** nenhuma facção é melhor em tudo — Symbiont tem casco alto e escudo baixo; Nexus tem escudo alto, dano x0,9 e drone; Federação é a linha de base.

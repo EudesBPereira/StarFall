@@ -293,3 +293,29 @@ Uma campanha completa em rank A com primeira conclusão rende ≈ 5 300 crédito
 | Cadência em Overdrive | x1,15 | x1,30 |
 
 Função: teto de score mais alto quando o piloto sustenta Extremo; defesa menor que a Vanguard. ⚠️ Comparar com Phantom (25 % de crítico) em playtest.
+
+---
+
+# Fase C — Facções
+
+## Naves novas
+
+| Nave | Facção | Casco | Escudo | Regen | Veloc. | Crítico | Dano | Ult. | Kit | Custo |
+|---|---|---:|---:|---:|---:|---|---:|---|---|---:|
+| BX-01 Symbiont | Biomecânica | 110 | 30 | 1,0/s | 8,5 | 4 % x1,8 | x1,00 | Spore Swarm | lifesteal 2 %/abate; Overdrive +8 escudo/s | 3 500 |
+| CX-7 Nexus | Cyber | 85 | 60 | 0,8/s | 10,0 | 10 % x2,0 | x0,90 | EMP Burst | drone (4 dano / 0,5 s) + marcação | 5 000 |
+
+Phantom passa a Cyber: marca alvos, Ultimate EMP, Overdrive +20 % de crítico.
+
+## Kits
+
+| Regra | Valor |
+|---|---|
+| Precisão (Federação) | +1 % por acerto consecutivo, teto +25 % |
+| Marcação (Cyber) | 4 s, +25 % de dano recebido |
+| EMP | 3 s de atordoamento (chefes 1,5 s), 90 de dano, marca 6 s, limpa projéteis |
+| Lifesteal (Biomecânica) | 2 % do casco máximo por abate, teto 5 % |
+| Spore Swarm | 10 esporos, 45 de dano, área 0,7 u, 6 s de vida, 260°/s |
+| Spore Launcher | 3 de dano, 0,18 s, 7,5 u/s, teleguiado 200°/s, 2→7 esporos por nível |
+
+⚠️ EMP + marcação em chefe pode ser forte demais (efetivamente +25 % de dano por 6 s a cada Ultimate). Medir no playtest final.

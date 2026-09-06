@@ -37,6 +37,12 @@ MonoBehaviour:
   OverdriveShieldRegen: 0
   OverdriveCritBonus: 0
   PrecisionBonusPerHit: 0.01
+  Ultimate: 0
+  MarksTargets: 0
+  HasCompanionDrone: 0
+  DroneDamage: 4
+  DroneInterval: 0.5
+  LifestealPerKill: 0
   Sprite: {fileID: 21300000, guid: 9156a3f4b694bef47ae3cdf5322187ca, type: 3}
   Tint: {r: 0.75, g: 0.85, b: 1, a: 1}
   ThrusterColor: {r: 0.5, g: 0.6, b: 1, a: 0.9}

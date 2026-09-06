@@ -29,6 +29,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7ec9d861b9ee36c48899969eef4f084b, type: 2}
   - {fileID: 11400000, guid: 908187bf0f5d1374e80a2101d3a54722, type: 2}
   - {fileID: 11400000, guid: 74168d3ae361abe47881346d6273425d, type: 2}
+  - {fileID: 11400000, guid: 45843747e48e27343a1d521324eb166f, type: 2}
+  - {fileID: 11400000, guid: d88322c2cf724ca4582e46a6a631f758, type: 2}
   Weapons:
   - {fileID: 11400000, guid: 6ea3ef2fa8a33ab4fa503137540d27b2, type: 2}
   - {fileID: 11400000, guid: 121a5773ab5ef1643a4bb3fa2ec632cd, type: 2}
@@ -37,6 +39,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2f8f9f24fbbaa745b303986a7d072da, type: 2}
   - {fileID: 11400000, guid: a52fe2a5f79d48e45ab9802d41fce0ce, type: 2}
   - {fileID: 11400000, guid: b41fc46d9d54da14d80be60d88e502b9, type: 2}
+  - {fileID: 11400000, guid: db830e094de03ac43bd68427272839e9, type: 2}
   Bosses:
   - {fileID: 11400000, guid: ba548743a4f21fc46a2f99e892c51b1b, type: 2}
   - {fileID: 11400000, guid: 59b4ebb1e1c076949b0b996dc44d51aa, type: 2}

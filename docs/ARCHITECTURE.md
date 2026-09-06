@@ -148,3 +148,16 @@ Nenhuma dessas classes referencia `UnityEngine`; todas têm teste em `Tests/Edit
 - `HudPresenter` — dicas contextuais únicas na fase 1 (Alerta, Perigo, Extremo, Overdrive, Graze).
 - `AudioManager` — fonte extra `OverdriveLayer` com fade; sons `RiskUp/RiskDown/Graze/OverdriveStart/OverdriveEnd/RankReveal`.
 - `SettingsPanel` — screen shake, efeitos reduzidos, feedback de graze e hitbox visível (`CameraShake` e `RiskSensor` leem o save).
+
+---
+
+## Fase C — Facções
+
+- `Logic/FactionRules` — `UltimateKind`, `PrecisionModel` (sequência de acertos), constantes de marcação, EMP, lifesteal e enxame; mapeamento nave → facção.
+- `ShipDefinition` — `Faction`, `Ultimate`, `MarksTargets`, `HasCompanionDrone`, `LifestealPerKill`, `PrecisionBonusPerHit`, bônus de Overdrive por facção.
+- `WeaponController` — aplica a precisão da Federação (o `Projectile` chama `ReportShot` ao despawnar) e carimba `MarkSeconds` nos projéteis de naves Cyber.
+- `Health.IncomingDamageMultiplier` + `Enemy.ApplyMark/Stun` — estado de marcação e atordoamento com feedback de cor; `BossController` respeita o stun (metade do tempo) e esconde o laser.
+- `CompanionDrone` — filho do prefab do jogador; orbita e dispara sozinho no inimigo mais próximo com projéteis marcadores.
+- `UltimateController` — três execuções: Orbital Strike, Spore Swarm (esporos buscadores) e EMP Burst (stun + marca + limpeza).
+- `PlayerShip` — lifesteal por sinal de abate; liga o drone conforme a nave.
+- Conteúdo: `ContentFactory` cria Symbiont, Nexus e Spore Launcher; `PlaceholderArt` gera as silhuetas orgânica e hexagonal, o drone e o esporo.

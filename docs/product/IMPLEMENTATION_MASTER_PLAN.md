@@ -2,6 +2,8 @@
 
 > Fonte de direção do produto (recebido em 2026-09-05). O GDD (`document.md`) continua sendo a especificação detalhada.
 > Decisões de implementação derivadas deste plano ficam em `docs/DECISIONS.md` (D-023 em diante).
+>
+> **Decisões do responsável do produto sobre este plano:** o nome comercial fica **Starfall Defense** (D-029, §3.1 superado); o teste em aparelho real (§18 P0, SR-QA-001) será feito com o produto completo (D-030).
 
 
 **Nome interno atual do projeto:** Starfall Defense

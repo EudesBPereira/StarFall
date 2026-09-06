@@ -28,6 +28,8 @@ namespace Starfall.Combat
             get => Model.Invulnerable;
             set => Model.Invulnerable = value;
         }
+        /// <summary>Scales incoming damage (Cyber marks). 1 = normal. Reset by the owner on spawn.</summary>
+        public float IncomingDamageMultiplier { get; set; } = 1f;
 
         /// <summary>Fired after damage was applied (not when blocked). Includes the world hit point.</summary>
         public event Action<DamageInfo, DamageResult, Vector2> DamagedAt;
@@ -55,6 +57,7 @@ namespace Starfall.Combat
             faction = newFaction;
             maxHull = hull;
             maxShield = shield;
+            IncomingDamageMultiplier = 1f;
             Model.Configure(hull, shield);
         }
 
@@ -62,7 +65,10 @@ namespace Starfall.Combat
 
         public DamageResult ApplyDamage(in DamageInfo info, Vector2 hitPoint)
         {
-            var result = Model.TakeDamage(info);
+            var scaled = IncomingDamageMultiplier != 1f
+                ? new DamageInfo(info.Amount * IncomingDamageMultiplier, info.Source, info.Type, info.IgnoreShield, info.IgnoreInvulnerability, info.Critical)
+                : info;
+            var result = Model.TakeDamage(scaled);
             if (result.Applied)
                 DamagedAt?.Invoke(info, result, hitPoint);
             else if (result.BlockedByInvulnerability)

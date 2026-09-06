@@ -254,3 +254,11 @@ Implementado após a redação original deste documento:
 - **Tutorial contextual** do laço de risco na fase 1.
 
 Continua pendente, na ordem do plano: confirmação do nome (SR-PROD-001), teste em aparelho real (SR-QA-001), nave Biomecânica e especiais por facção (fase C), fatia de arte final (fase D), dez fases e dez chefes (fase E), monetização, analytics e privacidade (fase F), e preparação de loja (fase G).
+
+# Adendo — Fase C do Plano Mestre (facções)
+
+- **Três facções jogáveis com kit próprio:** Federação (Vanguard, Falcon, Titan, Nova-X) com passiva de precisão e Orbital Strike; Biomecânica (BX-01 Symbiont) com Spore Launcher, lifesteal por abate e Spore Swarm; Corporação Cyber (CX-7 Nexus e Phantom) com marcação de alvos, drone companheiro e EMP Burst.
+- **Sete naves e oito armas** no Hangar, que agora mostra facção, Ultimate e passiva de cada nave.
+- **Decisões do responsável:** nome mantido como Starfall Defense (D-029); validação em aparelho adiada para o produto completo (D-030).
+
+Continua pendente, na ordem do plano: fatia de arte final (fase D), dez fases e dez chefes com builds temporárias (fase E), monetização, analytics e privacidade (fase F) e preparação de loja (fase G). O teste em aparelho fica para o fim, por decisão.

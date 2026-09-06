@@ -101,7 +101,7 @@ namespace Starfall.UI
             if (statsText != null)
                 statsText.text = $"HULL {loadout.MaxHull:0}   SHIELD {loadout.MaxShield:0}   SPEED {loadout.MoveSpeed:0.0}\n" +
                                  $"DAMAGE x{loadout.DamageMultiplier:0.00}   CRIT {loadout.CritChance * 100f:0}% (x{loadout.CritMultiplier:0.0})\n" +
-                                 $"SHIELD REGEN {loadout.ShieldRegenPerSecond:0.0}/s   ULTIMATE x{loadout.UltimatePowerMultiplier:0.00}";
+                                 $"SHIELD REGEN {loadout.ShieldRegenPerSecond:0.0}/s   ULTIMATE x{loadout.UltimatePowerMultiplier:0.00}\n" + KitLine(ship);
 
             bool owned = save.IsShipUnlocked(_viewShip);
             bool equipped = save.selectedShip == _viewShip;
@@ -183,6 +183,14 @@ namespace Starfall.UI
             Refresh();
         }
 
-        private static string ShortStats(ShipDefinition s) => $"HULL {s.MaxHull:0}  SHD {s.MaxShield:0}  SPD {s.MoveSpeed:0.0}  CRIT {s.CritChance * 100f:0}%";
+        private static string ShortStats(ShipDefinition s) => $"{FactionRules.FactionName(s.Faction)}  HULL {s.MaxHull:0}  SHD {s.MaxShield:0}  SPD {s.MoveSpeed:0.0}";
+
+        private static string KitLine(ShipDefinition s)
+        {
+            string passive = s.Faction == FactionId.Biomech ? $"LIFESTEAL {s.LifestealPerKill * 100f:0.#}%/KILL"
+                : s.Faction == FactionId.Cyber ? (s.HasCompanionDrone ? "DRONE + MARK" : "MARK TARGETS")
+                : $"PRECISION +{s.PrecisionBonusPerHit * 100f:0.#}%/HIT";
+            return $"{FactionRules.FactionName(s.Faction)}   ULT: {FactionRules.UltimateName(s.Ultimate)}   PASSIVE: {passive}";
+        }
     }
 }

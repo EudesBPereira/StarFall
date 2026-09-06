@@ -539,6 +539,13 @@ namespace Starfall.EditorTools
             var riskSensor = go.AddComponent<RiskSensor>();
             riskSensor.hitbox = col;
             riskSensor.hitboxVisual = hitboxVisual;
+            var droneGo = new GameObject("CompanionDrone");
+            droneGo.transform.SetParent(go.transform, false);
+            droneGo.transform.localPosition = new Vector3(0.9f, 0.35f, 0f);
+            var droneSprite = AddSprite(droneGo, "Body", art.Drone2, new Color(0.14f, 0.84f, 1f), SortingOrders.Player + 1, 0.4f);
+            droneSprite.enabled = false;
+            var drone = droneGo.AddComponent<CompanionDrone>();
+            drone.body = droneSprite;
 
             var movement = go.AddComponent<PlayerMovement>();
             movement.bankTarget = visual.transform;
@@ -565,6 +572,7 @@ namespace Starfall.EditorTools
             ship.smoke = smoke;
             ship.engineAudio = engine;
             ship.riskSensor = riskSensor;
+            ship.companionDrone = drone;
 
             var saved = PrefabUtility.SaveAsPrefabAsset(go, $"{PrefabRoot}/Player/Player.prefab");
             UnityEngine.Object.DestroyImmediate(go);
