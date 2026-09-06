@@ -309,6 +309,7 @@ MonoBehaviour:
     TransformSeconds: 0
   DeathExplosions: 16
   DeathSequenceSeconds: 2.6
+  Parts: []
   SegmentCount: 0
   SegmentSprite: {fileID: 0}
   SegmentSpacing: 0.9

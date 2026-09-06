@@ -40,6 +40,7 @@ namespace Starfall.EditorTools
         {
             public PooledObject PlayerProjectile, EnemyProjectile, Enemy, Pickup, Explosion, FloatingText, Sparks;
             public PooledObject SentinelX, Widow, ReaperWing, Destroyer, Leviathan, HiveQueen, OmegaCore;
+            public PooledObject IronWarden, Bastion, CorsairQueen, Assembler, AetherGuardian, RiftWalker;
             public GameObject Player;
         }
 
@@ -324,6 +325,12 @@ namespace Starfall.EditorTools
             set.Leviathan = CreateEnemyPrefab("Leviathan", art, materials, art.LeviathanHead, 0.8f, false);
             set.HiveQueen = CreateEnemyPrefab("HiveQueen", art, materials, art.HiveQueen, 1.4f, false);
             set.OmegaCore = CreateEnemyPrefab("OmegaCore", art, materials, art.OmegaCore, 1.5f, true);
+            set.IronWarden = CreateEnemyPrefab("IronWarden", art, materials, art.IronWarden, 1.3f, false);
+            set.Bastion = CreateEnemyPrefab("Bastion", art, materials, art.Bastion, 1.6f, true);
+            set.CorsairQueen = CreateEnemyPrefab("CorsairQueen", art, materials, art.CorsairQueen, 1.2f, false);
+            set.Assembler = CreateEnemyPrefab("Assembler", art, materials, art.Assembler, 1.5f, false);
+            set.AetherGuardian = CreateEnemyPrefab("AetherGuardian", art, materials, art.AetherGuardian, 1.2f, true);
+            set.RiftWalker = CreateEnemyPrefab("RiftWalker", art, materials, art.RiftWalker, 1.2f, false);
             set.Pickup = CreatePickupPrefab(art, materials);
             set.Explosion = CreateExplosionPrefab(art, materials);
             set.FloatingText = CreateFloatingTextPrefab();

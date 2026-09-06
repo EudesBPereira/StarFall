@@ -22,6 +22,8 @@ namespace Starfall.Enemies
                 case MovementKind.Serpentine: return new SerpentineMovement();
                 case MovementKind.Dash: return new DashMovement();
                 case MovementKind.Hold: return new HoldMovement();
+                case MovementKind.SideSweep: return new SideSweepMovement();
+                case MovementKind.Blink: return new BlinkMovement();
                 default: return new StraightDownMovement();
             }
         }
@@ -239,6 +241,68 @@ namespace Starfall.Enemies
                 _dashing = false;
                 _pause = p.StrafeSpeed > 0f ? p.StrafeSpeed : 0.6f;
             }
+        }
+    }
+}
+
+namespace Starfall.Enemies
+{
+    /// <summary>Side formations: spawned at the left/right edge, crosses the screen horizontally with a wave.</summary>
+    public sealed class SideSweepMovement : IMovementStrategy
+    {
+        private float _direction;
+        private float _baseY;
+        private float _phase;
+
+        public void Begin(Enemy enemy)
+        {
+            var area = enemy.Area;
+            _direction = area != null && enemy.transform.position.x > area.Center.x ? -1f : 1f;
+            _baseY = enemy.transform.position.y;
+            _phase = UnityEngine.Random.value * 6.28f;
+            enemy.FaceDirection(new UnityEngine.Vector2(_direction, -0.2f));
+        }
+
+        public void Tick(Enemy enemy, float dt)
+        {
+            var p = enemy.Movement;
+            var pos = enemy.transform.position;
+            pos.x += _direction * p.Speed * enemy.SpeedMultiplier * dt;
+            pos.y = _baseY + UnityEngine.Mathf.Sin(enemy.Age * p.Frequency + _phase) * p.Amplitude * 0.5f - enemy.Age * 0.25f;
+            enemy.transform.position = pos;
+        }
+    }
+
+    /// <summary>Teleporting enemy: holds, blinks to a random point in the upper area, holds again.</summary>
+    public sealed class BlinkMovement : IMovementStrategy
+    {
+        private float _timer;
+
+        public void Begin(Enemy enemy)
+        {
+            _timer = enemy.Movement.HoldDuration > 0f ? enemy.Movement.HoldDuration : 2.5f;
+        }
+
+        public void Tick(Enemy enemy, float dt)
+        {
+            var p = enemy.Movement;
+            var area = enemy.Area;
+            _timer -= dt;
+            // Drift slowly so the target is never perfectly static between blinks.
+            var pos = enemy.transform.position;
+            pos.x += UnityEngine.Mathf.Sin(enemy.Age * 1.3f) * p.StrafeSpeed * 0.3f * dt;
+            enemy.transform.position = pos;
+            if (_timer > 0f || area == null) return;
+            _timer = p.HoldDuration > 0f ? p.HoldDuration : 2.5f;
+            float minY = area.Top - p.HoldHeight * area.Height;
+            var target = new UnityEngine.Vector3(area.LerpX(UnityEngine.Random.value, 1f), UnityEngine.Random.Range(minY - p.Amplitude, minY + p.Amplitude * 0.5f), 0f);
+            var ctx = Core.GameplayContext.Current;
+            if (ctx != null && ctx.Vfx != null)
+            {
+                ctx.Vfx.SpawnShockwave(enemy.transform.position, 1.6f, new UnityEngine.Color(0.8f, 0.5f, 1f));
+                ctx.Vfx.SpawnShockwave(target, 1.6f, new UnityEngine.Color(0.8f, 0.5f, 1f));
+            }
+            enemy.transform.position = target;
         }
     }
 }

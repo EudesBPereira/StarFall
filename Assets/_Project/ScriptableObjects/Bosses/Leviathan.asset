@@ -237,6 +237,7 @@ MonoBehaviour:
     TransformSeconds: 0
   DeathExplosions: 14
   DeathSequenceSeconds: 2.4
+  Parts: []
   SegmentCount: 8
   SegmentSprite: {fileID: 21300000, guid: 573a88f24a3951a429ecb9d46ec179c6, type: 3}
   SegmentSpacing: 0.95

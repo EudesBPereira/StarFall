@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage04_LivingNebula
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Living Nebula
+  Subtitle: Ionized cloud - something breathes inside
+  Briefing: 'Sensors fail in the nebula and the gas itself pulses. The Swarm breeds
+    here.
+
+    Expect every enemy type, elite escorts and the Leviathan coiling beneath
+    the cloud.'
+  Objectives: '- Break through the nebula
+
+    - Defeat the Widow Prime
+
+    - Destroy
+    the Leviathan'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 4: LIVING NEBULA'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 14a911d1cb277b24198ca8ea3f76c2cf, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 1abc524c0633ce94ebdc3f145b8749c8, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 2
+  - Type: 0
+    Wave: {fileID: 11400000, guid: ae178895814c7d0429d315a305f57f57, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: 1a28d4ff1c0f9524990c3f84873abf3c, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: df4dd2f3e8629704ab968230d241421e, type: 2}
+    Message: 'WARNING: WIDOW PRIME'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 8
+    Wave: {fileID: 11400000, guid: 929857f1592c72242800e6cf358e4534, type: 2}
+    Boss: {fileID: 0}
+    Message: SPORE CLOUD
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: bde33293ab41d7f4a968d4a8aa82be4d, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 2
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 79cd4f746ae36384caf99ccb53268ea8, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 59b4ebb1e1c076949b0b996dc44d51aa, type: 2}
+    Message: 'WARNING: LEVIATHAN'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 1800
+  ParTimeSeconds: 230
+  RankTargetScore: 36000
+  BaseCredits: 480
+  EnemyStatMultiplier: 1.15
+  MiniBossName: Widow Prime
+  BossName: Leviathan
+  Music: 3
+  Ambient: 3
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.16, g: 0.05, b: 0.24, a: 1}
+  BackgroundBottom: {r: 0.08, g: 0.02, b: 0.14, a: 1}
+  Fog: {r: 0.55, g: 0.25, b: 0.85, a: 0.2}
+  StarDensity: 0.5
+  StarTint: {r: 0.9, g: 0.8, b: 1, a: 1}
+  DebrisSprites: []
+  DebrisInterval: 0
+  DebrisTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropSprite: {fileID: 0}
+  BackdropTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropScale: 6
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2

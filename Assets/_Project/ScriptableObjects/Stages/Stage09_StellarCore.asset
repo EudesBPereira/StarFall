@@ -1,0 +1,177 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage09_StellarCore
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Stellar Core
+  Subtitle: Hive built around a dying star
+  Briefing: 'The Swarm hive is wrapped around a star. Heat, swarms and their queen.
+
+    Flares
+    are constant here. Everything comes in numbers.'
+  Objectives: '- Reach the core
+
+    - Defeat Sentinel-X Mk.II
+
+    - Kill the Hive
+    Queen'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 9: STELLAR CORE'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 0dca6b376dcb08143913ed496637bc22, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 59623c4cd0d0a8c4db241bd461b85c48, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: 5697c39104ad89b43a27f8f5325e0535, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: d46143db32c0c5843a12fbc1e34c6e6d, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 5e7304835360be04aa4f8cb9f970af21, type: 2}
+    Message: 'WARNING: SENTINEL-X MK.II'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 8
+    Wave: {fileID: 11400000, guid: 841fbc1b21de1304c8f99b9db269ddda, type: 2}
+    Boss: {fileID: 0}
+    Message: BROOD SWARM
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.6
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 61d0f1d182f9d984b93ac65068bbee12, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: f60b47c900246d646b22e3116b6e7533, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 083924980c292b34299822877fa03d02, type: 2}
+    Message: 'WARNING: HIVE QUEEN'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 4000
+  ParTimeSeconds: 280
+  RankTargetScore: 68000
+  BaseCredits: 800
+  EnemyStatMultiplier: 1.4
+  MiniBossName: Sentinel-X Mk.II
+  BossName: Hive Queen
+  Music: 7
+  Ambient: 5
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.18, g: 0.06, b: 0.08, a: 1}
+  BackgroundBottom: {r: 0.06, g: 0.02, b: 0.05, a: 1}
+  Fog: {r: 1, g: 0.4, b: 0.3, a: 0.1}
+  StarDensity: 0.4
+  StarTint: {r: 1, g: 0.8, b: 0.7, a: 1}
+  DebrisSprites: []
+  DebrisInterval: 0
+  DebrisTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropSprite: {fileID: 21300000, guid: d529efcc97f90c844acd0c9a4437a158, type: 3}
+  BackdropTint: {r: 1, g: 0.55, b: 0.3, a: 0.5}
+  BackdropScale: 16
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2

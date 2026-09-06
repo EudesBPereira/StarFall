@@ -55,7 +55,7 @@ namespace Starfall.PowerUps
             var ctx = GameplayContext.Current;
             var ship = ctx != null ? ctx.Player : null;
             // Overdrive attracts pickups (plan §5.2 "atração de itens").
-            if (ship != null && ship.IsAlive && ship.Risk != null && ship.Risk.Overdrive.IsActive)
+            if (ship != null && ship.IsAlive && ((ship.Risk != null && ship.Risk.Overdrive.IsActive) || ship.MagnetActive))
             {
                 p = Vector3.MoveTowards(p, ship.transform.position, 9f * Time.deltaTime);
             }

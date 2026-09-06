@@ -1,0 +1,171 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage06_AutonomousFactory
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Autonomous Factory
+  Subtitle: Swarm forge - production never stops
+  Briefing: 'A factory the size of a moon builds the Swarm army in real time.
+
+    Turrets
+    roll off the line and The Assembler keeps making more. Destroy its fabricators
+    to stop the flow.'
+  Objectives: '- Shut down the assembly lines
+
+    - Defeat the Reaper Prime
+
+    -
+    Destroy The Assembler'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 6: AUTONOMOUS FACTORY'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: e4c264689e42d94409a305513e9879f6, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 857f55e482256b24cb3571831bbb9165, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: f3582e0a7e858d94d94b8db2a6230846, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: 35ceb6e8a806e9544b66afa58767e9ac, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: eb875f3ee82fb6e489de8f1491f32a65, type: 2}
+    Message: 'WARNING: REAPER PRIME'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 8
+    Wave: {fileID: 11400000, guid: 0296086fd4afe4243a4282fd8a3b5c62, type: 2}
+    Boss: {fileID: 0}
+    Message: PRODUCTION SURGE
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: a033a397dda46fe4fab48fa900c6bf80, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 36ebfea108bfd904189a00f291466fda, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 71d63ee1bf759554080ab02cab0aedd6, type: 2}
+    Message: 'WARNING: THE ASSEMBLER'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 2600
+  ParTimeSeconds: 250
+  RankTargetScore: 48000
+  BaseCredits: 600
+  EnemyStatMultiplier: 1.25
+  MiniBossName: Reaper Prime
+  BossName: The Assembler
+  Music: 4
+  Ambient: 4
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.12, g: 0.08, b: 0.05, a: 1}
+  BackgroundBottom: {r: 0.05, g: 0.04, b: 0.05, a: 1}
+  Fog: {r: 1, g: 0.5, b: 0.2, a: 0.06}
+  StarDensity: 0.3
+  StarTint: {r: 1, g: 0.8, b: 0.6, a: 1}
+  DebrisSprites:
+  - {fileID: 21300000, guid: 04b85a6d11e9f494f9ea3a0758594109, type: 3}
+  - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
+  DebrisInterval: 4
+  DebrisTint: {r: 0.5, g: 0.45, b: 0.4, a: 0.5}
+  BackdropSprite: {fileID: 21300000, guid: 28460a9dccb5477448d6aff8ffe73c55, type: 3}
+  BackdropTint: {r: 0.35, g: 0.3, b: 0.32, a: 0.6}
+  BackdropScale: 12
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2

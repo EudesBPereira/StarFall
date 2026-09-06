@@ -50,7 +50,7 @@ namespace Starfall.EditorTools
                     Level(1.6f, S(0, 0), S(-0.22f, 0), S(0.22f, 0), S(-0.3f, -12f), S(0.3f, 12f)),
                 });
             var doubleLaser = Weapon(WeaponId.DoubleLaser, "Double Laser", "Twin beams. More shots per volley at every level.", ProgressionRules.WeaponCreditCost(WeaponId.DoubleLaser), art, prefabs,
-                0.13f, 3.5f, 19f, 2.5f, 0.9f, new Color(0.5f, 1f, 0.7f), SfxId.Laser, DamageType.Laser, art.Projectile, new[]
+                0.13f, 3f, 19f, 2.5f, 0.9f, new Color(0.5f, 1f, 0.7f), SfxId.Laser, DamageType.Laser, art.Projectile, new[]
                 {
                     Level(1f, S(-0.16f, 0), S(0.16f, 0)),
                     Level(1.1f, S(-0.16f, 0), S(0.16f, 0), S(0, 0)),
@@ -86,7 +86,7 @@ namespace Starfall.EditorTools
                     Level(1.5f, S(0, 0), S(-0.3f, 0), S(0.3f, 0)),
                 }, pierce: 3);
             var missiles = Weapon(WeaponId.Missiles, "Missiles", "Homing warheads with splash damage. Never miss, but reload slowly.", ProgressionRules.WeaponCreditCost(WeaponId.Missiles), art, prefabs,
-                0.45f, 12f, 10f, 4f, 1f, new Color(1f, 0.55f, 0.35f), SfxId.Missile, DamageType.Explosive, art.Missile, new[]
+                0.55f, 12f, 10f, 4f, 1f, new Color(1f, 0.55f, 0.35f), SfxId.Missile, DamageType.Explosive, art.Missile, new[]
                 {
                     Level(1f, S(-0.3f, -20f), S(0.3f, 20f)),
                     Level(1.15f, S(-0.3f, -20f), S(0.3f, 20f)),
@@ -317,102 +317,348 @@ namespace Starfall.EditorTools
                 });
             omega.ShieldColor = new Color(0.6f, 0.9f, 1f, 0.7f);
 
-            // ---------------------------------------------------------------- Stages (GDD §12)
-            var s1 = Stage("Stage1_OrbitalSector", "Orbital Sector", "Low Earth orbit - debris field",
-                "The Swarm vanguard is tearing through our satellite grid.\nClear the orbital sector and stop their scout carrier, The Destroyer.\n\nDrag to move. Your laser fires automatically.\nBlue crates upgrade your weapon; green ones restore shields.",
-                "- Destroy every Swarm wave\n- Defeat Sentinel-X\n- Destroy The Destroyer",
-                MusicId.Stage1, AmbientId.Space, new Color(0.03f, 0.05f, 0.14f), new Color(0.06f, 0.03f, 0.14f), new Color(0.5f, 0.2f, 0.8f, 0f), 0.75f, Color.white,
-                debris: new[] { art.Satellite }, debrisInterval: 5f, debrisTint: new Color(0.6f, 0.65f, 0.75f, 0.55f), backdrop: art.Planet, backdropTint: new Color(0.15f, 0.35f, 0.6f, 0.45f), backdropScale: 14f,
-                bonus: 1000, asteroid: null, events: new[]
+            // ---------------------------------------------------------------- Pirate raiders (side formations) + mini variants
+            var raider = Enemy("Raider", art.Interceptor, new Color(1f, 0.5f, 0.45f), 0.9f, 0.36f, 22f, 0f, 22f, 100, 8f,
+                MovementKind.SideSweep, Move(4.5f, amplitude: 1.2f, frequency: 2.5f), AttackKind.Aimed, Attack(1.6f, 0.4f, 9f, 8f, new Color(1f, 0.45f, 0.35f), count: 1, burst: 2, burstInterval: 0.12f), dropStandard);
+            raider.RiskWeight = 1.1f;
+            var raiderElite = Elite(raider, "RaiderElite", "Pirate Captain", dropRich);
+            var reaperPrime = Variant(reaper, "ReaperPrime", "REAPER PRIME", new Color(1f, 0.35f, 0.6f), 2400f, 1.35f, 2);
+
+            // ---------------------------------------------------------------- Bosses (phase E, plan §7.6)
+            var ironWarden = Boss("IronWarden", "IRON WARDEN", BossId.IronWarden, prefabs.IronWarden, art.IronWarden, new Color(0.85f, 0.7f, 0.5f), 1.7f, 1.3f,
+                2000f, 0f, 35f, 10000, 60f, 3, dropGuaranteed, 3f, 0.2f, 12, 2f, new[]
                 {
-                    Ev.Message("SECTOR 1: ORBITAL", 2f),
-                    Ev.Wave(Wave("S1_W1", E(drone, 4, 0.7f, SpawnPattern.TopLine))),
-                    Ev.Wave(Wave("S1_W2", E(drone, 5, 0.5f, SpawnPattern.TopVee), E(drone, 3, 0.6f, SpawnPattern.TopAlternate, 1.5f))),
+                    Phase("IRON WARDEN", 1f, MovementKind.LateralPatrol, Move(1f, amplitude: 2.2f, frequency: 0.5f),
+                        BossAtk(BossAttackKind.Ring, Attack(2.6f, 1.5f, 10f, 4.5f, new Color(1f, 0.75f, 0.4f), count: 8)),
+                        BossAtk(BossAttackKind.Summon, Attack(4f, 2f, 0f, 0f, Color.white, count: 2), summon: asteroid, cap: 6),
+                        BossAtk(BossAttackKind.Aimed, Attack(2.2f, 1f, 10f, 6.5f, new Color(1f, 0.6f, 0.3f), count: 1))),
+                    Phase("IRON WARDEN: DRILL FURY", 0.5f, MovementKind.LateralPatrol, Move(1f, amplitude: 2.8f, frequency: 0.8f),
+                        BossAtk(BossAttackKind.Ring, Attack(2f, 0.5f, 10f, 5f, new Color(1f, 0.75f, 0.4f), count: 12)),
+                        BossAtk(BossAttackKind.Summon, Attack(3.5f, 1f, 0f, 0f, Color.white, count: 3), summon: asteroid, cap: 8),
+                        BossAtk(BossAttackKind.Aimed, Attack(1.5f, 0.5f, 10f, 7f, new Color(1f, 0.6f, 0.3f), count: 3, spread: 16f))),
+                });
+            ironWarden.Parts = new[]
+            {
+                Part("Left Drill", new Vector2(-1.55f, -0.25f), 0.45f, 220f, 800, disables: 0, art.TurretPart, new Color(1f, 0.8f, 0.5f)),
+                Part("Right Drill", new Vector2(1.55f, -0.25f), 0.45f, 220f, 800, disables: 1, art.TurretPart, new Color(1f, 0.8f, 0.5f)),
+            };
+
+            var bastion = Boss("Bastion", "BASTION", BossId.Bastion, prefabs.Bastion, art.Bastion, new Color(0.75f, 0.8f, 0.9f), 2.2f, 1.6f,
+                2600f, 0f, 40f, 10000, 60f, 3, dropGuaranteed, 3.5f, 0.16f, 14, 2.2f, new[]
+                {
+                    Phase("BASTION", 1f, MovementKind.LateralPatrol, Move(1f, amplitude: 1.2f, frequency: 0.35f),
+                        BossAtk(BossAttackKind.SideCannons, Attack(1f, 1f, 10f, 7f, new Color(0.9f, 0.6f, 0.4f), count: 1), muzzle: 2.1f),
+                        BossAtk(BossAttackKind.Forward, Attack(2.4f, 1.5f, 10f, 5f, new Color(1f, 0.5f, 0.4f), count: 3, spread: 28f)),
+                        BossAtk(BossAttackKind.Ring, Attack(3.2f, 2f, 10f, 4.5f, new Color(0.8f, 0.7f, 1f), count: 10))),
+                    Phase("BASTION: SIEGE MODE", 0.5f, MovementKind.LateralPatrol, Move(1f, amplitude: 1.6f, frequency: 0.5f),
+                        BossAtk(BossAttackKind.SideCannons, Attack(0.7f, 0.4f, 10f, 7.5f, new Color(0.9f, 0.6f, 0.4f), count: 2, spread: 12f), muzzle: 2.1f),
+                        BossAtk(BossAttackKind.Forward, Attack(2f, 0.8f, 10f, 5.5f, new Color(1f, 0.5f, 0.4f), count: 5, spread: 40f)),
+                        BossAtk(BossAttackKind.Ring, Attack(2.8f, 1f, 10f, 5f, new Color(0.8f, 0.7f, 1f), count: 14)),
+                        BossAtk(BossAttackKind.FrontLaser, Attack(6f, 2f, 0f, 0f, new Color(1f, 0.35f, 0.55f)), telegraph: 1.2f, beam: 1.5f, beamWidth: 1.2f, beamDps: 45f)),
+                });
+            bastion.Parts = new[]
+            {
+                Part("Left Battery", new Vector2(-1.7f, -0.5f), 0.4f, 240f, 700, disables: 0, art.TurretPart, new Color(0.9f, 0.7f, 0.5f)),
+                Part("Forward Gun", new Vector2(0f, -1.3f), 0.38f, 260f, 700, disables: 1, art.TurretPart, new Color(1f, 0.6f, 0.5f)),
+                Part("Right Battery", new Vector2(1.7f, -0.5f), 0.4f, 240f, 700, disables: 2, art.TurretPart, new Color(0.9f, 0.7f, 0.5f)),
+            };
+
+            var corsair = Boss("CorsairQueen", "CORSAIR QUEEN", BossId.CorsairQueen, prefabs.CorsairQueen, art.CorsairQueen, new Color(1f, 0.55f, 0.5f), 1.6f, 1.2f,
+                3000f, 0f, 40f, 10000, 60f, 3, dropGuaranteed, 2.5f, 0.22f, 14, 2.2f, new[]
+                {
+                    Phase("CORSAIR QUEEN", 1f, MovementKind.Dash, Move(9f, amplitude: 1.6f, holdHeight: 0.24f, strafeSpeed: 0.7f),
+                        BossAtk(BossAttackKind.Mines, Attack(3.2f, 1.5f, 24f, 2.2f, new Color(1f, 0.55f, 0.2f), count: 3, lifetime: 3.2f, splash: 1.3f)),
+                        BossAtk(BossAttackKind.SideCannons, Attack(1.1f, 0.8f, 10f, 7.5f, new Color(1f, 0.45f, 0.4f), count: 1), muzzle: 1.4f)),
+                    Phase("CORSAIR QUEEN: BOARDING PARTY", 0.6f, MovementKind.Dash, Move(11f, amplitude: 2f, holdHeight: 0.28f, strafeSpeed: 0.5f),
+                        BossAtk(BossAttackKind.Mines, Attack(2.8f, 0.5f, 24f, 2.4f, new Color(1f, 0.55f, 0.2f), count: 4, lifetime: 3f, splash: 1.3f)),
+                        BossAtk(BossAttackKind.Summon, Attack(6f, 1f, 0f, 0f, Color.white, count: 2), summon: raiderElite, cap: 4),
+                        BossAtk(BossAttackKind.Aimed, Attack(1.6f, 0.5f, 10f, 8f, new Color(1f, 0.45f, 0.4f), count: 3, spread: 18f))),
+                    Phase("CORSAIR QUEEN: NO QUARTER", 0.3f, MovementKind.Dash, Move(13f, amplitude: 2.2f, holdHeight: 0.3f, strafeSpeed: 0.35f),
+                        BossAtk(BossAttackKind.Mines, Attack(2.4f, 0.3f, 24f, 2.6f, new Color(1f, 0.55f, 0.2f), count: 5, lifetime: 2.8f, splash: 1.4f)),
+                        BossAtk(BossAttackKind.Stream, Attack(0.16f, 0.4f, 8f, 7.5f, new Color(1f, 0.4f, 0.3f), spread: 40f)),
+                        BossAtk(BossAttackKind.Summon, Attack(7f, 2f, 0f, 0f, Color.white, count: 2), summon: raiderElite, cap: 4)),
+                });
+
+            var assembler = Boss("Assembler", "THE ASSEMBLER", BossId.Assembler, prefabs.Assembler, art.Assembler, new Color(0.8f, 0.85f, 0.9f), 2f, 1.5f,
+                3400f, 150f, 40f, 10000, 60f, 4, dropGuaranteed, 3.5f, 0.18f, 16, 2.4f, new[]
+                {
+                    Phase("THE ASSEMBLER", 1f, MovementKind.LateralPatrol, Move(1f, amplitude: 1.8f, frequency: 0.4f),
+                        BossAtk(BossAttackKind.Summon, Attack(6f, 1.5f, 0f, 0f, Color.white, count: 1), summon: turret, cap: 3),
+                        BossAtk(BossAttackKind.Summon, Attack(4.5f, 2.5f, 0f, 0f, Color.white, count: 3), summon: drone, cap: 8),
+                        BossAtk(BossAttackKind.Stream, Attack(0.22f, 1f, 9f, 6.5f, new Color(1f, 0.6f, 0.3f), spread: 35f))),
+                    Phase("THE ASSEMBLER: OVERPRODUCTION", 0.5f, MovementKind.LateralPatrol, Move(1f, amplitude: 2.4f, frequency: 0.6f),
+                        BossAtk(BossAttackKind.Summon, Attack(5f, 0.5f, 0f, 0f, Color.white, count: 1), summon: turret, cap: 4),
+                        BossAtk(BossAttackKind.Summon, Attack(4f, 1f, 0f, 0f, Color.white, count: 3), summon: kamikaze, cap: 8),
+                        BossAtk(BossAttackKind.Stream, Attack(0.16f, 0.3f, 9f, 7.5f, new Color(1f, 0.6f, 0.3f), spread: 45f)),
+                        BossAtk(BossAttackKind.Ring, Attack(3f, 1f, 11f, 5f, new Color(0.9f, 0.9f, 1f), count: 12))),
+                });
+            assembler.Parts = new[]
+            {
+                Part("Turret Fabricator", new Vector2(-1.6f, 0.3f), 0.42f, 300f, 900, disables: 0, art.Fabricator, new Color(1f, 0.7f, 0.4f)),
+                Part("Drone Fabricator", new Vector2(1.6f, 0.3f), 0.42f, 300f, 900, disables: 1, art.Fabricator, new Color(0.6f, 0.9f, 1f)),
+            };
+
+            var aether = Boss("AetherGuardian", "AETHER GUARDIAN", BossId.AetherGuardian, prefabs.AetherGuardian, art.AetherGuardian, new Color(0.7f, 0.85f, 1f), 1.7f, 1.2f,
+                3200f, 0f, 40f, 10000, 60f, 4, dropGuaranteed, 3f, 0.2f, 16, 2.4f, new[]
+                {
+                    Phase("AETHER GUARDIAN", 1f, MovementKind.Blink, Move(1f, amplitude: 1.2f, holdHeight: 0.22f, holdDuration: 3.2f, strafeSpeed: 1f),
+                        BossAtk(BossAttackKind.Ring, Attack(2.4f, 1.5f, 10f, 4.5f, new Color(0.7f, 0.85f, 1f), count: 10)),
+                        BossAtk(BossAttackKind.Aimed, Attack(2f, 1f, 10f, 7f, new Color(0.9f, 0.7f, 1f), count: 5, spread: 30f))),
+                    Phase("AETHER GUARDIAN: AWAKENED", 0.6f, MovementKind.Blink, Move(1f, amplitude: 1.6f, holdHeight: 0.26f, holdDuration: 2.4f, strafeSpeed: 1.2f),
+                        BossAtk(BossAttackKind.Ring, Attack(2f, 0.5f, 10f, 5f, new Color(0.7f, 0.85f, 1f), count: 12)),
+                        BossAtk(BossAttackKind.Stream, Attack(0.18f, 0.4f, 8f, 7f, new Color(0.9f, 0.7f, 1f), spread: 40f))),
+                    Phase("AETHER GUARDIAN: JUDGEMENT", 0.3f, MovementKind.Blink, Move(1f, amplitude: 1.8f, holdHeight: 0.28f, holdDuration: 1.8f, strafeSpeed: 1.4f),
+                        BossAtk(BossAttackKind.Ring, Attack(1.8f, 0.4f, 10f, 5.5f, new Color(0.7f, 0.85f, 1f), count: 14)),
+                        BossAtk(BossAttackKind.FrontLaser, Attack(5.5f, 2f, 0f, 0f, new Color(0.8f, 0.6f, 1f)), telegraph: 1.1f, beam: 1.5f, beamWidth: 1.1f, beamDps: 45f),
+                        BossAtk(BossAttackKind.Aimed, Attack(1.5f, 0.6f, 10f, 8f, new Color(0.9f, 0.7f, 1f), count: 3, spread: 20f))),
+                });
+            aether.Parts = new[]
+            {
+                Part("Crystal", new Vector2(-1.5f, 0.6f), 0.36f, 160f, 700, disables: -1, art.Crystal, new Color(0.6f, 0.9f, 1f), shieldsCore: true),
+                Part("Crystal", new Vector2(1.5f, 0.6f), 0.36f, 160f, 700, disables: -1, art.Crystal, new Color(0.6f, 0.9f, 1f), shieldsCore: true),
+                Part("Crystal", new Vector2(0f, -1.5f), 0.36f, 160f, 700, disables: -1, art.Crystal, new Color(0.6f, 0.9f, 1f), shieldsCore: true),
+            };
+
+            var riftWalker = Boss("RiftWalker", "RIFT WALKER", BossId.RiftWalker, prefabs.RiftWalker, art.RiftWalker, new Color(0.8f, 0.55f, 1f), 1.6f, 1.2f,
+                3600f, 200f, 40f, 10000, 60f, 4, dropGuaranteed, 3f, 0.2f, 16, 2.6f, new[]
+                {
+                    Phase("RIFT WALKER", 1f, MovementKind.Blink, Move(1f, amplitude: 1.4f, holdHeight: 0.22f, holdDuration: 2.8f, strafeSpeed: 1f),
+                        BossAtk(BossAttackKind.RiftSpawn, Attack(5f, 2f, 0f, 0f, Color.white, count: 2), summon: kamikaze, cap: 6),
+                        BossAtk(BossAttackKind.Aimed, Attack(1.8f, 1f, 10f, 7.5f, new Color(0.9f, 0.6f, 1f), count: 1, burst: 3, burstInterval: 0.12f))),
+                    Phase("RIFT WALKER: TEAR", 0.6f, MovementKind.Blink, Move(1f, amplitude: 1.8f, holdHeight: 0.26f, holdDuration: 2.2f, strafeSpeed: 1.2f),
+                        BossAtk(BossAttackKind.RiftSpawn, Attack(4.5f, 1f, 0f, 0f, Color.white, count: 3), summon: interceptor, cap: 8),
+                        BossAtk(BossAttackKind.Ring, Attack(2.4f, 0.5f, 10f, 5f, new Color(0.8f, 0.55f, 1f), count: 12)),
+                        BossAtk(BossAttackKind.Aimed, Attack(1.5f, 0.5f, 10f, 8f, new Color(0.9f, 0.6f, 1f), count: 3, spread: 18f))),
+                    Phase("RIFT WALKER: COLLAPSE", 0.3f, MovementKind.Blink, Move(1f, amplitude: 2f, holdHeight: 0.3f, holdDuration: 1.6f, strafeSpeed: 1.5f),
+                        BossAtk(BossAttackKind.RiftSpawn, Attack(5f, 0.5f, 0f, 0f, Color.white, count: 2), summon: kamikazeElite, cap: 6),
+                        BossAtk(BossAttackKind.Stream, Attack(0.15f, 0.3f, 8f, 7.5f, new Color(0.9f, 0.5f, 1f), spread: 45f)),
+                        BossAtk(BossAttackKind.Ring, Attack(2f, 0.5f, 10f, 5.5f, new Color(0.8f, 0.55f, 1f), count: 16))),
+                });
+            riftWalker.ShieldColor = new Color(0.8f, 0.55f, 1f, 0.7f);
+
+            // ---------------------------------------------------------------- Stages (plan §7.4: ten sectors)
+            Color fogNone = new Color(0.5f, 0.2f, 0.8f, 0f);
+            var s1 = Stage("Stage01_IronBelt", "Iron Belt", "Mining belt - first contact",
+                "The Swarm hit the mining belt first. Rocks everywhere, drones between them.\nDrag to move. Your weapon fires on its own.\nStay close to enemies to raise your RISK multiplier, and dodge close to bullets for GRAZE bonuses.",
+                "- Clear the drone patrols\n- Survive the meteor shower\n- Destroy the Iron Warden",
+                MusicId.Stage1, AmbientId.Asteroids, new Color(0.10f, 0.07f, 0.05f), new Color(0.04f, 0.03f, 0.05f), fogNone, 0.45f, new Color(0.95f, 0.85f, 0.75f),
+                new[] { art.Asteroid }, 4f, new Color(0.5f, 0.45f, 0.4f, 0.5f), null, Color.white, 6f, 1000, asteroid, new[]
+                {
+                    Ev.Message("SECTOR 1: IRON BELT", 2f),
+                    Ev.Wave(Wave("S01_W1", E(drone, 4, 0.7f, SpawnPattern.TopLine))),
+                    Ev.Wave(Wave("S01_W2", E(drone, 5, 0.5f, SpawnPattern.TopVee), E(drone, 3, 0.6f, SpawnPattern.TopAlternate, 1.5f)), Wave("S01_W2b", E(drone, 6, 0.45f, SpawnPattern.TopArc))),
+                    Ev.Asteroids(true),
                     Ev.Message("INTERCEPTORS INBOUND", 1.5f),
-                    Ev.Wave(Wave("S1_W3", E(interceptor, 3, 0.8f, SpawnPattern.TopAlternate), E(drone, 4, 0.5f, SpawnPattern.TopLine, 1f))),
-                    Ev.Wave(Wave("S1_W4", E(interceptor, 4, 0.6f, SpawnPattern.TopRandom), E(drone, 6, 0.4f, SpawnPattern.TopVee, 1f))),
+                    Ev.Wave(Wave("S01_W3", E(interceptor, 3, 0.8f, SpawnPattern.TopAlternate), E(drone, 4, 0.5f, SpawnPattern.TopLine, 1f))),
                     Ev.MiniBoss(sentinel, "WARNING: SENTINEL-X APPROACHING"),
-                    Ev.Wave(Wave("S1_W5", E(drone, 6, 0.4f, SpawnPattern.TopLine), E(interceptor, 3, 0.6f, SpawnPattern.TopAlternate, 1f), E(droneElite, 1, 0f, SpawnPattern.TopCenter, 2f))),
-                    Ev.Wave(Wave("S1_W6", E(interceptor, 5, 0.5f, SpawnPattern.TopVee), E(drone, 6, 0.4f, SpawnPattern.TopRandom, 1.5f))),
+                    Ev.Build(),
+                    Ev.Wave(Wave("S01_W4", E(interceptor, 4, 0.6f, SpawnPattern.TopRandom), E(drone, 6, 0.4f, SpawnPattern.TopVee, 1f))),
+                    Ev.Hazard(HazardKind.MeteorShower),
+                    Ev.Encounter(0.5f, "ROGUE DRONE PACK", Wave("S01_R1", E(drone, 8, 0.3f, SpawnPattern.TopColumn, 0f, 0.3f), E(drone, 8, 0.3f, SpawnPattern.TopColumn, 0.5f, 0.7f))),
+                    Ev.Wave(Wave("S01_W5", E(drone, 6, 0.4f, SpawnPattern.TopLine), E(interceptor, 3, 0.6f, SpawnPattern.TopAlternate, 1f), E(droneElite, 1, 0f, SpawnPattern.TopCenter, 2f))),
+                    Ev.Asteroids(false),
+                    Ev.Delay(1.5f),
+                    Ev.Boss(ironWarden, "WARNING: IRON WARDEN"),
+                });
+            var s2 = Stage("Stage02_SilentColony", "Silent Colony", "Dead colony in Earth orbit",
+                "No answer from the colony domes. The Destroyer, a Swarm scout carrier, is parked above them.\nSolar activity is high: leave the flare band when it lights up.",
+                "- Sweep the colony\n- Defeat the Widow\n- Destroy The Destroyer",
+                MusicId.Stage1, AmbientId.Space, new Color(0.03f, 0.05f, 0.14f), new Color(0.06f, 0.03f, 0.14f), fogNone, 0.7f, Color.white,
+                new[] { art.Satellite }, 5f, new Color(0.6f, 0.65f, 0.75f, 0.55f), art.Colony, new Color(0.25f, 0.45f, 0.6f, 0.45f), 12f, 1200, null, new[]
+                {
+                    Ev.Message("SECTOR 2: SILENT COLONY", 2f),
+                    Ev.Wave(Wave("S02_W1", E(drone, 6, 0.45f, SpawnPattern.TopArc), E(interceptor, 2, 0.8f, SpawnPattern.TopAlternate, 1.5f))),
+                    Ev.Wave(Wave("S02_W2", E(bomber, 2, 1f, SpawnPattern.TopAlternate), E(drone, 5, 0.4f, SpawnPattern.TopLine, 1.5f)), Wave("S02_W2b", E(kamikaze, 4, 0.6f, SpawnPattern.TopRandom), E(drone, 5, 0.4f, SpawnPattern.TopVee, 1f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S02_W3", E(interceptor, 4, 0.5f, SpawnPattern.TopVee), E(shieldDrone, 2, 1f, SpawnPattern.TopAlternate, 1.5f))),
+                    Ev.MiniBoss(widow, "WARNING: WIDOW"),
+                    Ev.Build(),
+                    Ev.Encounter(0.5f, "SCAVENGERS!", Wave("S02_R1", E(raider, 4, 0.5f, SpawnPattern.Pincer, 0f, 0.7f))),
+                    Ev.Wave(Wave("S02_W4", E(bomber, 3, 0.9f, SpawnPattern.TopLine), E(kamikaze, 5, 0.5f, SpawnPattern.TopRandom, 1f), E(bomberElite, 1, 0f, SpawnPattern.TopCenter, 2.5f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S02_W5", E(shieldDrone, 3, 0.8f, SpawnPattern.TopVee), E(interceptor, 4, 0.5f, SpawnPattern.TopAlternate, 1f), E(interceptorElite, 1, 0f, SpawnPattern.TopRandom, 2f))),
+                    Ev.Build(),
                     Ev.Delay(1.5f),
                     Ev.Boss(destroyer, "WARNING: THE DESTROYER"),
                 });
-            var s2 = Stage("Stage2_AsteroidField", "Asteroid Field", "Kuiper drift - rogue asteroids",
-                "The Swarm is using the asteroid field as cover.\nWatch for rocks: they damage your hull on contact but can be destroyed.\nThe Widow lurks here, and something big is coiling beneath the rocks.",
-                "- Survive the asteroid field\n- Defeat the Widow\n- Destroy the Leviathan",
-                MusicId.Stage2, AmbientId.Asteroids, new Color(0.08f, 0.06f, 0.05f), new Color(0.03f, 0.03f, 0.06f), new Color(0.5f, 0.2f, 0.8f, 0f), 0.4f, new Color(0.9f, 0.85f, 0.8f),
-                null, 0f, Color.white, null, Color.white, 6f, 1500, asteroid, new[]
+            var s3 = Stage("Stage03_OrbitalWall", "Orbital Wall", "Swarm blockade - turret grid",
+                "The Swarm walled off the planet with a chain of gun platforms.\nTurrets hold their line and fire in every direction. Take them out fast, then breach the Bastion.",
+                "- Silence the turret grid\n- Shoot down the Reaper Wing\n- Breach the Bastion",
+                MusicId.Stage2, AmbientId.Space, new Color(0.06f, 0.06f, 0.1f), new Color(0.03f, 0.03f, 0.06f), fogNone, 0.5f, new Color(0.85f, 0.9f, 1f),
+                new[] { art.Satellite, art.Turret }, 4f, new Color(0.5f, 0.5f, 0.55f, 0.5f), art.FortressWall, new Color(0.3f, 0.32f, 0.38f, 0.45f), 12f, 1500, null, new[]
                 {
-                    Ev.Message("SECTOR 2: ASTEROID FIELD", 2f),
-                    Ev.Asteroids(true),
-                    Ev.Wave(Wave("S2_W1", E(drone, 5, 0.5f, SpawnPattern.TopLine), E(bomber, 2, 1f, SpawnPattern.TopAlternate, 1.5f))),
-                    Ev.Wave(Wave("S2_W2", E(kamikaze, 4, 0.7f, SpawnPattern.TopRandom), E(interceptor, 3, 0.6f, SpawnPattern.TopVee, 1.5f))),
-                    Ev.Message("SHIELDED UNITS DETECTED", 1.5f),
-                    Ev.Wave(Wave("S2_W3", E(shieldDrone, 3, 1f, SpawnPattern.TopLine), E(drone, 4, 0.4f, SpawnPattern.TopRandom, 2f))),
-                    Ev.MiniBoss(widow, "WARNING: WIDOW"),
-                    Ev.Wave(Wave("S2_W4", E(bomber, 3, 0.9f, SpawnPattern.TopLine), E(kamikaze, 5, 0.5f, SpawnPattern.TopRandom, 1f), E(bomberElite, 1, 0f, SpawnPattern.TopCenter, 2.5f))),
-                    Ev.Wave(Wave("S2_W5", E(shieldDrone, 3, 0.8f, SpawnPattern.TopVee), E(interceptor, 4, 0.5f, SpawnPattern.TopAlternate, 1f), E(kamikazeElite, 1, 0f, SpawnPattern.TopRandom, 2f))),
-                    Ev.Asteroids(false),
+                    Ev.Message("SECTOR 3: ORBITAL WALL", 2f),
+                    Ev.Wave(Wave("S03_W1", E(turret, 2, 1f, SpawnPattern.TopAlternate), E(drone, 6, 0.4f, SpawnPattern.TopLine, 1.5f))),
+                    Ev.Wave(Wave("S03_W2", E(raider, 5, 0.45f, SpawnPattern.LeftEdge, 0f, 0.75f), E(raider, 5, 0.45f, SpawnPattern.RightEdge, 1.5f, 0.65f))),
+                    Ev.Wave(Wave("S03_W3", E(turret, 3, 0.8f, SpawnPattern.TopLine), E(interceptor, 4, 0.5f, SpawnPattern.TopVee, 1.5f)), Wave("S03_W3b", E(turret, 2, 1f, SpawnPattern.TopAlternate), E(kamikaze, 6, 0.4f, SpawnPattern.TopRandom, 1.5f))),
+                    Ev.MiniBoss(reaper, "WARNING: REAPER WING"),
+                    Ev.Build(),
+                    Ev.Encounter(0.5f, "PATROL SQUADRON", Wave("S03_R1", E(interceptor, 6, 0.35f, SpawnPattern.TopArc), E(interceptorElite, 1, 0f, SpawnPattern.TopCenter, 1.5f))),
+                    Ev.Wave(Wave("S03_W4", E(turret, 4, 0.6f, SpawnPattern.TopLine), E(shieldDrone, 3, 0.7f, SpawnPattern.TopAlternate, 1.5f), E(bomberElite, 1, 0f, SpawnPattern.TopCenter, 2.5f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S03_W5", E(turret, 3, 0.6f, SpawnPattern.TopLine), E(bomber, 3, 0.8f, SpawnPattern.TopAlternate, 1f), E(shieldElite, 1, 0f, SpawnPattern.TopCenter, 2f))),
+                    Ev.Build(),
+                    Ev.Delay(1.5f),
+                    Ev.Boss(bastion, "WARNING: BASTION"),
+                });
+            var s4 = Stage("Stage04_LivingNebula", "Living Nebula", "Ionized cloud - something breathes inside",
+                "Sensors fail in the nebula and the gas itself pulses. The Swarm breeds here.\nExpect every enemy type, elite escorts and the Leviathan coiling beneath the cloud.",
+                "- Break through the nebula\n- Defeat the Widow Prime\n- Destroy the Leviathan",
+                MusicId.Stage2, AmbientId.Nebula, new Color(0.16f, 0.05f, 0.24f), new Color(0.08f, 0.02f, 0.14f), new Color(0.55f, 0.25f, 0.85f, 0.2f), 0.5f, new Color(0.9f, 0.8f, 1f),
+                null, 0f, Color.white, null, Color.white, 6f, 1800, null, new[]
+                {
+                    Ev.Message("SECTOR 4: LIVING NEBULA", 2f),
+                    Ev.Wave(Wave("S04_W1", E(interceptor, 5, 0.4f, SpawnPattern.TopVee), E(drone, 6, 0.35f, SpawnPattern.TopLine, 1f))),
+                    Ev.Wave(Wave("S04_W2", E(kamikaze, 6, 0.4f, SpawnPattern.TopRandom), E(shieldDrone, 3, 0.8f, SpawnPattern.TopLine, 1.5f), E(interceptorElite, 1, 0f, SpawnPattern.TopCenter, 2f))),
+                    Ev.Hazard(HazardKind.NebulaPulse),
+                    Ev.Wave(Wave("S04_W3", E(bomber, 4, 0.7f, SpawnPattern.TopAlternate), E(interceptor, 4, 0.5f, SpawnPattern.TopVee, 1f), E(kamikaze, 4, 0.5f, SpawnPattern.TopRandom, 2f)), Wave("S04_W3b", E(raider, 6, 0.4f, SpawnPattern.Pincer, 0f, 0.7f), E(bomber, 3, 0.8f, SpawnPattern.TopLine, 2f))),
+                    Ev.MiniBoss(widowPrime, "WARNING: WIDOW PRIME"),
+                    Ev.Build(),
+                    Ev.Encounter(0.5f, "SPORE CLOUD", Wave("S04_R1", E(kamikaze, 10, 0.25f, SpawnPattern.TopArc), E(kamikazeElite, 1, 0f, SpawnPattern.TopCenter, 2f))),
+                    Ev.Wave(Wave("S04_W4", E(shieldDrone, 4, 0.6f, SpawnPattern.TopLine), E(bomber, 3, 0.8f, SpawnPattern.TopAlternate, 1f), E(kamikaze, 6, 0.35f, SpawnPattern.TopRandom, 2f), E(shieldElite, 1, 0f, SpawnPattern.TopCenter, 3f))),
+                    Ev.Hazard(HazardKind.NebulaPulse),
+                    Ev.Wave(Wave("S04_W5", E(interceptor, 6, 0.35f, SpawnPattern.TopVee), E(drone, 8, 0.3f, SpawnPattern.TopLine, 1f), E(bomberElite, 1, 0f, SpawnPattern.TopLeft, 2f), E(droneElite, 1, 0f, SpawnPattern.TopRight, 2f))),
+                    Ev.Build(),
                     Ev.Delay(1.5f),
                     Ev.Boss(leviathan, "WARNING: LEVIATHAN"),
                 });
-            var s3 = Stage("Stage3_VioletNebula", "Violet Nebula", "Ionized gas cloud - low visibility",
-                "Sensors are useless in the nebula. The Swarm breeds here.\nExpect every enemy type at once, elite escorts, and their fastest ace: the Reaper Wing.\nThe Hive Queen must not leave this cloud.",
-                "- Break through the nebula\n- Shoot down the Reaper Wing\n- Kill the Hive Queen",
-                MusicId.Stage3, AmbientId.Nebula, new Color(0.16f, 0.05f, 0.24f), new Color(0.08f, 0.02f, 0.14f), new Color(0.55f, 0.25f, 0.85f, 0.22f), 0.5f, new Color(0.9f, 0.8f, 1f),
-                null, 0f, Color.white, null, Color.white, 6f, 2000, null, new[]
+            var s5 = Stage("Stage05_PirateCorridor", "Pirate Corridor", "Smuggler lanes - raiders and mines",
+                "Human pirates sold the corridor to the Swarm. Raiders come from the sides, mines drift everywhere,\nand their queen fights dirty.",
+                "- Run the corridor\n- Defeat Sentinel-X Mk.II\n- Sink the Corsair Queen",
+                MusicId.Stage3, AmbientId.Asteroids, new Color(0.09f, 0.06f, 0.08f), new Color(0.04f, 0.02f, 0.05f), fogNone, 0.45f, new Color(1f, 0.85f, 0.8f),
+                new[] { art.Asteroid, art.Satellite }, 3.5f, new Color(0.55f, 0.45f, 0.4f, 0.5f), null, Color.white, 6f, 2200, asteroid, new[]
                 {
-                    Ev.Message("SECTOR 3: VIOLET NEBULA", 2f),
-                    Ev.Wave(Wave("S3_W1", E(interceptor, 5, 0.4f, SpawnPattern.TopVee), E(drone, 6, 0.35f, SpawnPattern.TopLine, 1f))),
-                    Ev.Wave(Wave("S3_W2", E(kamikaze, 6, 0.4f, SpawnPattern.TopRandom), E(shieldDrone, 3, 0.8f, SpawnPattern.TopLine, 1.5f), E(interceptorElite, 1, 0f, SpawnPattern.TopCenter, 2f))),
-                    Ev.Wave(Wave("S3_W3", E(bomber, 4, 0.7f, SpawnPattern.TopAlternate), E(interceptor, 4, 0.5f, SpawnPattern.TopVee, 1f), E(kamikaze, 4, 0.5f, SpawnPattern.TopRandom, 2f))),
-                    Ev.MiniBoss(reaper, "WARNING: REAPER WING"),
-                    Ev.Wave(Wave("S3_W4", E(shieldDrone, 4, 0.6f, SpawnPattern.TopLine), E(bomber, 3, 0.8f, SpawnPattern.TopAlternate, 1f), E(kamikaze, 6, 0.35f, SpawnPattern.TopRandom, 2f), E(shieldElite, 1, 0f, SpawnPattern.TopCenter, 3f))),
-                    Ev.Wave(Wave("S3_W5", E(interceptor, 6, 0.35f, SpawnPattern.TopVee), E(drone, 8, 0.3f, SpawnPattern.TopLine, 1f), E(bomberElite, 1, 0f, SpawnPattern.TopLeft, 2f), E(droneElite, 1, 0f, SpawnPattern.TopRight, 2f))),
+                    Ev.Message("SECTOR 5: PIRATE CORRIDOR", 2f),
+                    Ev.Asteroids(true),
+                    Ev.Wave(Wave("S05_W1", E(raider, 4, 0.5f, SpawnPattern.LeftEdge, 0f, 0.7f), E(raider, 4, 0.5f, SpawnPattern.RightEdge, 1.2f, 0.6f))),
+                    Ev.Wave(Wave("S05_W2", E(raider, 6, 0.4f, SpawnPattern.Pincer, 0f, 0.75f), E(bomber, 2, 1f, SpawnPattern.TopAlternate, 2f)), Wave("S05_W2b", E(interceptor, 5, 0.4f, SpawnPattern.TopArc), E(raider, 4, 0.5f, SpawnPattern.LeftEdge, 1.5f, 0.65f))),
+                    Ev.Encounter(0.6f, "PIRATE AMBUSH!", Wave("S05_R1", E(raiderElite, 2, 1f, SpawnPattern.Pincer, 0f, 0.7f), E(raider, 6, 0.35f, SpawnPattern.Pincer, 1f, 0.55f))),
+                    Ev.MiniBoss(sentinelMk2, "WARNING: SENTINEL-X MK.II"),
+                    Ev.Build(),
+                    Ev.Hazard(HazardKind.MeteorShower),
+                    Ev.Wave(Wave("S05_W3", E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom), E(shieldDrone, 3, 0.7f, SpawnPattern.TopLine, 1.5f), E(raiderElite, 1, 0f, SpawnPattern.LeftEdge, 2f, 0.7f))),
+                    Ev.Wave(Wave("S05_W4", E(bomber, 4, 0.7f, SpawnPattern.TopAlternate), E(raider, 6, 0.4f, SpawnPattern.RightEdge, 1f, 0.6f), E(bomberElite, 1, 0f, SpawnPattern.TopCenter, 2.5f))),
+                    Ev.Build(),
+                    Ev.Asteroids(false),
+                    Ev.Delay(1.5f),
+                    Ev.Boss(corsair, "WARNING: CORSAIR QUEEN"),
+                });
+            var s6 = Stage("Stage06_AutonomousFactory", "Autonomous Factory", "Swarm forge - production never stops",
+                "A factory the size of a moon builds the Swarm army in real time.\nTurrets roll off the line and The Assembler keeps making more. Destroy its fabricators to stop the flow.",
+                "- Shut down the assembly lines\n- Defeat the Reaper Prime\n- Destroy The Assembler",
+                MusicId.Stage3, AmbientId.Fortress, new Color(0.12f, 0.08f, 0.05f), new Color(0.05f, 0.04f, 0.05f), new Color(1f, 0.5f, 0.2f, 0.06f), 0.3f, new Color(1f, 0.8f, 0.6f),
+                new[] { art.Turret, art.Satellite }, 4f, new Color(0.5f, 0.45f, 0.4f, 0.5f), art.FortressWall, new Color(0.35f, 0.3f, 0.32f, 0.6f), 12f, 2600, null, new[]
+                {
+                    Ev.Message("SECTOR 6: AUTONOMOUS FACTORY", 2f),
+                    Ev.Wave(Wave("S06_W1", E(turret, 3, 0.8f, SpawnPattern.TopLine), E(drone, 8, 0.3f, SpawnPattern.TopArc, 1.5f))),
+                    Ev.Wave(Wave("S06_W2", E(turret, 2, 1f, SpawnPattern.TopAlternate), E(interceptor, 5, 0.4f, SpawnPattern.TopVee, 1.5f), E(kamikaze, 5, 0.4f, SpawnPattern.TopRandom, 2.5f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S06_W3", E(turret, 4, 0.6f, SpawnPattern.TopLine), E(shieldDrone, 3, 0.7f, SpawnPattern.TopAlternate, 1.5f), E(bomberElite, 1, 0f, SpawnPattern.TopCenter, 2.5f)), Wave("S06_W3b", E(turret, 3, 0.7f, SpawnPattern.TopColumn, 0f, 0.5f), E(raider, 6, 0.4f, SpawnPattern.Pincer, 1.5f, 0.7f))),
+                    Ev.MiniBoss(reaperPrime, "WARNING: REAPER PRIME"),
+                    Ev.Build(),
+                    Ev.Encounter(0.5f, "PRODUCTION SURGE", Wave("S06_R1", E(turret, 5, 0.5f, SpawnPattern.TopLine), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 1.5f))),
+                    Ev.Wave(Wave("S06_W4", E(turret, 3, 0.6f, SpawnPattern.TopLine), E(bomber, 4, 0.7f, SpawnPattern.TopAlternate, 1f), E(interceptorElite, 2, 1f, SpawnPattern.TopAlternate, 2f))),
+                    Ev.Wave(Wave("S06_W5", E(turret, 4, 0.5f, SpawnPattern.TopLine), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 1.5f), E(shieldElite, 2, 1f, SpawnPattern.TopAlternate, 2f), E(kamikazeElite, 2, 0.8f, SpawnPattern.TopRandom, 3f))),
+                    Ev.Build(),
+                    Ev.Delay(1.5f),
+                    Ev.Boss(assembler, "WARNING: THE ASSEMBLER"),
+                });
+            var s7 = Stage("Stage07_AetherRuins", "Aether Ruins", "Precursor ruins - the Swarm digs for something",
+                "Ruins of a civilization older than the Swarm. Its guardian still stands.\nThe Guardian's core is shielded by crystals: shatter them first, then strike the core.",
+                "- Cross the ruins\n- Defeat the Widow Prime\n- Shatter the crystals and destroy the Aether Guardian",
+                MusicId.Stage4, AmbientId.Nebula, new Color(0.08f, 0.1f, 0.16f), new Color(0.03f, 0.04f, 0.08f), new Color(0.4f, 0.6f, 1f, 0.08f), 0.6f, new Color(0.8f, 0.9f, 1f),
+                new[] { art.Crystal, art.Satellite }, 4f, new Color(0.5f, 0.7f, 0.9f, 0.5f), art.Ruins, new Color(0.35f, 0.4f, 0.5f, 0.55f), 12f, 3000, null, new[]
+                {
+                    Ev.Message("SECTOR 7: AETHER RUINS", 2f),
+                    Ev.Wave(Wave("S07_W1", E(interceptor, 6, 0.35f, SpawnPattern.TopArc), E(shieldDrone, 3, 0.7f, SpawnPattern.TopLine, 1.5f))),
+                    Ev.Wave(Wave("S07_W2", E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom), E(bomber, 3, 0.8f, SpawnPattern.TopAlternate, 1.5f), E(droneElite, 2, 0.8f, SpawnPattern.TopAlternate, 2.5f))),
+                    Ev.Hazard(HazardKind.NebulaPulse),
+                    Ev.Wave(Wave("S07_W3", E(raider, 6, 0.4f, SpawnPattern.Pincer, 0f, 0.7f), E(shieldElite, 1, 0f, SpawnPattern.TopCenter, 1.5f), E(interceptor, 5, 0.4f, SpawnPattern.TopVee, 2f)), Wave("S07_W3b", E(turret, 3, 0.7f, SpawnPattern.TopLine), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 1.5f))),
+                    Ev.MiniBoss(widowPrime, "WARNING: WIDOW PRIME"),
+                    Ev.Build(),
+                    Ev.Encounter(0.5f, "GUARDIAN CONSTRUCTS", Wave("S07_R1", E(shieldDrone, 5, 0.5f, SpawnPattern.TopArc), E(shieldElite, 2, 1f, SpawnPattern.TopAlternate, 2f))),
+                    Ev.Wave(Wave("S07_W4", E(bomber, 4, 0.7f, SpawnPattern.TopLine), E(interceptorElite, 2, 1f, SpawnPattern.TopAlternate, 1f), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 2f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S07_W5", E(shieldDrone, 4, 0.6f, SpawnPattern.TopVee), E(bomberElite, 2, 1f, SpawnPattern.TopAlternate, 1f), E(raiderElite, 2, 1f, SpawnPattern.Pincer, 2f, 0.65f), E(drone, 10, 0.25f, SpawnPattern.TopLine, 3f))),
+                    Ev.Build(),
+                    Ev.Delay(1.5f),
+                    Ev.Boss(aether, "WARNING: AETHER GUARDIAN"),
+                });
+            var s8 = Stage("Stage08_DimensionalRift", "Dimensional Rift", "Tear in space - enemies from nowhere",
+                "The Swarm opened a rift to bring reinforcements from somewhere else.\nRifts open anywhere on screen after a warning; the Rift Walker teleports and tears new ones.",
+                "- Hold the line at the rift\n- Defeat the Reaper Prime\n- Destroy the Rift Walker",
+                MusicId.Stage4, AmbientId.Hive, new Color(0.14f, 0.04f, 0.2f), new Color(0.05f, 0.02f, 0.1f), new Color(0.7f, 0.3f, 1f, 0.12f), 0.55f, new Color(0.9f, 0.75f, 1f),
+                null, 0f, Color.white, art.Rift, new Color(0.6f, 0.3f, 0.9f, 0.5f), 12f, 3400, null, new[]
+                {
+                    Ev.Message("SECTOR 8: DIMENSIONAL RIFT", 2f),
+                    Ev.Wave(Wave("S08_W1", E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom), E(interceptor, 5, 0.4f, SpawnPattern.TopArc, 1.5f))),
+                    Ev.Wave(Wave("S08_W2", E(bomber, 4, 0.7f, SpawnPattern.TopAlternate), E(raider, 6, 0.4f, SpawnPattern.Pincer, 1f, 0.7f), E(kamikazeElite, 2, 0.8f, SpawnPattern.TopRandom, 2.5f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S08_W3", E(shieldDrone, 4, 0.6f, SpawnPattern.TopLine), E(interceptorElite, 2, 1f, SpawnPattern.TopAlternate, 1.5f), E(drone, 10, 0.25f, SpawnPattern.TopVee, 2.5f)), Wave("S08_W3b", E(turret, 3, 0.7f, SpawnPattern.TopLine), E(raiderElite, 2, 1f, SpawnPattern.Pincer, 1.5f, 0.7f), E(kamikaze, 6, 0.35f, SpawnPattern.TopRandom, 2.5f))),
+                    Ev.MiniBoss(reaperPrime, "WARNING: REAPER PRIME"),
+                    Ev.Build(),
+                    Ev.Encounter(0.6f, "RIFT SURGE", Wave("S08_R1", E(kamikaze, 12, 0.22f, SpawnPattern.TopArc), E(kamikazeElite, 2, 0.8f, SpawnPattern.TopAlternate, 2.5f))),
+                    Ev.Wave(Wave("S08_W4", E(bomberElite, 2, 1f, SpawnPattern.TopAlternate), E(interceptor, 6, 0.35f, SpawnPattern.TopVee, 1f), E(shieldElite, 2, 1f, SpawnPattern.TopAlternate, 2f), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 3f))),
+                    Ev.Hazard(HazardKind.NebulaPulse),
+                    Ev.Wave(Wave("S08_W5", E(raider, 8, 0.35f, SpawnPattern.Pincer, 0f, 0.7f), E(turret, 3, 0.7f, SpawnPattern.TopLine, 1f), E(droneElite, 3, 0.6f, SpawnPattern.TopArc, 2f))),
+                    Ev.Build(),
+                    Ev.Delay(1.5f),
+                    Ev.Boss(riftWalker, "WARNING: RIFT WALKER"),
+                });
+            var s9 = Stage("Stage09_StellarCore", "Stellar Core", "Hive built around a dying star",
+                "The Swarm hive is wrapped around a star. Heat, swarms and their queen.\nFlares are constant here. Everything comes in numbers.",
+                "- Reach the core\n- Defeat Sentinel-X Mk.II\n- Kill the Hive Queen",
+                MusicId.Stage5, AmbientId.Hive, new Color(0.18f, 0.06f, 0.08f), new Color(0.06f, 0.02f, 0.05f), new Color(1f, 0.4f, 0.3f, 0.1f), 0.4f, new Color(1f, 0.8f, 0.7f),
+                null, 0f, Color.white, art.StarCore, new Color(1f, 0.55f, 0.3f, 0.5f), 16f, 4000, null, new[]
+                {
+                    Ev.Message("SECTOR 9: STELLAR CORE", 2f),
+                    Ev.Wave(Wave("S09_W1", E(drone, 12, 0.22f, SpawnPattern.TopVee), E(kamikaze, 6, 0.35f, SpawnPattern.TopRandom, 1f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S09_W2", E(interceptor, 7, 0.3f, SpawnPattern.TopArc), E(shieldDrone, 4, 0.6f, SpawnPattern.TopAlternate, 1f), E(droneElite, 2, 0.8f, SpawnPattern.TopAlternate, 2f)), Wave("S09_W2b", E(raider, 8, 0.35f, SpawnPattern.Pincer, 0f, 0.7f), E(bomber, 3, 0.8f, SpawnPattern.TopLine, 2f))),
+                    Ev.Wave(Wave("S09_W3", E(bomber, 4, 0.6f, SpawnPattern.TopLine), E(turret, 2, 0.8f, SpawnPattern.TopAlternate, 1f), E(kamikaze, 10, 0.25f, SpawnPattern.TopRandom, 2f), E(interceptorElite, 2, 0.8f, SpawnPattern.TopVee, 3f))),
+                    Ev.MiniBoss(sentinelMk2, "WARNING: SENTINEL-X MK.II"),
+                    Ev.Build(),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Encounter(0.6f, "BROOD SWARM", Wave("S09_R1", E(kamikaze, 14, 0.2f, SpawnPattern.TopArc), E(kamikazeElite, 3, 0.6f, SpawnPattern.TopRandom, 2.5f))),
+                    Ev.Wave(Wave("S09_W4", E(shieldElite, 2, 1f, SpawnPattern.TopAlternate), E(bomberElite, 2, 1f, SpawnPattern.TopAlternate, 1f), E(drone, 12, 0.22f, SpawnPattern.TopLine, 2f), E(kamikazeElite, 3, 0.6f, SpawnPattern.TopRandom, 3f))),
+                    Ev.Wave(Wave("S09_W5", E(interceptor, 8, 0.3f, SpawnPattern.TopVee), E(turret, 3, 0.6f, SpawnPattern.TopLine, 1f), E(kamikaze, 10, 0.25f, SpawnPattern.TopRandom, 2f), E(raiderElite, 2, 1f, SpawnPattern.Pincer, 3f, 0.65f))),
+                    Ev.Build(),
                     Ev.Delay(1.5f),
                     Ev.Boss(hiveQueen, "WARNING: HIVE QUEEN"),
                 });
-            var s4 = Stage("Stage4_MechanicalFortress", "Mechanical Fortress", "Swarm forward base - turret grid",
-                "A fortress the size of a moon, bristling with cannons.\nTurrets hold their position and fire in every direction: take them out fast.\nThe Swarm rebuilt The Destroyer. It is waiting at the core.",
-                "- Silence the turret grid\n- Defeat Sentinel-X Mk.II\n- Destroy the Destroyer Mk.II",
-                MusicId.Stage4, AmbientId.Fortress, new Color(0.12f, 0.08f, 0.05f), new Color(0.05f, 0.04f, 0.05f), new Color(1f, 0.5f, 0.2f, 0.06f), 0.3f, new Color(1f, 0.8f, 0.6f),
-                new[] { art.Satellite, art.Turret }, 4f, new Color(0.5f, 0.45f, 0.4f, 0.5f), art.FortressWall, new Color(0.35f, 0.3f, 0.32f, 0.6f), 12f, 2500, null, new[]
+            var s10 = Stage("Stage10_OmegaFortress", "Omega Fortress", "Swarm command - the machine intelligence",
+                "This is the end of the line: the Omega Core, the intelligence behind the invasion.\nThe fortress throws everything at you before the core wakes. It will transform as it takes damage. Finish it.",
+                "- Storm the fortress\n- Destroy the Destroyer Mk.II\n- Destroy the Omega Core",
+                MusicId.Stage5, AmbientId.Fortress, new Color(0.12f, 0.03f, 0.1f), new Color(0.04f, 0.01f, 0.06f), new Color(0.9f, 0.3f, 0.6f, 0.1f), 0.45f, new Color(1f, 0.75f, 0.9f),
+                new[] { art.Turret, art.Satellite }, 3.5f, new Color(0.5f, 0.4f, 0.5f, 0.5f), art.HiveWall, new Color(0.45f, 0.15f, 0.35f, 0.55f), 12f, 5000, null, new[]
                 {
-                    Ev.Message("SECTOR 4: MECHANICAL FORTRESS", 2f),
-                    Ev.Wave(Wave("S4_W1", E(turret, 2, 1f, SpawnPattern.TopAlternate), E(drone, 6, 0.4f, SpawnPattern.TopLine, 1.5f))),
-                    Ev.Wave(Wave("S4_W2", E(turret, 3, 0.8f, SpawnPattern.TopLine), E(interceptor, 4, 0.5f, SpawnPattern.TopVee, 1.5f), E(kamikaze, 4, 0.5f, SpawnPattern.TopRandom, 2f))),
-                    Ev.Message("HEAVY CANNONS ONLINE", 1.5f),
-                    Ev.Wave(Wave("S4_W3", E(turret, 4, 0.6f, SpawnPattern.TopLine), E(shieldDrone, 3, 0.7f, SpawnPattern.TopAlternate, 1.5f), E(bomberElite, 1, 0f, SpawnPattern.TopCenter, 2.5f))),
-                    Ev.MiniBoss(sentinelMk2, "WARNING: SENTINEL-X MK.II"),
-                    Ev.Wave(Wave("S4_W4", E(turret, 3, 0.6f, SpawnPattern.TopLine), E(bomber, 4, 0.7f, SpawnPattern.TopAlternate, 1f), E(interceptorElite, 2, 1f, SpawnPattern.TopAlternate, 2f))),
-                    Ev.Wave(Wave("S4_W5", E(turret, 4, 0.5f, SpawnPattern.TopLine), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 1.5f), E(shieldElite, 2, 1f, SpawnPattern.TopAlternate, 2f), E(kamikazeElite, 2, 0.8f, SpawnPattern.TopRandom, 3f))),
-                    Ev.Delay(1.5f),
-                    Ev.Boss(destroyerMk2, "WARNING: DESTROYER MK.II"),
-                });
-            var s5 = Stage("Stage5_HiveCore", "Hive Core", "Swarm homeworld - the final assault",
-                "This is it: the Swarm homeworld.\nEndless swarms, elite guards and the Omega Core, the machine intelligence behind the invasion.\nIt will transform as it takes damage. Finish it.",
-                "- Reach the core\n- Defeat the Widow Prime\n- Destroy the Omega Core",
-                MusicId.Stage5, AmbientId.Hive, new Color(0.12f, 0.03f, 0.1f), new Color(0.04f, 0.01f, 0.06f), new Color(0.9f, 0.3f, 0.6f, 0.1f), 0.45f, new Color(1f, 0.75f, 0.9f),
-                null, 0f, Color.white, art.HiveWall, new Color(0.45f, 0.15f, 0.35f, 0.55f), 12f, 4000, null, new[]
-                {
-                    Ev.Message("SECTOR 5: HIVE CORE", 2f),
-                    Ev.Wave(Wave("S5_W1", E(drone, 10, 0.25f, SpawnPattern.TopVee), E(kamikaze, 6, 0.35f, SpawnPattern.TopRandom, 1f))),
-                    Ev.Wave(Wave("S5_W2", E(interceptor, 6, 0.35f, SpawnPattern.TopLine), E(shieldDrone, 4, 0.6f, SpawnPattern.TopAlternate, 1f), E(droneElite, 2, 0.8f, SpawnPattern.TopAlternate, 2f))),
-                    Ev.Wave(Wave("S5_W3", E(bomber, 4, 0.6f, SpawnPattern.TopLine), E(turret, 2, 0.8f, SpawnPattern.TopAlternate, 1f), E(kamikaze, 8, 0.3f, SpawnPattern.TopRandom, 2f), E(interceptorElite, 2, 0.8f, SpawnPattern.TopVee, 3f))),
-                    Ev.MiniBoss(widowPrime, "WARNING: WIDOW PRIME"),
-                    Ev.Wave(Wave("S5_W4", E(shieldElite, 2, 1f, SpawnPattern.TopAlternate), E(bomberElite, 2, 1f, SpawnPattern.TopAlternate, 1f), E(drone, 10, 0.25f, SpawnPattern.TopLine, 2f), E(kamikazeElite, 3, 0.6f, SpawnPattern.TopRandom, 3f))),
-                    Ev.Wave(Wave("S5_W5", E(interceptor, 8, 0.3f, SpawnPattern.TopVee), E(turret, 3, 0.6f, SpawnPattern.TopLine, 1f), E(kamikaze, 10, 0.25f, SpawnPattern.TopRandom, 2f), E(droneElite, 2, 0.6f, SpawnPattern.TopAlternate, 3f), E(shieldElite, 2, 0.8f, SpawnPattern.TopAlternate, 4f))),
+                    Ev.Message("SECTOR 10: OMEGA FORTRESS", 2f),
+                    Ev.Wave(Wave("S10_W1", E(turret, 4, 0.5f, SpawnPattern.TopLine), E(drone, 10, 0.25f, SpawnPattern.TopVee, 1.5f), E(kamikaze, 6, 0.35f, SpawnPattern.TopRandom, 2.5f))),
+                    Ev.Wave(Wave("S10_W2", E(raider, 8, 0.35f, SpawnPattern.Pincer, 0f, 0.7f), E(interceptorElite, 2, 0.8f, SpawnPattern.TopAlternate, 1.5f), E(shieldDrone, 4, 0.6f, SpawnPattern.TopAlternate, 2.5f))),
+                    Ev.Hazard(HazardKind.SolarFlare),
+                    Ev.Wave(Wave("S10_W3", E(bomber, 4, 0.6f, SpawnPattern.TopLine), E(turret, 3, 0.6f, SpawnPattern.TopAlternate, 1f), E(kamikaze, 10, 0.25f, SpawnPattern.TopRandom, 2f), E(bomberElite, 2, 0.8f, SpawnPattern.TopAlternate, 3f)), Wave("S10_W3b", E(raiderElite, 3, 0.8f, SpawnPattern.Pincer, 0f, 0.7f), E(shieldElite, 2, 1f, SpawnPattern.TopAlternate, 1.5f), E(drone, 12, 0.22f, SpawnPattern.TopArc, 2.5f))),
+                    Ev.MiniBoss(destroyerMk2, "WARNING: DESTROYER MK.II"),
+                    Ev.Build(),
+                    Ev.Encounter(0.6f, "OMEGA GUARD", Wave("S10_R1", E(shieldElite, 3, 0.8f, SpawnPattern.TopArc), E(kamikazeElite, 3, 0.6f, SpawnPattern.TopRandom, 2f), E(turret, 3, 0.6f, SpawnPattern.TopLine, 3f))),
+                    Ev.Hazard(HazardKind.NebulaPulse),
+                    Ev.Wave(Wave("S10_W4", E(interceptor, 8, 0.3f, SpawnPattern.TopVee), E(turret, 4, 0.5f, SpawnPattern.TopLine, 1f), E(kamikaze, 12, 0.22f, SpawnPattern.TopRandom, 2f), E(droneElite, 3, 0.6f, SpawnPattern.TopAlternate, 3f), E(shieldElite, 2, 0.8f, SpawnPattern.TopAlternate, 4f))),
+                    Ev.Build(),
                     Ev.Message("THE OMEGA CORE AWAKENS", 2f),
                     Ev.Delay(1.5f),
                     Ev.Boss(omega, "WARNING: OMEGA CORE"),
                 });
-            data.Stages.AddRange(new[] { s1, s2, s3, s4, s5 });
-            // Rank targets, par times and base credits (plan §9.3, §11.5). Credits no longer come from score.
-            Tune(s1, 170f, 18000, 300);
-            Tune(s2, 200f, 26000, 380);
-            Tune(s3, 220f, 34000, 460);
-            Tune(s4, 240f, 44000, 560);
-            Tune(s5, 280f, 60000, 700);
+            data.Stages.AddRange(new[] { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 });
+            // Par times, rank targets, base credits, stat curve, names (plan §9.3, §11.5, §7.5)
+            Tune(s1, 190f, 18000, 300, 1.00f, "Sentinel-X", "Iron Warden");
+            Tune(s2, 210f, 24000, 360, 1.05f, "Widow", "The Destroyer");
+            Tune(s3, 220f, 30000, 420, 1.10f, "Reaper Wing", "Bastion");
+            Tune(s4, 230f, 36000, 480, 1.15f, "Widow Prime", "Leviathan");
+            Tune(s5, 240f, 42000, 540, 1.20f, "Sentinel-X Mk.II", "Corsair Queen");
+            Tune(s6, 250f, 48000, 600, 1.25f, "Reaper Prime", "The Assembler");
+            Tune(s7, 260f, 54000, 660, 1.30f, "Widow Prime", "Aether Guardian");
+            Tune(s8, 270f, 60000, 720, 1.35f, "Reaper Prime", "Rift Walker");
+            Tune(s9, 280f, 68000, 800, 1.40f, "Sentinel-X Mk.II", "Hive Queen");
+            Tune(s10, 320f, 80000, 900, 1.50f, "Destroyer Mk.II", "Omega Core");
 
             data.MenuLook = Stage("MenuLook", "Menu", "", "", "", MusicId.Menu, AmbientId.Space, new Color(0.03f, 0.05f, 0.14f), new Color(0.05f, 0.02f, 0.12f), new Color(0.5f, 0.2f, 0.8f, 0f), 0.8f, Color.white,
                 null, 0f, Color.white, art.Planet, new Color(0.15f, 0.35f, 0.6f, 0.35f), 14f, 0, null, new StageEvent[0]);
@@ -424,10 +670,10 @@ namespace Starfall.EditorTools
             config.Stages = data.Stages.ToArray();
             config.Ships = data.Ships.ToArray();
             config.Weapons = data.Weapons.ToArray();
-            config.Bosses = new[] { destroyer, leviathan, hiveQueen, omega };
+            config.Bosses = new[] { destroyer, leviathan, hiveQueen, omega, ironWarden, bastion, corsair, assembler, aether, riftWalker };
             config.SurvivalLook = data.SurvivalLook;
             config.ProceduralEnemies = new[] { drone, interceptor, bomber, kamikaze, shieldDrone, supply, interceptorElite, turret };
-            config.SurvivalMiniBosses = new[] { sentinel, widow, reaper };
+            config.SurvivalMiniBosses = new[] { sentinel, widow, reaper, sentinelMk2, widowPrime, reaperPrime };
             config.SurvivalMiniBossEvery = 8;
             config.SurvivalWavePause = 2.5f;
             config.DailyEnemySpeedMultiplier = 1.15f;
@@ -711,15 +957,25 @@ namespace Starfall.EditorTools
             public static StageEvent MiniBoss(BossDefinition b, string warning) => new StageEvent { Type = StageEventType.MiniBoss, Boss = b, Message = warning };
             public static StageEvent Boss(BossDefinition b, string warning) => new StageEvent { Type = StageEventType.Boss, Boss = b, Message = warning };
             public static StageEvent Asteroids(bool on) => new StageEvent { Type = StageEventType.AsteroidField, Flag = on };
+            public static StageEvent Wave(WaveDefinition w, params WaveDefinition[] variants) => new StageEvent { Type = StageEventType.Wave, Wave = w, Variants = variants };
+            public static StageEvent Encounter(float chance, string message, WaveDefinition w, params WaveDefinition[] variants) => new StageEvent { Type = StageEventType.RandomEncounter, Wave = w, Variants = variants, Chance = chance, Message = message };
+            public static StageEvent Hazard(HazardKind kind) => new StageEvent { Type = StageEventType.Hazard, Hazard = kind };
+            public static StageEvent Build() => new StageEvent { Type = StageEventType.BuildChoice };
         }
 
-        private static void Tune(StageDefinition s, float parSeconds, int rankTarget, int baseCredits)
+        private static void Tune(StageDefinition s, float parSeconds, int rankTarget, int baseCredits, float statMultiplier = 1f, string miniBoss = "", string boss = "")
         {
             s.ParTimeSeconds = parSeconds;
             s.RankTargetScore = rankTarget;
             s.BaseCredits = baseCredits;
+            s.EnemyStatMultiplier = statMultiplier;
+            s.MiniBossName = miniBoss;
+            s.BossName = boss;
             EditorUtility.SetDirty(s);
         }
+
+        private static BossPartSpec Part(string name, Vector2 offset, float radius, float hull, int score, int disables, Sprite sprite, Color tint, bool shieldsCore = false)
+            => new BossPartSpec { Name = name, Offset = offset, Radius = radius, Hull = hull, Score = score, DisablesAttack = disables, ShieldsCore = shieldsCore, Sprite = sprite, Tint = tint, Scale = 1f };
 
         private static StageDefinition Stage(string asset, string name, string subtitle, string briefing, string objectives, MusicId music, AmbientId ambient,
             Color top, Color bottom, Color fog, float stars, Color starTint, Sprite[] debris, float debrisInterval, Color debrisTint,

@@ -11,6 +11,12 @@ namespace Starfall.Bosses
         Leviathan = 1,
         HiveQueen = 2,
         OmegaCore = 3,
+        IronWarden = 4,
+        Bastion = 5,
+        CorsairQueen = 6,
+        Assembler = 7,
+        AetherGuardian = 8,
+        RiftWalker = 9,
         /// <summary>Mini-bosses and variants share this id and never count for Boss Hunter.</summary>
         MiniBoss = 10,
     }
@@ -29,6 +35,28 @@ namespace Starfall.Bosses
         Summon = 7,
         /// <summary>Slow energy web that slows the player (Widow).</summary>
         Web = 8,
+        /// <summary>Drops slow mines that detonate with splash when they expire (Corsair Queen).</summary>
+        Mines = 9,
+        /// <summary>Opens rifts at random on-screen points that spawn minions after a telegraph (Rift Walker).</summary>
+        RiftSpawn = 10,
+    }
+
+    /// <summary>Destructible boss component (plan §7.7: partes destrutíveis, pontos fracos).</summary>
+    [Serializable]
+    public struct BossPartSpec
+    {
+        public string Name;
+        public Vector2 Offset;
+        [Min(0.1f)] public float Radius;
+        [Min(1f)] public float Hull;
+        [Min(0)] public int Score;
+        [Tooltip("Index of the attack (in every phase) that stops when this part dies; -1 = none.")]
+        public int DisablesAttack;
+        [Tooltip("While any shielding part is alive the core cannot be damaged (weak-point mechanic).")]
+        public bool ShieldsCore;
+        public Sprite Sprite;
+        public Color Tint;
+        [Min(0.1f)] public float Scale;
     }
 
     [Serializable]
@@ -85,6 +113,9 @@ namespace Starfall.Bosses
         public BossPhase[] Phases = new BossPhase[0];
         [Min(1)] public int DeathExplosions = 8;
         [Min(0.1f)] public float DeathSequenceSeconds = 1.6f;
+
+        [Header("Destructible parts")]
+        public BossPartSpec[] Parts = new BossPartSpec[0];
 
         [Header("Body segments (Leviathan)")]
         [Min(0)] public int SegmentCount = 0;

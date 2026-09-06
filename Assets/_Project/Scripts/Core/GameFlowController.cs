@@ -22,6 +22,7 @@ namespace Starfall.Core
         [SerializeField] internal VictoryPanel victoryPanel;
         [SerializeField] internal GameOverPanel gameOverPanel;
         [SerializeField] internal SettingsPanel settingsPanel;
+        [SerializeField] internal BuildDraftPanel buildDraftPanel;
         [SerializeField] internal StageBackground background;
         [SerializeField] internal GameObject touchControls;
 
@@ -52,6 +53,7 @@ namespace Starfall.Core
             if (hud != null) hud.Bind(ctx, _lives);
 
             WirePanels();
+            ctx.StageDirector.BuildDraftRequest = BuildDraftRoutine;
             GameSignals.PlayerDied += OnPlayerDied;
             GameSignals.StageCompleted += OnStageCompleted;
 
@@ -113,6 +115,45 @@ namespace Starfall.Core
             if (victoryPanel != null) victoryPanel.Hide();
             if (gameOverPanel != null) gameOverPanel.Hide();
             if (settingsPanel != null) settingsPanel.Hide();
+            if (buildDraftPanel != null) buildDraftPanel.Hide();
+        }
+
+        // ---- Temporary builds (plan §2) ---------------------------------------------------------------
+
+        private bool _draftOpen;
+
+        /// <summary>Freezes the stage, shows three seeded mods and resumes when the player picks or skips.</summary>
+        private IEnumerator BuildDraftRoutine()
+        {
+            if (buildDraftPanel == null || _state != GameState.Playing || ctx.Player == null || !ctx.Player.IsAlive) yield break;
+            var build = ctx.Player.Build;
+            var offer = build.NextDraft(GameSession.Seed, GameSession.CurrentStageIndex);
+            if (offer.Count == 0) { build.Skip(); yield break; }
+            var previous = _state;
+            SetState(GameState.BuildChoice);
+            Time.timeScale = 0f;
+            ctx.Input.ResetTransient();
+            _draftOpen = true;
+            buildDraftPanel.Show(offer, build.Chosen, chosen =>
+            {
+                if (chosen.HasValue)
+                {
+                    build.Choose(chosen.Value);
+                    ctx.Player.ApplyBuild();
+                    GameSignals.RaiseBuildModChosen(chosen.Value);
+                    GameSignals.RaiseStageMessage(BuildMods.DisplayName(chosen.Value).ToUpperInvariant() + " INSTALLED", 1.4f);
+                    AudioManager.PlaySfx(SfxId.Purchase);
+                }
+                else build.Skip();
+                _draftOpen = false;
+            });
+            while (_draftOpen) yield return null;
+            if (_state == GameState.BuildChoice)
+            {
+                Time.timeScale = 1f;
+                ctx.Input.ResetTransient();
+                SetState(GameState.Playing);
+            }
         }
 
         private void Update()

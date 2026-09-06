@@ -29,7 +29,7 @@ namespace Starfall.Logic
     {
         public const int CurrentVersion = 2;
         public const int UpgradeNodeCount = 10;
-        public const int StageSlots = 5;
+        public const int StageSlots = 10;
         public const int LeaderboardSize = 10;
 
         public int version = CurrentVersion;

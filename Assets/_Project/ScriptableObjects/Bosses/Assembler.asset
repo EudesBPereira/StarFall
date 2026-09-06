@@ -1,0 +1,296 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ce7ad3fb0d9234db4e362d0a1df7e9, type: 3}
+  m_Name: Assembler
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
+  DisplayName: THE ASSEMBLER
+  Prefab: {fileID: 8560364597132467159, guid: 74a563d064bb3874e9f0a29b632610f4, type: 3}
+  Sprite: {fileID: 21300000, guid: fe2a66543c32b4647be077a2f75c454b, type: 3}
+  Tint: {r: 0.8, g: 0.85, b: 0.9, a: 1}
+  Scale: 2
+  ColliderRadius: 1.5
+  MaxHull: 3400
+  MaxShield: 150
+  ShieldColor: {r: 0.4, g: 0.9, b: 1, a: 0.6}
+  ContactDamage: 40
+  SelfDestructOnContact: 0
+  ScoreValue: 10000
+  EnergyOnKill: 60
+  ComponentReward: 4
+  DropTable: {fileID: 11400000, guid: 06154b06ada0eed42afa6dc384c08fdd, type: 2}
+  IsElite: 0
+  IsObstacle: 0
+  ImmuneToUltimate: 0
+  Movement: 4
+  MovementSettings:
+    Speed: 1
+    Amplitude: 1.5
+    Frequency: 2
+    HoldHeight: 0.25
+    HoldDuration: 6
+    StrafeSpeed: 2
+    TurnRate: 90
+  Attack: 0
+  AttackSettings:
+    Interval: 2
+    InitialDelay: 0.8
+    Count: 1
+    SpreadAngle: 0
+    BurstCount: 1
+    BurstInterval: 0.12
+    ProjectileSpeed: 6
+    Damage: 10
+    ProjectileScale: 1
+    Lifetime: 5
+    Color: {r: 1, g: 0.4, b: 0.3, a: 1}
+    OnlyWhenOnScreen: 1
+    SplashRadius: 0
+    SlowSeconds: 0
+  ProjectilePrefab: {fileID: 0}
+  MinLifetime: 999
+  RiskWeight: 2
+  ExplosionScale: 2.4
+  ExplosionColor: {r: 0.9, g: 0.725, b: 0.575, a: 1}
+  HasThruster: 1
+  ThrusterColor: {r: 0.88, g: 0.71000004, b: 0.62, a: 1}
+  BossId: 7
+  Title: THE ASSEMBLER
+  EntranceDuration: 3.5
+  EntranceHeight: 0.18
+  Phases:
+  - Name: THE ASSEMBLER
+    HealthThreshold: 1
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 1.8
+      Frequency: 0.4
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 7
+      Settings:
+        Interval: 6
+        InitialDelay: 1.5
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 1, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 11400000, guid: 7cde71cef5556264f8000f6ec586adaa, type: 2}
+      SummonCap: 3
+    - Kind: 7
+      Settings:
+        Interval: 4.5
+        InitialDelay: 2.5
+        Count: 3
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 1, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 11400000, guid: 1766c11a60bc3874f92b0988fda61ebf, type: 2}
+      SummonCap: 8
+    - Kind: 6
+      Settings:
+        Interval: 0.22
+        InitialDelay: 1
+        Count: 1
+        SpreadAngle: 35
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 6.5
+        Damage: 9
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.6, b: 0.3, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  - Name: 'THE ASSEMBLER: OVERPRODUCTION'
+    HealthThreshold: 0.5
+    Movement: 4
+    MovementSettings:
+      Speed: 1
+      Amplitude: 2.4
+      Frequency: 0.6
+      HoldHeight: 0.25
+      HoldDuration: 6
+      StrafeSpeed: 2
+      TurnRate: 90
+    Attacks:
+    - Kind: 7
+      Settings:
+        Interval: 5
+        InitialDelay: 0.5
+        Count: 1
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 1, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 11400000, guid: 7cde71cef5556264f8000f6ec586adaa, type: 2}
+      SummonCap: 4
+    - Kind: 7
+      Settings:
+        Interval: 4
+        InitialDelay: 1
+        Count: 3
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 0.1
+        Damage: 0
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 1, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 11400000, guid: e3c50bc843d8ddd469163359244c1a5f, type: 2}
+      SummonCap: 8
+    - Kind: 6
+      Settings:
+        Interval: 0.16
+        InitialDelay: 0.3
+        Count: 1
+        SpreadAngle: 45
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 7.5
+        Damage: 9
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 1, g: 0.6, b: 0.3, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    - Kind: 0
+      Settings:
+        Interval: 3
+        InitialDelay: 1
+        Count: 12
+        SpreadAngle: 0
+        BurstCount: 1
+        BurstInterval: 0.12
+        ProjectileSpeed: 5
+        Damage: 11
+        ProjectileScale: 1
+        Lifetime: 5
+        Color: {r: 0.9, g: 0.9, b: 1, a: 1}
+        OnlyWhenOnScreen: 1
+        SplashRadius: 0
+        SlowSeconds: 0
+      HomingTurnRate: 0
+      TelegraphSeconds: 1
+      BeamSeconds: 1.5
+      BeamWidth: 1.2
+      BeamDamagePerSecond: 40
+      MuzzleOffset: 0
+      SummonEnemy: {fileID: 0}
+      SummonCap: 0
+    Sprite: {fileID: 0}
+    Tint: {r: 0, g: 0, b: 0, a: 0}
+    Scale: 0
+    TransformSeconds: 0
+  DeathExplosions: 16
+  DeathSequenceSeconds: 2.4
+  Parts:
+  - Name: Turret Fabricator
+    Offset: {x: -1.6, y: 0.3}
+    Radius: 0.42
+    Hull: 300
+    Score: 900
+    DisablesAttack: 0
+    ShieldsCore: 0
+    Sprite: {fileID: 21300000, guid: c2761da43d40d484884996b7ede0fc7e, type: 3}
+    Tint: {r: 1, g: 0.7, b: 0.4, a: 1}
+    Scale: 1
+  - Name: Drone Fabricator
+    Offset: {x: 1.6, y: 0.3}
+    Radius: 0.42
+    Hull: 300
+    Score: 900
+    DisablesAttack: 1
+    ShieldsCore: 0
+    Sprite: {fileID: 21300000, guid: c2761da43d40d484884996b7ede0fc7e, type: 3}
+    Tint: {r: 0.6, g: 0.9, b: 1, a: 1}
+    Scale: 1
+  SegmentCount: 0
+  SegmentSprite: {fileID: 0}
+  SegmentSpacing: 0.9
+  SegmentScale: 0.8

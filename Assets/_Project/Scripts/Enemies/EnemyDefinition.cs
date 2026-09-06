@@ -18,6 +18,10 @@ namespace Starfall.Enemies
         Dash = 6,
         /// <summary>Turrets: descend to the hold line and stay there.</summary>
         Hold = 7,
+        /// <summary>Enters from a side edge and sweeps across the screen with a gentle wave.</summary>
+        SideSweep = 8,
+        /// <summary>Teleports to a new position every few seconds (Rift Walker, Aether Guardian).</summary>
+        Blink = 9,
     }
 
     public enum AttackKind

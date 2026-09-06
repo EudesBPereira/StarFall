@@ -14,6 +14,22 @@ namespace Starfall.Waves
         MiniBoss = 3,
         Boss = 4,
         AsteroidField = 5,
+        /// <summary>Environmental hazard (solar flare band, meteor shower) — plan §7.5 "evento ambiental".</summary>
+        Hazard = 6,
+        /// <summary>Pauses the stage and offers a seeded draft of temporary build mods.</summary>
+        BuildChoice = 7,
+        /// <summary>Optional wave that only fires for some runs (seeded by Chance) — "encontro aleatório".</summary>
+        RandomEncounter = 8,
+    }
+
+    public enum HazardKind
+    {
+        /// <summary>A horizontal band of radiation sweeps down after a telegraph; standing in it burns hull.</summary>
+        SolarFlare = 0,
+        /// <summary>Fast asteroids rain for a few seconds.</summary>
+        MeteorShower = 1,
+        /// <summary>Visibility drops (fog thickens) for a while.</summary>
+        NebulaPulse = 2,
     }
 
     [Serializable]
@@ -28,6 +44,11 @@ namespace Starfall.Waves
         [Min(0f)] public float Seconds = 2f;
         [Tooltip("AsteroidField: enable (true) or disable (false) the field.")]
         public bool Flag = true;
+        [Tooltip("Wave / RandomEncounter: alternative waves; one is picked by the run seed (partially random stages).")]
+        public WaveDefinition[] Variants = new WaveDefinition[0];
+        [Tooltip("RandomEncounter: probability that the encounter happens in a run.")]
+        [Range(0f, 1f)] public float Chance = 0.5f;
+        public HazardKind Hazard = HazardKind.SolarFlare;
     }
 
     /// <summary>
@@ -53,6 +74,11 @@ namespace Starfall.Waves
         [Min(1000)] public int RankTargetScore = 20000;
         [Tooltip("Credits granted for completing the stage, independent of score (plan §11.5).")]
         [Min(0)] public int BaseCredits = 300;
+        [Tooltip("Hull/damage multiplier applied to every enemy of this stage (difficulty curve).")]
+        [Min(0.1f)] public float EnemyStatMultiplier = 1f;
+        [Tooltip("Mini-boss shown in the mission list (informational).")]
+        public string MiniBossName = "";
+        public string BossName = "";
         public MusicId Music = MusicId.Stage1;
         public AmbientId Ambient = AmbientId.Space;
         public bool KeepBossMusicAfterDefeat = false;

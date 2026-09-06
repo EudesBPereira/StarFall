@@ -6,7 +6,7 @@ Guia para agentes (Claude Code) trabalhando neste repositório. Leia também `bl
 
 Shoot'em up 2D vertical para **Android/iOS** em **Unity 6000.3.23f1** (Unity 6.3 LTS), orientação portrait.
 
-Direção: `docs/product/IMPLEMENTATION_MASTER_PLAN.md` (Plano Mestre STAR RISK, D-023) — núcleo = Zona de Risco, Overdrive, graze, facções; fases A–G; nada de monetização/serviços fora da fase F. Escopo atual (v1.0, GDD completo + fase B do plano): 5 naves, 7 armas, 6 tipos de inimigo comum + elites + turret + asteroide, 5 mini-chefes, 4 chefes (Destroyer, Leviathan, Hive Queen, Omega Core), 5 fases, vidas/escudo/casco com crítico, multiplicador x1–x10, 6 power-ups, Ultimate, progressão permanente (créditos/XP/componentes, árvore de 10 upgrades), Hangar, Ranking local, conquistas, modos Sobrevivência/Boss Rush/Desafio Diário, áudio placeholder e save local v2.
+Direção: `docs/product/IMPLEMENTATION_MASTER_PLAN.md` (Plano Mestre STAR RISK, D-023) — núcleo = Zona de Risco, Overdrive, graze, facções; fases A–G; nada de monetização/serviços fora da fase F. Escopo atual (fases B, C e E do plano): 7 naves em 3 facções, 8 armas, inimigos comuns + elites + turret + raider + asteroide, 7 mini-chefes/variantes, 10 chefes principais (Destroyer, Leviathan, Hive Queen, Omega Core, Iron Warden, Bastion, Corsair Queen, Assembler, Aether Guardian, Rift Walker), 10 fases com hazards, encontros aleatórios por semente e builds temporárias, vidas/escudo/casco com crítico, multiplicador x1–x10, 6 power-ups, Ultimate, progressão permanente (créditos/XP/componentes, árvore de 10 upgrades), Hangar, Ranking local, conquistas, modos Sobrevivência/Boss Rush/Desafio Diário, áudio placeholder e save local v2.
 
 **A fonte de verdade é `document.md` (GDD)** desde D-016; o `blueprint.md` foi só o recorte inicial de MVP. Plataforma mobile foi pedida pelo usuário e sobrepõe o "Windows" do GDD (D-001/D-002). Fora do escopo: a "Visão de Futuro" do GDD (coop, ranking global, clãs, Battle Pass, editor de fases, Steam).
 
@@ -14,18 +14,18 @@ Direção: `docs/product/IMPLEMENTATION_MASTER_PLAN.md` (Plano Mestre STAR RISK,
 
 ```
 Assets/_Project/Scripts/
-  Logic/    regras puras (sem UnityEngine) — testadas por dotnet e EditMode; inclui RiskModel, OverdriveModel, GrazeRules, StageResultRules
+  Logic/    regras puras (sem UnityEngine) — testadas por dotnet e EditMode; inclui RiskModel, OverdriveModel, GrazeRules, StageResultRules, StageVariation, BuildMods, FactionRules
   Core/     GameFlowController, GameplayContext, GameSignals, PlayArea, GameConfig, GameSession
   Input/    IGameInput, GameInputReader (teclado+gamepad+toque), TouchPad
   Player/   PlayerShip, PlayerMovement, WeaponController, PlayerStatusEffects, UltimateController, RiskSensor (risco+overdrive+graze)
   Combat/   IDamageable, Health, Projectile, ProjectileSpec/Launcher, WeaponDefinition, GameLayers
   Enemies/  Enemy (genérico, orientado a dados), EnemyDefinition, estratégias de movimento/ataque, registry, spawner
-  Bosses/   BossController (fases), BossDefinition, LaserBeam
-  Waves/    WaveDefinition, StageDefinition, StageDirector, SpawnPositionResolver
+  Bosses/   BossController (fases, partes destrutíveis, minas, fendas), BossDefinition, BossPart, LaserBeam
+  Waves/    WaveDefinition, StageDefinition (eventos: Wave, Hazard, BuildChoice, RandomEncounter...), StageDirector, HazardController, SpawnPositionResolver
   Scoring/ PowerUps/ UI/ Audio/ Save/ Pooling/ VFX/
   Editor/   ProjectBootstrap (settings+prefabs), ContentFactory (todos os dados), SceneBuilder, UiBuilder, PlaceholderArt, BuildScript
 Assets/_Project/{ScriptableObjects,Prefabs,Scenes,Art/Placeholders}  gerados pelo bootstrap
-Assets/_Project/Tests/{EditMode,PlayMode}
+Assets/_Project/Tests/{EditMode,EditMode/UnityOnly (usa AssetDatabase, fora do dotnet),PlayMode}
 Tools/LogicTests/   projeto `dotnet test` que compila Scripts/Logic + Tests/EditMode
 docs/               RELEASE_STATUS (o que existe e o que falta p/ as lojas), ARCHITECTURE,
                     DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG, GDD_COMPLIANCE

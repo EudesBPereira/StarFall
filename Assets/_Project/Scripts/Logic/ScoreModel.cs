@@ -20,6 +20,7 @@ namespace Starfall.Logic
         public int DamageTakenCount { get; private set; }
         public int Grazes { get; private set; }
         public int GrazePoints { get; private set; }
+        public int PartPoints { get; private set; }
         public float HighestRiskMultiplier { get; private set; } = 1f;
 
         public event Action<int> ScoreChanged;
@@ -66,7 +67,17 @@ namespace Starfall.Logic
             return points;
         }
 
-        /// <summary>Adds points without affecting the multiplier (stage bonus, boss parts, objectives).</summary>
+        /// <summary>Boss part destroyed: additive points scaled by risk, tracked for the results screen (plan §9.2).</summary>
+        public int RegisterPart(int basePoints, float riskMultiplier)
+        {
+            int points = (int)Math.Round(Math.Max(0, basePoints) * Math.Max(1f, riskMultiplier));
+            PartPoints += points;
+            Score += points;
+            ScoreChanged?.Invoke(Score);
+            return points;
+        }
+
+        /// <summary>Adds points without affecting the multiplier (stage bonus, objectives).</summary>
         public void AddBonus(int points)
         {
             if (points <= 0) return;
@@ -95,6 +106,7 @@ namespace Starfall.Logic
             DamageTakenCount = 0;
             Grazes = 0;
             GrazePoints = 0;
+            PartPoints = 0;
             HighestRiskMultiplier = 1f;
             ScoreChanged?.Invoke(Score);
             MultiplierChanged?.Invoke(Multiplier);

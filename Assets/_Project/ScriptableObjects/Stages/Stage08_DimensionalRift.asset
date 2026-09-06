@@ -1,0 +1,178 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage08_DimensionalRift
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Dimensional Rift
+  Subtitle: Tear in space - enemies from nowhere
+  Briefing: 'The Swarm opened a rift to bring reinforcements from somewhere else.
+
+    Rifts
+    open anywhere on screen after a warning; the Rift Walker teleports and tears
+    new ones.'
+  Objectives: '- Hold the line at the rift
+
+    - Defeat the Reaper Prime
+
+    -
+    Destroy the Rift Walker'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 8: DIMENSIONAL RIFT'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: d40bd7322adbed64ebacd695e2aa8aeb, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 19e93fc78be1eee4384504c88d32a234, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: bffeeebc80171434cac35ad1178f99eb, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: 844a795faa7aa744caa3b10daec6b2a1, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: eb875f3ee82fb6e489de8f1491f32a65, type: 2}
+    Message: 'WARNING: REAPER PRIME'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 8
+    Wave: {fileID: 11400000, guid: d43a200d44586094f8ad29ba3d79407a, type: 2}
+    Boss: {fileID: 0}
+    Message: RIFT SURGE
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.6
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 09c3d0c34dd2bf34d92c72756f76f8c1, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 2
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 902c2f43b170c2849b494545dbb3e739, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: b221674882b28604cbe3bc2f9a36fa15, type: 2}
+    Message: 'WARNING: RIFT WALKER'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 3400
+  ParTimeSeconds: 270
+  RankTargetScore: 60000
+  BaseCredits: 720
+  EnemyStatMultiplier: 1.35
+  MiniBossName: Reaper Prime
+  BossName: Rift Walker
+  Music: 6
+  Ambient: 5
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.14, g: 0.04, b: 0.2, a: 1}
+  BackgroundBottom: {r: 0.05, g: 0.02, b: 0.1, a: 1}
+  Fog: {r: 0.7, g: 0.3, b: 1, a: 0.12}
+  StarDensity: 0.55
+  StarTint: {r: 0.9, g: 0.75, b: 1, a: 1}
+  DebrisSprites: []
+  DebrisInterval: 0
+  DebrisTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropSprite: {fileID: 21300000, guid: c1d23bca188ae3949bd1e82606af4fc5, type: 3}
+  BackdropTint: {r: 0.6, g: 0.3, b: 0.9, a: 0.5}
+  BackdropScale: 12
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2

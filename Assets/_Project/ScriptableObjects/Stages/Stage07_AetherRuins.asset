@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage07_AetherRuins
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Aether Ruins
+  Subtitle: Precursor ruins - the Swarm digs for something
+  Briefing: 'Ruins of a civilization older than the Swarm. Its guardian still stands.
+
+    The
+    Guardian''s core is shielded by crystals: shatter them first, then strike the
+    core.'
+  Objectives: '- Cross the ruins
+
+    - Defeat the Widow Prime
+
+    - Shatter the
+    crystals and destroy the Aether Guardian'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 7: AETHER RUINS'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: e6eb96a057d752e4ea69e5294f2d222e, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 5bc8346ead68c5d468261c8e875c5326, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 2
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 370aa03d9e4dbe44e855ec9b9623b42e, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: 596c7f776719d344a8bb36b976183f9c, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: df4dd2f3e8629704ab968230d241421e, type: 2}
+    Message: 'WARNING: WIDOW PRIME'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 8
+    Wave: {fileID: 11400000, guid: 1d73554881d35ff44a86cd536f5612bc, type: 2}
+    Boss: {fileID: 0}
+    Message: GUARDIAN CONSTRUCTS
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 6de0c9c2d42d56e41ab08380a227ae30, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 1f6214b8b02aa39408173e499126bc40, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 81d5148829b894c499c5adb1aeffe3c1, type: 2}
+    Message: 'WARNING: AETHER GUARDIAN'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 3000
+  ParTimeSeconds: 260
+  RankTargetScore: 54000
+  BaseCredits: 660
+  EnemyStatMultiplier: 1.3
+  MiniBossName: Widow Prime
+  BossName: Aether Guardian
+  Music: 6
+  Ambient: 3
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.08, g: 0.1, b: 0.16, a: 1}
+  BackgroundBottom: {r: 0.03, g: 0.04, b: 0.08, a: 1}
+  Fog: {r: 0.4, g: 0.6, b: 1, a: 0.08}
+  StarDensity: 0.6
+  StarTint: {r: 0.8, g: 0.9, b: 1, a: 1}
+  DebrisSprites:
+  - {fileID: 21300000, guid: 20fb635e48725af41a1af3cb93fc4a1d, type: 3}
+  - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
+  DebrisInterval: 4
+  DebrisTint: {r: 0.5, g: 0.7, b: 0.9, a: 0.5}
+  BackdropSprite: {fileID: 21300000, guid: 499d7eebfd0cb904f863849fec254215, type: 3}
+  BackdropTint: {r: 0.35, g: 0.4, b: 0.5, a: 0.55}
+  BackdropScale: 12
+  AsteroidDefinition: {fileID: 0}
+  AsteroidInterval: 1.2

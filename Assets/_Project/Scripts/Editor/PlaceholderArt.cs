@@ -21,7 +21,8 @@ namespace Starfall.EditorTools
             public Sprite Projectile, Bullet, Plasma, Missile, Rail, Web, Spore;
             public Sprite Drone, Interceptor, Bomber, Kamikaze, ShieldDrone, Asteroid, Turret;
             public Sprite SentinelX, Widow, ReaperWing, Destroyer, LeviathanHead, LeviathanSegment, HiveQueen, OmegaCore, OmegaCoreForm2, OmegaCoreForm3;
-            public Sprite Satellite, Planet, FortressWall, HiveWall, Logo;
+            public Sprite IronWarden, Bastion, CorsairQueen, Assembler, AetherGuardian, RiftWalker, Crystal, Fabricator, TurretPart;
+            public Sprite Satellite, Planet, FortressWall, HiveWall, Colony, Ruins, Rift, StarCore, Logo;
         }
 
         public static Set GenerateAll()
@@ -136,6 +137,33 @@ namespace Starfall.EditorTools
             set.OmegaCoreForm2 = Save("omegacore2", 384, (x, y) => Union(Star(x, y, 8, 1f, 0.55f), Circle(x, y, 0.35f) * -1f + 0.1f));
             set.OmegaCoreForm3 = Save("omegacore3", 384, (x, y) => Union(Star(x, y, 6, 1f, 0.3f), Ring(x, y, 0.5f, 0.1f), Circle(x, y, 0.2f)));
 
+            // ---- Bosses (phase E) ----
+            set.IronWarden = Save("ironwarden", 320, (x, y) => Union(
+                RoundedBox(x, y, 0.55f, 0.5f, 0.15f),
+                Polygon(x, y, P(-0.55f, 0.3f), P(-1f, 0.1f), P(-1f, -0.5f), P(-0.6f, -0.35f)), Polygon(x, y, P(0.55f, 0.3f), P(1f, 0.1f), P(1f, -0.5f), P(0.6f, -0.35f)),
+                Capsule(x - 0.85f, y - 0.7f, 0.12f, 0.3f), Capsule(x + 0.85f, y - 0.7f, 0.12f, 0.3f),
+                Polygon(x, y, P(-0.25f, -0.5f), P(0.25f, -0.5f), P(0f, -1f))));
+            set.Bastion = Save("bastion", 384, (x, y) => Union(
+                Box(x, y + 0.3f, 1f, 0.35f), RoundedBox(x, y - 0.2f, 0.45f, 0.35f, 0.1f),
+                Box(x - 0.75f, y - 0.25f, 0.15f, 0.3f), Box(x + 0.75f, y - 0.25f, 0.15f, 0.3f),
+                Capsule(x, y - 0.75f, 0.14f, 0.3f)), fullRect: false);
+            set.CorsairQueen = Save("corsairqueen", 320, (x, y) => Union(
+                Polygon(x, y, P(0f, 1f), P(0.4f, 0.2f), P(0.3f, -0.8f), P(-0.3f, -0.8f), P(-0.4f, 0.2f)),
+                Polygon(x, y, P(0.3f, 0.4f), P(1f, 0.9f), P(0.95f, -0.2f), P(0.35f, -0.4f)), Polygon(x, y, P(-0.3f, 0.4f), P(-1f, 0.9f), P(-0.95f, -0.2f), P(-0.35f, -0.4f)),
+                Star(x, y - 0.3f, 4, 0.25f, 0.1f)));
+            set.Assembler = Save("assembler", 384, (x, y) => Union(
+                Box(x, y, 0.9f, 0.5f), Box(x - 0.6f, y + 0.7f, 0.2f, 0.3f), Box(x + 0.6f, y + 0.7f, 0.2f, 0.3f), Box(x, y + 0.7f, 0.2f, 0.3f),
+                Ring(x - 0.5f, y - 0.1f, 0.22f, 0.05f) * -1f + 0.08f, Ring(x + 0.5f, y - 0.1f, 0.22f, 0.05f) * -1f + 0.08f,
+                Capsule(x, y - 0.75f, 0.2f, 0.3f)));
+            set.AetherGuardian = Save("aetherguardian", 320, (x, y) => Union(
+                Star(x, y, 3, 1f, 0.45f), Ring(x, y, 0.55f, 0.06f), Circle(x, y, 0.25f)));
+            set.RiftWalker = Save("riftwalker", 320, (x, y) => Union(
+                Capsule(x, y, 0.3f, 0.8f), Leg(x, y, 0.2f, 0.4f, 0.95f, 0.9f, 0.08f), Leg(x, y, -0.2f, 0.4f, -0.95f, 0.9f, 0.08f),
+                Leg(x, y, 0.2f, -0.4f, 0.9f, -0.9f, 0.08f), Leg(x, y, -0.2f, -0.4f, -0.9f, -0.9f, 0.08f), Ring(x, y, 0.5f, 0.04f) * -1f + 0.06f));
+            set.Crystal = Save("crystal", 64, (x, y) => Polygon(x, y, P(0f, 1f), P(0.55f, 0.2f), P(0.3f, -0.9f), P(-0.3f, -0.9f), P(-0.55f, 0.2f)));
+            set.Fabricator = Save("fabricator", 64, (x, y) => Union(RoundedBox(x, y, 0.7f, 0.5f, 0.15f), Ring(x, y, 0.3f, 0.05f) * -1f + 0.08f));
+            set.TurretPart = Save("turretpart", 64, (x, y) => Union(RegularPolygon(x, y, 8, 0.7f), Capsule(x, y - 0.5f, 0.15f, 0.45f)));
+
             // ---- Environment ----
             set.Satellite = Save("satellite", 96, (x, y) => Union(
                 RoundedBox(x, y, 0.25f, 0.35f, 0.05f),
@@ -148,6 +176,10 @@ namespace Starfall.EditorTools
             set.HiveWall = Save("hivewall", 256, (x, y) => Union(
                 RegularPolygon(x, y, 6, 0.32f), RegularPolygon(x + 0.58f, y + 0.33f, 6, 0.32f), RegularPolygon(x - 0.58f, y + 0.33f, 6, 0.32f),
                 RegularPolygon(x + 0.58f, y - 0.33f, 6, 0.32f), RegularPolygon(x - 0.58f, y - 0.33f, 6, 0.32f), RegularPolygon(x, y + 0.66f, 6, 0.32f), RegularPolygon(x, y - 0.66f, 6, 0.32f)), fullRect: true);
+            set.Colony = Save("colony", 256, (x, y) => Union(SoftCircle(x - 0.5f, y - 0.4f, 0.45f), SoftCircle(x + 0.35f, y - 0.5f, 0.35f), SoftCircle(x + 0.1f, y + 0.2f, 0.3f), Box(x, y - 0.85f, 0.95f, 0.1f)), soft: true, fullRect: true);
+            set.Ruins = Save("ruins", 256, (x, y) => Union(Box(x - 0.7f, y, 0.1f, 0.9f), Box(x - 0.25f, y - 0.2f, 0.1f, 0.7f), Box(x + 0.25f, y + 0.1f, 0.1f, 0.8f), Box(x + 0.7f, y - 0.3f, 0.1f, 0.6f), Box(x, y + 0.9f, 0.95f, 0.08f)), fullRect: true);
+            set.Rift = Save("rift", 256, (x, y) => Union(Ring(x, y, 0.85f, 0.05f), Ring(x, y, 0.6f, 0.04f), Ring(x, y, 0.35f, 0.04f), SoftCircle(x, y, 0.25f)), soft: true);
+            set.StarCore = Save("starcore", 256, (x, y) => SoftCircle(x, y, 0.7f), soft: true);
             set.Logo = Save("logo", 256, (x, y) => Union(Star(x, y, 5, 0.9f, 0.4f), Ring(x, y, 0.95f, 0.04f)));
 
             AssetDatabase.SaveAssets();

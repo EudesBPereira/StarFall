@@ -34,6 +34,7 @@ namespace Starfall.Core
         [SerializeField] internal VfxSpawner vfx;
         [SerializeField] internal CameraShake cameraShake;
         [SerializeField] internal RunTracker runTracker;
+        [SerializeField] internal Waves.HazardController hazards;
 
         public GameConfig Config => config;
         public PlayArea PlayArea => playArea;
@@ -47,6 +48,7 @@ namespace Starfall.Core
         public VfxSpawner Vfx => vfx;
         public CameraShake CameraShake => cameraShake;
         public RunTracker RunTracker => runTracker;
+        public Waves.HazardController Hazards => hazards;
 
         public StageDefinition CurrentStage => config != null ? config.GetStage(GameSession.CurrentStageIndex) : null;
 

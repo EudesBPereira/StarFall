@@ -108,5 +108,14 @@ namespace Starfall.Logic
             Hull = Math.Min(MaxHull, Hull + amount);
             Changed?.Invoke();
         }
+
+        /// <summary>Raises the shield capacity without resetting hull (temporary builds). Extra capacity is granted as shield.</summary>
+        public void AddMaxShield(float amount)
+        {
+            if (amount <= 0f) return;
+            MaxShield += amount;
+            if (IsAlive) Shield = Math.Min(MaxShield, Shield + amount);
+            Changed?.Invoke();
+        }
     }
 }

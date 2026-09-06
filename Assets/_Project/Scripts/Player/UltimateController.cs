@@ -26,6 +26,8 @@ namespace Starfall.Player
         public bool IsReady => Energy.IsFull;
         /// <summary>Temporary charge multiplier (Overdrive). 1 = none.</summary>
         public float ExternalChargeMultiplier { get; set; } = 1f;
+        /// <summary>Charge multiplier from the temporary build (Energy Cells). 1 = none.</summary>
+        public float BuildChargeMultiplier { get; set; } = 1f;
 
         public void Initialize(GameConfig config, in PlayerLoadout loadout)
         {
@@ -57,7 +59,7 @@ namespace Starfall.Player
         {
             // Only weapon kills charge the bar (Ultimate kills would otherwise refund themselves).
             if (info.Source != DamageSource.Player || info.Definition == null) return;
-            Energy.Add(info.Definition.EnergyOnKill * _chargeMultiplier * ExternalChargeMultiplier);
+            Energy.Add(info.Definition.EnergyOnKill * _chargeMultiplier * ExternalChargeMultiplier * BuildChargeMultiplier);
         }
 
         public void AddEnergy(float amount) => Energy.Add(amount);

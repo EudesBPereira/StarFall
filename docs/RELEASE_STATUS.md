@@ -262,3 +262,13 @@ Continua pendente, na ordem do plano: confirmação do nome (SR-PROD-001), teste
 - **Decisões do responsável:** nome mantido como Starfall Defense (D-029); validação em aparelho adiada para o produto completo (D-030).
 
 Continua pendente, na ordem do plano: fatia de arte final (fase D), dez fases e dez chefes com builds temporárias (fase E), monetização, analytics e privacidade (fase F) e preparação de loja (fase G). O teste em aparelho fica para o fim, por decisão.
+
+# Adendo — Fase E do Plano Mestre (conteúdo)
+
+- **Dez fases** (Iron Belt, Silent Colony, Orbital Wall, Living Nebula, Pirate Corridor, Autonomous Factory, Aether Ruins, Dimensional Rift, Stellar Core, Omega Fortress), cada uma com formações próprias, um evento ambiental, um encontro aleatório por semente, duas escolhas de build, mini-chefe e chefe.
+- **Dez chefes principais** com mecânica própria: aos quatro existentes somaram-se Iron Warden, Bastion, Corsair Queen, The Assembler, Aether Guardian e Rift Walker. Partes destrutíveis, minas, teleporte e fendas são sistemas novos, não recolorações.
+- **Builds temporárias:** doze módulos sorteados por semente durante a fase, sem persistência.
+- **Eventos ambientais** sempre telegrafados e **validação automatizada de conteúdo** (dez fases, dez chefes, limites de velocidade e telegraph) no EditMode.
+- Balanceamento inicial de Laser Duplo e Mísseis.
+
+Pendente na ordem do plano: fase D (fatia de arte e áudio finais, depende de assets), fase F (monetização, analytics, privacidade) e fase G (loja). Teste em aparelho ao final, por decisão (D-030).

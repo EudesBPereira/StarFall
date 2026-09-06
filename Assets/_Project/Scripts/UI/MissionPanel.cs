@@ -49,7 +49,10 @@ namespace Starfall.UI
                 bool unlocked = i <= save.unlockedStage && stage != null;
                 bool completed = save.IsStageCompleted(i);
                 string title = stage != null ? $"{i + 1}. {stage.DisplayName.ToUpperInvariant()}" : $"{i + 1}. ???";
-                string detail = !unlocked ? "LOCKED" : completed ? $"BEST {save.stageBestScores[Mathf.Min(i, save.stageBestScores.Length - 1)]:N0}" : "NEW";
+                int slot = Mathf.Min(i, save.stageBestScores.Length - 1);
+                string rank = completed && save.stageBestRanks != null && slot < save.stageBestRanks.Length ? StageResultRules.RankLabel((StageRank)save.stageBestRanks[slot]) : "";
+                string bosses = stage != null && !string.IsNullOrEmpty(stage.BossName) ? $"  {stage.BossName.ToUpperInvariant()}" : "";
+                string detail = !unlocked ? "LOCKED" : completed ? $"RANK {rank}  BEST {save.stageBestScores[slot]:N0}{bosses}" : "NEW" + bosses;
                 row.Set(title, detail, "", unlocked, i == save.unlockedStage && !completed);
                 row.gameObject.SetActive(stage != null);
             }

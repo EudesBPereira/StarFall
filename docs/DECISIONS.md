@@ -193,3 +193,40 @@ Registro das decisões tomadas para requisitos ambíguos do blueprint, com alter
 - **Corporação Cyber** (CX-7 Nexus 5 000 créditos; Phantom convertida): marcação — todo acerto deixa o alvo 4 s recebendo +25 % de dano (`Health.IncomingDamageMultiplier`); Nexus tem drone companheiro que orbita e dispara sozinho (também marca); Overdrive dá crítico; Ultimate **EMP Burst** — atordoa 3 s (chefes 1,5 s), limpa projéteis, marca tudo por 6 s e causa 90 de dano.
 - **Por que a Phantom virou Cyber:** a identidade de precisão/crítico casa com a corporação; a Federação ficou com quatro cascos (o plano permite mais naves humanas depois das outras facções, não antes — nenhuma nova foi criada).
 - **Regra do plano respeitada:** nenhuma facção é melhor em tudo — Symbiont tem casco alto e escudo baixo; Nexus tem escudo alto, dano x0,9 e drone; Federação é a linha de base.
+
+## D-032 — Campanha de dez fases (fase E, plano §7)
+
+- **Estrutura adotada (plano §7.4):** 1 Iron Belt (Cinturão de Ferro) · 2 Silent Colony · 3 Orbital Wall (Muralha Orbital) · 4 Living Nebula · 5 Pirate Corridor · 6 Autonomous Factory · 7 Aether Ruins · 8 Dimensional Rift · 9 Stellar Core · 10 Omega Fortress.
+- **Reaproveitamento (plano §7.3):** Setor Orbital virou a base da fase 2 (Destroyer); Campo de Asteroides virou a fase 1 (Iron Warden); Nebulosa → fase 4 (Leviathan); Fortaleza Mecânica → fase 6 (Assembler); Núcleo da Colmeia → fase 9 (Hive Queen, colmeia em torno de uma estrela). Omega Core encerra a fase 10.
+- **Cada fase tem:** ≥3 ondas com formações próprias (novas: LeftEdge, RightEdge, Pincer, TopColumn, TopArc), um evento ambiental (solar flare, chuva de meteoros ou pulso de nebulosa), um encontro aleatório (probabilidade por semente), pelo menos uma escolha de build, mini-chefe, preparação (delay) e chefe no fim. Os assets antigos das fases 1–5 são substituídos pelos novos nomes `Stage01_…`.
+- **Curva:** `EnemyStatMultiplier` 1,00 → 1,50; alvo de rank 18 000 → 80 000; par 190 s → 320 s; créditos-base 300 → 900.
+- **Seed reproduzível:** variantes de onda, encontros aleatórios e posição dos hazards derivam de `GameSession.Seed` + índice da fase + índice do evento (`StageVariation`); o seed vai para o placar.
+
+## D-033 — Seis chefes novos com mecânica própria (plano §7.6–§7.7)
+
+| Chefe | Fase | Mecânica exclusiva |
+|---|---|---|
+| Iron Warden | 1 | duas brocas destrutíveis (desligam anel e chuva de rochas); invoca asteroides |
+| Bastion | 3 | muralha com três baterias destrutíveis, cada uma desliga um padrão; laser só na fase 2 |
+| Corsair Queen | 5 | investidas, minas que param e explodem, invoca capitães piratas |
+| The Assembler | 6 | duas fabricadoras destrutíveis que param a produção de turrets e drones |
+| Aether Guardian | 7 | três cristais que blindam o núcleo (ponto fraco); teleporte; laser na fase final |
+| Rift Walker | 8 | teleporte e fendas telegrafadas que cospem inimigos em pontos aleatórios da tela |
+
+Recolorações (Destroyer Mk.II, Sentinel-X Mk.II, Widow Prime, Reaper Prime) continuam mini-chefes e não contam como chefes (plano §7.6). `BossId` cobre os dez chefes principais e o Boss Rush enfileira todos.
+
+## D-034 — Partes destrutíveis de chefe
+
+- `BossPart` = filho com vida própria, colisor e sprite; `BossDefinition.Parts` define offset, vida, pontos, ataque desligado e se blinda o núcleo. Pontos de parte entram na fórmula do score (`ScoreModel.RegisterPart`, escalados pelo risco) e carregam Overdrive.
+- Enquanto uma parte `ShieldsCore` viver, o núcleo é invulnerável (`BossController.RefreshInvulnerability` combina entrada, transformação e blindagem). Mensagem "CORE EXPOSED" ao cair a última.
+
+## D-035 — Builds temporárias por sorteio com semente
+
+- Doze módulos (`BuildModId`), sorteio de três por `BuildMods.Draft(seed, fase, índice)`, sem repetição no mesmo sorteio, com limite de três pilhas (Magnet uma). Duram só a fase; `BuildState` zera no início.
+- O evento `BuildChoice` congela o jogo (`GameState.BuildChoice`, `timeScale 0`) e mostra `BuildDraftPanel`; modos infinitos oferecem a cada cinco ondas e o Boss Rush a cada três chefes.
+- Efeitos aplicados por multiplicadores externos (`WeaponController.SetBuild`, `UltimateController.BuildChargeMultiplier`, `RiskSensor.BuildGainMultiplier`, `HealthModel.AddMaxShield`, ímã nos itens). Nada persiste no save (plano §12.7: sem venda de poder).
+
+## D-036 — Eventos ambientais sempre telegrafados
+
+- `HazardController`: solar flare mostra a faixa piscando 1,4 s antes de causar 22 de dano/s por 1,8 s (nunca na linha de spawn); chuva de meteoros avisa 1 s antes; pulso de nebulosa só reduz visibilidade. Isso cumpre "sem situação impossível" do plano §7.5 e a diretriz de dano evitável do GDD.
+- `ContentValidationTests` (só no Editor) verifica dez fases/dez chefes, estrutura por fase, velocidades de projétil ≤ 14 u/s, intervalos ≥ 0,1 s, anéis ≤ 20, laser telegrafado ≥ 0,8 s, invocações com limite e spawns laterais só com inimigos `SideSweep`.

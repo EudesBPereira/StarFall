@@ -21,6 +21,9 @@ MonoBehaviour:
   ParTimeSeconds: 180
   RankTargetScore: 20000
   BaseCredits: 300
+  EnemyStatMultiplier: 1
+  MiniBossName: 
+  BossName: 
   Music: 8
   Ambient: 1
   KeepBossMusicAfterDefeat: 0

@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage01_IronBelt
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Iron Belt
+  Subtitle: Mining belt - first contact
+  Briefing: 'The Swarm hit the mining belt first. Rocks everywhere, drones between
+    them.
+
+    Drag to move. Your weapon fires on its own.
+
+    Stay close to enemies
+    to raise your RISK multiplier, and dodge close to bullets for GRAZE bonuses.'
+  Objectives: '- Clear the drone patrols
+
+    - Survive the meteor shower
+
+    -
+    Destroy the Iron Warden'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 1: IRON BELT'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: dba3b30adf0bc21449f3bc7b912308f8, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 0107dbcc4afb63744b5f7a0cfb9c4249, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: c5052bfa54e12a54986785b91a4900bc, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 5
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: INTERCEPTORS INBOUND
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 4b562286bddaf5f48856e37d136cfdf5, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: c6263f1dc58fc3a4cb5d9a5cfc5846a4, type: 2}
+    Message: 'WARNING: SENTINEL-X APPROACHING'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 82eeba4a39bfb264a9918fd34cd584b8, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 1
+  - Type: 8
+    Wave: {fileID: 11400000, guid: 30c5f862764fdfc4d99164b3597943c8, type: 2}
+    Boss: {fileID: 0}
+    Message: ROGUE DRONE PACK
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 0de91f006616433429159ce38588b596, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 5
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 0
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 1b6a4015f4d5c234888275ce0d2a2fb9, type: 2}
+    Message: 'WARNING: IRON WARDEN'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 1000
+  ParTimeSeconds: 190
+  RankTargetScore: 18000
+  BaseCredits: 300
+  EnemyStatMultiplier: 1
+  MiniBossName: Sentinel-X
+  BossName: Iron Warden
+  Music: 2
+  Ambient: 2
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.1, g: 0.07, b: 0.05, a: 1}
+  BackgroundBottom: {r: 0.04, g: 0.03, b: 0.05, a: 1}
+  Fog: {r: 0.5, g: 0.2, b: 0.8, a: 0}
+  StarDensity: 0.45
+  StarTint: {r: 0.95, g: 0.85, b: 0.75, a: 1}
+  DebrisSprites:
+  - {fileID: 21300000, guid: 72e9e309edc9ce04b8aa1868d7bf3c27, type: 3}
+  DebrisInterval: 4
+  DebrisTint: {r: 0.5, g: 0.45, b: 0.4, a: 0.5}
+  BackdropSprite: {fileID: 0}
+  BackdropTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropScale: 6
+  AsteroidDefinition: {fileID: 11400000, guid: 33764b9c5b78608439ee79c4810eedc2, type: 2}
+  AsteroidInterval: 1.2

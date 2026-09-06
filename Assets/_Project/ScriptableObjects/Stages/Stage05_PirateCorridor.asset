@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7349e59ca0d722408f50d227dee6f27, type: 3}
+  m_Name: Stage05_PirateCorridor
+  m_EditorClassIdentifier: Starfall.Runtime::Starfall.Waves.StageDefinition
+  DisplayName: Pirate Corridor
+  Subtitle: Smuggler lanes - raiders and mines
+  Briefing: 'Human pirates sold the corridor to the Swarm. Raiders come from the
+    sides, mines drift everywhere,
+
+    and their queen fights dirty.'
+  Objectives: '- Run the corridor
+
+    - Defeat Sentinel-X Mk.II
+
+    - Sink the
+    Corsair Queen'
+  Events:
+  - Type: 2
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 'SECTOR 5: PIRATE CORRIDOR'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 5
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 0592d6027da1cf140ac376cedd31d69e, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: ff29d8a5df0fe7e4bab889b0c76274d6, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants:
+    - {fileID: 11400000, guid: d7cff39a49caaa945a8d6320b32b4e4e, type: 2}
+    Chance: 0.5
+    Hazard: 0
+  - Type: 8
+    Wave: {fileID: 11400000, guid: 1d5fd5a7323d71a47825ee129509a4e1, type: 2}
+    Boss: {fileID: 0}
+    Message: PIRATE AMBUSH!
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.6
+    Hazard: 0
+  - Type: 3
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 5e7304835360be04aa4f8cb9f970af21, type: 2}
+    Message: 'WARNING: SENTINEL-X MK.II'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 6
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 1
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 2d22203d58da6ab4d9cf34dfe1361f78, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 0
+    Wave: {fileID: 11400000, guid: 685c1264d7372324a9bec2a6d6a25ec8, type: 2}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 7
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 5
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 2
+    Flag: 0
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 1
+    Wave: {fileID: 0}
+    Boss: {fileID: 0}
+    Message: 
+    Seconds: 1.5
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  - Type: 4
+    Wave: {fileID: 0}
+    Boss: {fileID: 11400000, guid: 8729a5df0fbfb9047a517124c7639450, type: 2}
+    Message: 'WARNING: CORSAIR QUEEN'
+    Seconds: 2
+    Flag: 1
+    Variants: []
+    Chance: 0.5
+    Hazard: 0
+  CompletionBonus: 2200
+  ParTimeSeconds: 240
+  RankTargetScore: 42000
+  BaseCredits: 540
+  EnemyStatMultiplier: 1.2
+  MiniBossName: Sentinel-X Mk.II
+  BossName: Corsair Queen
+  Music: 4
+  Ambient: 2
+  KeepBossMusicAfterDefeat: 0
+  BackgroundTop: {r: 0.09, g: 0.06, b: 0.08, a: 1}
+  BackgroundBottom: {r: 0.04, g: 0.02, b: 0.05, a: 1}
+  Fog: {r: 0.5, g: 0.2, b: 0.8, a: 0}
+  StarDensity: 0.45
+  StarTint: {r: 1, g: 0.85, b: 0.8, a: 1}
+  DebrisSprites:
+  - {fileID: 21300000, guid: 72e9e309edc9ce04b8aa1868d7bf3c27, type: 3}
+  - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
+  DebrisInterval: 3.5
+  DebrisTint: {r: 0.55, g: 0.45, b: 0.4, a: 0.5}
+  BackdropSprite: {fileID: 0}
+  BackdropTint: {r: 1, g: 1, b: 1, a: 1}
+  BackdropScale: 6
+  AsteroidDefinition: {fileID: 11400000, guid: 33764b9c5b78608439ee79c4810eedc2, type: 2}
+  AsteroidInterval: 1.2

@@ -181,3 +181,37 @@ Executar no Editor (Game view em 1080x1920 e 1920x1080) e em pelo menos um Andro
 - [ ] Federação: acertos consecutivos aumentam o dano (observar inimigos morrendo mais rápido após uma sequência sem errar); errar zera.
 - [ ] Chefes atordoados pela EMP ficam parados metade do tempo e o laser frontal some.
 - [ ] Nenhuma nave vence em todos os atributos na comparação do Hangar.
+
+
+---
+
+## Fase E — Dez fases, chefes, eventos e builds
+
+### Campanha
+- [ ] A seleção de missão lista dez fases com o nome do chefe; as concluídas mostram rank e melhor pontuação.
+- [ ] Cada fase termina no chefe listado na tabela de BALANCING.md e tem um mini-chefe antes.
+- [ ] Reiniciar a mesma fase na mesma partida repete as variantes de onda e os encontros aleatórios (seed); começar uma partida nova pode mudar.
+- [ ] Inimigos das fases finais são visivelmente mais resistentes (multiplicador 1,5 na fase 10).
+
+### Eventos ambientais
+- [ ] Solar flare: a faixa pisca amarela por ~1,4 s antes de queimar; ficar fora dela evita todo o dano; nunca aparece rente à base da tela.
+- [ ] Chuva de meteoros: aviso, depois rochas rápidas por alguns segundos; todas destrutíveis.
+- [ ] Pulso de nebulosa: a névoa engrossa e volta ao normal em ~6 s sem esconder projéteis por completo.
+
+### Builds temporárias
+- [ ] Após o mini-chefe (e antes do chefe) o jogo congela e oferece três módulos diferentes; "SKIP" também libera.
+- [ ] Escolher Wide Spread adiciona tiros angulados; Piercing Tips faz o tiro atravessar; Reactive Plating aumenta a barra de escudo na hora; Magnet puxa os itens.
+- [ ] Os módulos somem ao começar outra fase (briefing mostra a nave, não a build).
+- [ ] Sobrevivência oferece um sorteio a cada cinco ondas; Boss Rush a cada três chefes.
+
+### Chefes novos
+- [ ] Iron Warden: destruir uma broca para o anel; a outra para as rochas; "+pontos" dourados por parte.
+- [ ] Bastion: cada bateria destruída silencia um padrão; o laser só aparece na metade da vida.
+- [ ] Corsair Queen: as minas param no lugar, pulsam e explodem em área; capitães piratas entram pelas laterais.
+- [ ] The Assembler: destruir a fabricadora esquerda para os turrets; a direita, os drones.
+- [ ] Aether Guardian: o núcleo não recebe dano (anel roxo) até os três cristais quebrarem; mensagem "CORE EXPOSED".
+- [ ] Rift Walker: círculos roxos avisam onde os inimigos vão surgir; o chefe teleporta com efeito nos dois pontos.
+- [ ] Boss Rush enfileira os dez chefes principais.
+
+### Validação automatizada
+- [ ] `ContentValidationTests` passa no Test Runner (EditMode) após regenerar os assets.

@@ -29,6 +29,10 @@ namespace Starfall.Combat
         public float SplashRadius;
         /// <summary>Cyber: seconds the hit enemy stays marked (takes extra damage). 0 = none.</summary>
         public float MarkSeconds;
+        /// <summary>Mines: explode with SplashRadius when the lifetime ends instead of fading away.</summary>
+        public bool DetonateOnExpire;
+        /// <summary>Mines: seconds of travel before the projectile stops and waits.</summary>
+        public float StopAfterSeconds;
 
         public static ProjectileSpec Player(float damage, float speed, float lifetime, Color color, float scale = 1f)
         {

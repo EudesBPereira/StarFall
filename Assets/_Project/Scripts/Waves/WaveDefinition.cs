@@ -18,6 +18,16 @@ namespace Starfall.Waves
         TopFixed = 6,
         /// <summary>Alternates left / right columns.</summary>
         TopAlternate = 7,
+        /// <summary>Left edge, at a height given by PatternValue (0 = bottom, 1 = top). Use with SideSweep.</summary>
+        LeftEdge = 8,
+        /// <summary>Right edge, at a height given by PatternValue. Use with SideSweep.</summary>
+        RightEdge = 9,
+        /// <summary>Same X (PatternValue), stacked upwards so they enter one after another.</summary>
+        TopColumn = 10,
+        /// <summary>Alternates both edges at the same height (pincer). Use with SideSweep.</summary>
+        Pincer = 11,
+        /// <summary>Arc across the top: outer entries higher, centre lowest.</summary>
+        TopArc = 12,
     }
 
     [Serializable]

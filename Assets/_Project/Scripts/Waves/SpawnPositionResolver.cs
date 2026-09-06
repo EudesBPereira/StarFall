@@ -41,6 +41,23 @@ namespace Starfall.Waves
                 case SpawnPattern.TopAlternate:
                     x = area.LerpX(index % 2 == 0 ? 0.25f : 0.75f, SidePadding);
                     break;
+                case SpawnPattern.LeftEdge:
+                    return new Vector2(area.Left - 1.2f, area.LerpY(patternValue, 1f));
+                case SpawnPattern.RightEdge:
+                    return new Vector2(area.Right + 1.2f, area.LerpY(patternValue, 1f));
+                case SpawnPattern.Pincer:
+                    return new Vector2(index % 2 == 0 ? area.Left - 1.2f : area.Right + 1.2f, area.LerpY(patternValue, 1f) - (index / 2) * 0.6f);
+                case SpawnPattern.TopColumn:
+                    x = area.LerpX(patternValue, SidePadding);
+                    y += index * 0.9f;
+                    break;
+                case SpawnPattern.TopArc:
+                {
+                    float t = count <= 1 ? 0.5f : (float)index / (count - 1);
+                    x = area.LerpX(t, SidePadding);
+                    y += Mathf.Abs(t - 0.5f) * 3f;
+                    break;
+                }
                 default:
                     x = area.LerpX(Random.value, SidePadding);
                     break;

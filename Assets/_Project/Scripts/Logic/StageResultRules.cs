@@ -84,9 +84,9 @@ namespace Starfall.Logic
         {
             var r = new StageResult
             {
-                KillPoints = Math.Max(0, score.Score - score.GrazePoints),
+                KillPoints = Math.Max(0, score.Score - score.GrazePoints - score.PartPoints),
                 GrazePoints = score.GrazePoints,
-                PartPoints = 0,
+                PartPoints = score.PartPoints,
                 ObjectiveBonus = completed ? Math.Max(0, completionBonus) : 0,
                 TimeBonus = completed ? TimeBonus(elapsedSeconds, parSeconds) : 0,
                 NoDamageBonus = completed && hitsTaken == 0 ? NoDamageBonusPoints : 0,

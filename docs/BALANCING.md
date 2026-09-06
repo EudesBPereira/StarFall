@@ -319,3 +319,69 @@ Phantom passa a Cyber: marca alvos, Ultimate EMP, Overdrive +20 % de crítico.
 | Spore Launcher | 3 de dano, 0,18 s, 7,5 u/s, teleguiado 200°/s, 2→7 esporos por nível |
 
 ⚠️ EMP + marcação em chefe pode ser forte demais (efetivamente +25 % de dano por 6 s a cada Ultimate). Medir no playtest final.
+
+---
+
+# Fase E — Dez fases, dez chefes, builds temporárias
+
+## Curva da campanha
+
+| Fase | Nome | Mini-chefe | Chefe | Mult. inimigos | Par (s) | Alvo S | Créditos-base |
+|---|---|---|---|---:|---:|---:|---:|
+| 1 | Iron Belt | Sentinel-X | Iron Warden | 1,00 | 190 | 18 000 | 300 |
+| 2 | Silent Colony | Widow | The Destroyer | 1,05 | 210 | 24 000 | 360 |
+| 3 | Orbital Wall | Reaper Wing | Bastion | 1,10 | 220 | 30 000 | 420 |
+| 4 | Living Nebula | Widow Prime | Leviathan | 1,15 | 230 | 36 000 | 480 |
+| 5 | Pirate Corridor | Sentinel-X Mk.II | Corsair Queen | 1,20 | 240 | 42 000 | 540 |
+| 6 | Autonomous Factory | Reaper Prime | The Assembler | 1,25 | 250 | 48 000 | 600 |
+| 7 | Aether Ruins | Widow Prime | Aether Guardian | 1,30 | 260 | 54 000 | 660 |
+| 8 | Dimensional Rift | Reaper Prime | Rift Walker | 1,35 | 270 | 60 000 | 720 |
+| 9 | Stellar Core | Sentinel-X Mk.II | Hive Queen | 1,40 | 280 | 68 000 | 800 |
+| 10 | Omega Fortress | Destroyer Mk.II | Omega Core | 1,50 | 320 | 80 000 | 900 |
+
+Campanha completa em rank A com primeira conclusão ≈ 12 800 créditos: compra Falcon, Symbiont e Titan; Phantom e Nexus exigem repetir fases ou ranks altos. ⚠️ Recalibrar após playtest.
+
+## Chefes novos
+
+| Chefe | Casco | Escudo | Fases | Partes (vida / pontos) | Padrões |
+|---|---:|---:|---:|---|---|
+| Iron Warden | 2 000 | 0 | 2 | 2 brocas (220 / 800) | anel 8→12, asteroides, mirado |
+| Bastion | 2 600 | 0 | 2 | 3 baterias (240–260 / 700) | canhões laterais, leque frontal, anel, laser (fase 2) |
+| Corsair Queen | 3 000 | 0 | 3 | — | minas (24 dano, área 1,3), canhões, capitães, jato |
+| The Assembler | 3 400 | 150 | 2 | 2 fabricadoras (300 / 900) | invoca turrets e drones, jato, anel |
+| Aether Guardian | 3 200 | 0 | 3 | 3 cristais blindam o núcleo (160 / 700) | teleporte, anel, leque, laser (fase 3) |
+| Rift Walker | 3 600 | 200 | 3 | — | teleporte, fendas (kamikaze → interceptor → elite), anel, jato |
+
+## Eventos ambientais
+
+| Evento | Aviso | Efeito |
+|---|---:|---|
+| Solar flare | 1,4 s piscando | faixa de 2,2 u causa 22 dano/s por 1,8 s; nunca nos 30 % inferiores |
+| Chuva de meteoros | 1 s | 8–14 asteroides a 2,2× a velocidade |
+| Pulso de nebulosa | imediato (só visual) | névoa até 0,40 de alfa por 6 s |
+
+## Módulos temporários (`BuildMods`)
+
+| Módulo | Efeito por pilha | Pilhas |
+|---|---|---:|
+| Overclock | +12 % cadência | 3 |
+| Heavy Rounds | +15 % dano | 3 |
+| Piercing Tips | +1 perfuração | 3 |
+| Wide Spread | +1 tiro angulado (±16°) | 3 |
+| Reactive Plating | +25 escudo máximo, restaurado | 3 |
+| Nano Repair | +1 % de casco por abate (teto 5 %) | 3 |
+| Afterburner | +8 % velocidade | 3 |
+| Risk Tuner | +20 % ganho de Overdrive | 3 |
+| Magnet | itens atraídos | 1 |
+| Lucky Core | +8 % crítico | 3 |
+| Focus Lens | +15 % velocidade e alcance do projétil | 3 |
+| Energy Cells | +20 % carga do Ultimate | 3 |
+
+Sorteios por fase: 2 (após o mini-chefe e antes do chefe). Sobrevivência: a cada 5 ondas. Boss Rush: a cada 3 chefes. ⚠️ Heavy Rounds ×3 + Overclock ×3 ≈ +115 % de DPS; verificar se trivializa chefes tardios.
+
+## Ajustes de armas (plano §19 fase E)
+
+| Arma | Antes | Agora | Motivo |
+|---|---|---|---|
+| Laser Duplo | 3,5 de dano | 3,0 | DPS 54 → 46, fecha a distância para o Laser |
+| Mísseis | 0,45 s | 0,55 s | DPS 53 → 44 com dano em área e busca |

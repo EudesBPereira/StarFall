@@ -54,6 +54,8 @@ namespace Starfall.Player
         public UltimateController Ultimate => ultimate;
         /// <summary>Risk Zone + Overdrive owner (plan §5). Null-safe for tests that spawn a bare ship.</summary>
         public RiskSensor Risk => riskSensor;
+        /// <summary>Temporary in-mission build (plan §2). Reset on every stage start.</summary>
+        public BuildState Build { get; } = new BuildState();
         public bool IsAlive => _health != null && _health.IsAlive;
         public bool ControlEnabled => _controlEnabled;
         public bool IsCritical => _critical;
@@ -71,9 +73,10 @@ namespace Starfall.Player
         /// <summary>Biomech passive (plan §6): kills restore a small, capped fraction of hull.</summary>
         private void OnEnemyDestroyedLifesteal(EnemyKilledInfo info)
         {
-            if (!IsAlive || definition == null || definition.LifestealPerKill <= 0f || !info.CountsForScore) return;
+            float lifesteal = (definition != null ? definition.LifestealPerKill : 0f) + Build.Modifiers.LifestealPerKill;
+            if (!IsAlive || lifesteal <= 0f || !info.CountsForScore) return;
             if (info.Definition == null || info.Definition.IsObstacle) return;
-            _health.RestoreHull(FactionRules.LifestealAmount(_health.MaxHull, definition.LifestealPerKill));
+            _health.RestoreHull(FactionRules.LifestealAmount(_health.MaxHull, lifesteal));
         }
 
         private void Awake()
@@ -138,9 +141,29 @@ namespace Starfall.Player
             if (ctx.Input != null) ctx.Input.AutoFire = save == null || save.autoFire;
 
             gameObject.layer = GameLayers.Player;
+            Build.Reset();
+            ApplyBuild();
             SetVisible(false);
             _controlEnabled = false;
         }
+
+        /// <summary>Pushes the current build modifiers into every subsystem. Called after each draft pick.</summary>
+        public void ApplyBuild()
+        {
+            var m = Build.Modifiers;
+            if (weapon != null) weapon.SetBuild(m);
+            if (ultimate != null) ultimate.BuildChargeMultiplier = m.UltimateCharge;
+            if (riskSensor != null) riskSensor.BuildGainMultiplier = m.OverdriveGain;
+            if (_health != null && m.ShieldBonus > _appliedShieldBonus)
+            {
+                _health.Model.AddMaxShield(m.ShieldBonus - _appliedShieldBonus);
+                _appliedShieldBonus = m.ShieldBonus;
+                PulseShield();
+            }
+        }
+
+        private float _appliedShieldBonus;
+        public bool MagnetActive => Build.Modifiers.Magnet;
 
         /// <summary>Places the ship, restores health and grants spawn invulnerability.</summary>
         public void SpawnAt(Vector2 position, float invulnerabilitySeconds)
@@ -173,7 +196,7 @@ namespace Starfall.Player
             var input = _ctx.Input;
 
             ApplyOverdriveEffects();
-            movement.Tick(input, effects.SpeedMultiplier, _dragSensitivity);
+            movement.Tick(input, effects.SpeedMultiplier * Build.Modifiers.Speed, _dragSensitivity);
             weapon.Tick(input.FireHeld, effects.DamageMultiplier);
             if (input.UltimatePressed) ultimate.TryActivate();
             TickShieldRegen(Time.deltaTime);

@@ -80,6 +80,9 @@ namespace Starfall.Player
         public PrecisionModel Precision { get; } = new PrecisionModel();
         private float _precisionPerHit;
         private float _markSeconds;
+        private BuildModifiers _build = BuildModifiers.Identity;
+
+        public void SetBuild(in BuildModifiers build) => _build = build;
 
         /// <summary>Called by projectiles when they despawn: did the shot connect?</summary>
         public void ReportShot(bool hit)
@@ -89,7 +92,7 @@ namespace Starfall.Player
             else Precision.RegisterMiss();
         }
 
-        private float FireRate => Mathf.Max(0.1f, _loadout.FireRateMultiplier * ExternalFireRateMultiplier);
+        private float FireRate => Mathf.Max(0.1f, _loadout.FireRateMultiplier * ExternalFireRateMultiplier * _build.FireRate);
 
         public void Tick(bool fireHeld, float damageMultiplier)
         {
@@ -153,18 +156,21 @@ namespace Starfall.Player
             var levelData = def.GetLevel(_level);
             Vector2 origin = muzzle != null ? (Vector2)muzzle.position : (Vector2)transform.position;
             float baseDamage = def.Damage * levelData.DamageMultiplier * damageMultiplier * _loadout.DamageMultiplier * extraDamageMultiplier
-                               * Precision.Multiplier(_precisionPerHit, FactionRules.PrecisionCap);
-            float lifetime = def.ProjectileLifetime * _loadout.RangeMultiplier;
+                               * Precision.Multiplier(_precisionPerHit, FactionRules.PrecisionCap) * _build.Damage;
+            float lifetime = def.ProjectileLifetime * _loadout.RangeMultiplier * _build.Range;
 
             Transform homingTarget = def.Homing ? FindNearestEnemy(origin) : null;
 
             var shots = levelData.Shots;
-            for (int i = 0; i < shots.Length; i++)
+            int total = shots.Length + Mathf.Max(0, _build.ExtraShots);
+            for (int i = 0; i < total; i++)
             {
-                float damage = DamageInfo.ApplyCritical(baseDamage, Mathf.Clamp01(_loadout.CritChance + ExternalCritBonus), _loadout.CritMultiplier, Random.value, out bool crit);
+                // Extra shots from the Wide Spread mod fan out beyond the level pattern.
+                ShotSpec shot = i < shots.Length ? shots[i] : new ShotSpec(0f, (i - shots.Length + 1) * 16f * ((i - shots.Length) % 2 == 0 ? -1f : 1f));
+                float damage = DamageInfo.ApplyCritical(baseDamage, Mathf.Clamp01(_loadout.CritChance + ExternalCritBonus + _build.CritChance), _loadout.CritMultiplier, Random.value, out bool crit);
                 var spec = new ProjectileSpec
                 {
-                    Speed = def.ProjectileSpeed,
+                    Speed = def.ProjectileSpeed * _build.ProjectileSpeed,
                     Damage = damage,
                     Lifetime = lifetime,
                     Scale = def.ProjectileScale * scaleMultiplier * (crit ? 1.35f : 1f),
@@ -172,7 +178,7 @@ namespace Starfall.Player
                     Faction = Faction.Player,
                     Source = DamageSource.Player,
                     Type = def.DamageType,
-                    Pierce = def.Pierce,
+                    Pierce = def.Pierce + _build.Pierce,
                     Homing = def.Homing,
                     TurnRateDegrees = def.HomingTurnRate,
                     HomingTarget = homingTarget,
@@ -181,8 +187,8 @@ namespace Starfall.Player
                     SplashRadius = def.SplashRadius,
                     MarkSeconds = _markSeconds,
                 };
-                Vector2 dir = ProjectileLauncher.Rotate(Vector2.up, shots[i].Angle);
-                Vector2 pos = origin + new Vector2(shots[i].OffsetX, 0f);
+                Vector2 dir = ProjectileLauncher.Rotate(Vector2.up, shot.Angle);
+                Vector2 pos = origin + new Vector2(shot.OffsetX, 0f);
                 ProjectileLauncher.Fire(_pools, def.ProjectilePrefab, spec, pos, dir);
             }
 

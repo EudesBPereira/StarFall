@@ -106,9 +106,17 @@ namespace Starfall.Combat
                 }
             }
 
-            transform.position += (Vector3)(_direction * (_spec.Speed * dt));
+            bool moving = _spec.StopAfterSeconds <= 0f || _age < _spec.StopAfterSeconds;
+            if (moving) transform.position += (Vector3)(_direction * (_spec.Speed * dt));
+            else if (body != null) body.transform.localScale = Vector3.one * (1f + 0.15f * Mathf.Sin(_age * 18f));
 
-            if (_age >= _spec.Lifetime || (_area != null && _area.IsOutside(transform.position, _area.DespawnMargin)))
+            if (_age >= _spec.Lifetime)
+            {
+                if (_spec.DetonateOnExpire && _spec.SplashRadius > 0f) ApplySplash(transform.position, null);
+                Despawn();
+                return;
+            }
+            if (_area != null && _area.IsOutside(transform.position, _area.DespawnMargin))
                 Despawn();
         }
 
@@ -166,7 +174,7 @@ namespace Starfall.Combat
             var info = new DamageInfo(_spec.Damage * 0.5f, _spec.Source, DamageType.Explosive);
             for (int i = 0; i < n; i++)
             {
-                if (!SplashBuffer[i].TryGetComponent<IDamageable>(out var d) || ReferenceEquals(d, primary) || d.Faction == _spec.Faction) continue;
+                if (!SplashBuffer[i].TryGetComponent<IDamageable>(out var d) || (primary != null && ReferenceEquals(d, primary)) || d.Faction == _spec.Faction) continue;
                 d.ApplyDamage(info, SplashBuffer[i].ClosestPoint(center));
             }
             if (_vfx != null) _vfx.SpawnExplosion(center, _spec.SplashRadius * 0.9f, _spec.Color);
@@ -190,6 +198,7 @@ namespace Starfall.Combat
         void IPoolable.OnDespawned()
         {
             _launched = false;
+            if (body != null) body.transform.localScale = Vector3.one;
             if (_spec.Faction == Faction.Enemy) ActiveEnemyProjectiles.Remove(this);
             _spec.HomingTarget = null;
             if (body != null) body.sprite = _defaultSprite;

@@ -9,5 +9,7 @@ namespace Starfall.Core
         PlayerDown = 4,
         Victory = 5,
         GameOver = 6,
+        /// <summary>Stage frozen while the player picks a temporary build mod.</summary>
+        BuildChoice = 7,
     }
 }

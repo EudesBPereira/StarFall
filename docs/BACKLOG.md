@@ -98,10 +98,10 @@ Concluídos e removidos do backlog: cinco naves, sete armas, classe Elite, mini-
 | SR-BAL-001 | Reequilibrar Nova-X | P0 | QA | Horizontal; falta teste com jogadores |
 | SR-ECO-001 | Separar créditos de score | P0 | QA | Nova fórmula testada e simulada |
 | SR-QA-001 | Teste em aparelhos reais | P0 | Backlog | Adiado pelo responsável para o produto completo (D-030) |
-| — | Ranks D–SSS | P1 | QA | Limiares por fase; partes de chefe e dificuldade reservados |
+| — | Ranks D–SSS | P1 | QA | Limiares por fase; partes de chefe pontuam (D-034); dificuldade reservada |
 | — | Tutorial do núcleo | P0 | In Progress | Dicas contextuais na fase 1 (risco, overdrive, graze); faltam desviar/upgrade/rank |
-| — | Dez fases / dez chefes | P1 | Backlog | Fase E |
-| — | Builds temporárias | P1 | Backlog | Fase E |
+| — | Dez fases / dez chefes | P1 | QA | Dez setores e dez chefes com mecânica própria (D-032, D-033); validação de conteúdo automatizada |
+| — | Builds temporárias | P1 | QA | Doze módulos, sorteio com semente, painel de escolha (D-035) |
 | SR-MON-001/002/003 | Ads, Pacote Comandante, loja cosmética | P1 | Backlog | Fase F; SDK atrás de interface |
 | — | Analytics, política de privacidade com coleta | P1 | Backlog | Fase F |
 | — | Ranking online | P2 | Backlog | Modelo de dados já carimba seed, versão de balanceamento e revive |

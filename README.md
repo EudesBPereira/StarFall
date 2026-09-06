@@ -2,7 +2,7 @@
 
 Shoot'em up 2D vertical para **Android e iOS**, feito em **Unity 6**. No ano de 2237 a humanidade enfrenta The Swarm; você pilota uma das cinco naves da frota terrestre por cinco setores até o Omega Core, a inteligência por trás da invasão.
 
-Campanha de 5 fases com 4 chefes e 5 mini-chefes, 7 armas, 5 naves, árvore de upgrades permanente, ranking local, conquistas e os modos Sobrevivência, Boss Rush e Desafio Diário.
+Campanha de 10 fases com 10 chefes e mini-chefes, 8 armas, 7 naves em 3 facções, Zona de Risco, Overdrive, graze, builds temporárias, árvore de upgrades permanente, ranking local, conquistas e os modos Sobrevivência, Boss Rush e Desafio Diário.
 
 Documentação: [Plano Mestre STAR RISK](docs/product/IMPLEMENTATION_MASTER_PLAN.md) · [Estado do projeto e caminho até as lojas](docs/RELEASE_STATUS.md) · [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Balanceamento](docs/BALANCING.md) · [Checklist de QA](docs/QA_CHECKLIST.md) · [Backlog](docs/BACKLOG.md) · [Blueprint original](blueprint.md)
 
@@ -97,7 +97,7 @@ Todos os sprites são formas procedurais originais; todo o áudio é sintetizado
 
 | Modo | Como funciona |
 |---|---|
-| Campanha | 5 fases em ordem; cada uma desbloqueia a seguinte e guarda a melhor pontuação |
+| Campanha | 10 fases em ordem com ranks D–SSS; cada uma desbloqueia a seguinte e guarda a melhor pontuação e rank |
 | Sobrevivência | Ondas procedurais infinitas, dificuldade crescente, mini-chefe a cada 8 ondas |
 | Boss Rush | Os quatro chefes principais em sequência; desbloqueia ao derrotar qualquer chefe |
 | Desafio Diário | Semente derivada da data: mesma sequência para todos no dia, inimigos mais rápidos e menos drops |

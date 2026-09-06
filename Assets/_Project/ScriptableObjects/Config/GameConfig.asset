@@ -16,11 +16,16 @@ MonoBehaviour:
   MainMenuScene: MainMenu
   GameplayScene: Gameplay
   Stages:
-  - {fileID: 11400000, guid: 30be411063f6c9741b63b53134ee4f50, type: 2}
-  - {fileID: 11400000, guid: 6bde68cb39c945847b40e8d5814e65f0, type: 2}
-  - {fileID: 11400000, guid: 3a84dd4d4bb5c3240bf6cac36cc5ec47, type: 2}
-  - {fileID: 11400000, guid: ffefcea07b979e7428a7209b6f9523d7, type: 2}
-  - {fileID: 11400000, guid: e9b7a7591d79596469e15be2ac5f3d64, type: 2}
+  - {fileID: 11400000, guid: a25b55c09c7a3d749b00a2bc0c6a7515, type: 2}
+  - {fileID: 11400000, guid: 39f7363b427008f4683820e66dd4da2c, type: 2}
+  - {fileID: 11400000, guid: a48edb2a4d3905a4e84cfbb3c3d37d8c, type: 2}
+  - {fileID: 11400000, guid: 77d1b79671ec24b4ab044f7fd6c896b1, type: 2}
+  - {fileID: 11400000, guid: 4256d02d34a492f48b131fc3a961c5ae, type: 2}
+  - {fileID: 11400000, guid: 3a210dc05b8ed144e9d5779916867bc4, type: 2}
+  - {fileID: 11400000, guid: d0f25c404c6fdf14c90edb46b6154142, type: 2}
+  - {fileID: 11400000, guid: 5bff0c6b7c0d61748856f860ba47cbc2, type: 2}
+  - {fileID: 11400000, guid: 67c683e0bd54e3c4e80a2f315a829525, type: 2}
+  - {fileID: 11400000, guid: 75c4be2c6e062c6469e7ff28241ae47b, type: 2}
   StartingLives: 3
   MaxLives: 9
   Ships:
@@ -45,6 +50,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 59b4ebb1e1c076949b0b996dc44d51aa, type: 2}
   - {fileID: 11400000, guid: 083924980c292b34299822877fa03d02, type: 2}
   - {fileID: 11400000, guid: d60a853a50cb78f42892f02cb138bb3d, type: 2}
+  - {fileID: 11400000, guid: 1b6a4015f4d5c234888275ce0d2a2fb9, type: 2}
+  - {fileID: 11400000, guid: 996fc4f4918fbb8498c08e98ea58b29d, type: 2}
+  - {fileID: 11400000, guid: 8729a5df0fbfb9047a517124c7639450, type: 2}
+  - {fileID: 11400000, guid: 71d63ee1bf759554080ab02cab0aedd6, type: 2}
+  - {fileID: 11400000, guid: 81d5148829b894c499c5adb1aeffe3c1, type: 2}
+  - {fileID: 11400000, guid: b221674882b28604cbe3bc2f9a36fa15, type: 2}
   SurvivalLook: {fileID: 11400000, guid: ce73c1759e417ef43a988f684faadc48, type: 2}
   ProceduralEnemies:
   - {fileID: 11400000, guid: 1766c11a60bc3874f92b0988fda61ebf, type: 2}
@@ -61,6 +72,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c6263f1dc58fc3a4cb5d9a5cfc5846a4, type: 2}
   - {fileID: 11400000, guid: 5a548cf0d8b36ad4b97d5150e945d864, type: 2}
   - {fileID: 11400000, guid: ff8d02e2fcc4915408752a88a5039f6e, type: 2}
+  - {fileID: 11400000, guid: 5e7304835360be04aa4f8cb9f970af21, type: 2}
+  - {fileID: 11400000, guid: df4dd2f3e8629704ab968230d241421e, type: 2}
+  - {fileID: 11400000, guid: eb875f3ee82fb6e489de8f1491f32a65, type: 2}
   DailyEnemySpeedMultiplier: 1.15
   DailyDropChanceMultiplier: 0.6
   RespawnDelay: 1.5

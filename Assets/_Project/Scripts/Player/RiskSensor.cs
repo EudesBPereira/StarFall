@@ -30,6 +30,8 @@ namespace Starfall.Player
         private PlayerShip _ship;
         private float _sampleTimer;
         private float _overdriveGain = 1f;
+        /// <summary>Overdrive gain multiplier from the temporary build (Risk Tuner). 1 = none.</summary>
+        public float BuildGainMultiplier { get; set; } = 1f;
         private bool _enabledForRun;
         private int _threatMask;
 
@@ -89,7 +91,7 @@ namespace Starfall.Player
         {
             if (!_enabledForRun || _ship == null || !_ship.IsAlive || !_ship.ControlEnabled) return;
             float dt = Time.deltaTime;
-            _overdrive.Tick(_risk.State, dt * _overdriveGain);
+            _overdrive.Tick(_risk.State, dt * _overdriveGain * BuildGainMultiplier);
             _risk.OverdriveActive = _overdrive.IsActive;
             if (_risk.State >= RiskState.Danger) SecondsInDanger += dt;
 
@@ -175,6 +177,10 @@ namespace Starfall.Player
             _overdrive.OnGraze();
             GameSignals.RaiseGraze(center, _risk.Multiplier);
         }
+
+        private void OnEnable() => GameSignals.BossPartDestroyed += OnBossPartDestroyed;
+        private void OnDisable() => GameSignals.BossPartDestroyed -= OnBossPartDestroyed;
+        private void OnBossPartDestroyed(Vector2 position, int points) { if (_enabledForRun) _overdrive.OnBossPartDestroyed(); }
 
         // ---- Hooks from the ship -------------------------------------------------------------------
 

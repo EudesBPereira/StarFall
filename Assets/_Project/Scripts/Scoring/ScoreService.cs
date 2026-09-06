@@ -34,6 +34,7 @@ namespace Starfall.Scoring
             GameSignals.PlayerDamaged += OnPlayerDamaged;
             GameSignals.Graze += OnGraze;
             GameSignals.GameStateChanged += OnGameStateChanged;
+            GameSignals.BossPartDestroyed += OnBossPartDestroyed;
         }
 
         private void OnDisable()
@@ -42,6 +43,14 @@ namespace Starfall.Scoring
             GameSignals.PlayerDamaged -= OnPlayerDamaged;
             GameSignals.Graze -= OnGraze;
             GameSignals.GameStateChanged -= OnGameStateChanged;
+            GameSignals.BossPartDestroyed -= OnBossPartDestroyed;
+        }
+
+        private void OnBossPartDestroyed(Vector2 position, int points)
+        {
+            int awarded = Model.RegisterPart(points, CurrentRiskMultiplier);
+            var ctx = GameplayContext.Current;
+            if (awarded > 0 && ctx != null && ctx.Vfx != null) ctx.Vfx.SpawnFloatingText(position + Vector2.up * 0.9f, $"+{awarded:N0}", new Color(1f, 0.85f, 0.3f), 0.8f);
         }
 
         private void Update()

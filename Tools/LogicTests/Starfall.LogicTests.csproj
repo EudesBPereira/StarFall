@@ -19,7 +19,8 @@
 
   <ItemGroup>
     <Compile Include="..\..\Assets\_Project\Scripts\Logic\**\*.cs" Link="Logic\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="..\..\Assets\_Project\Tests\EditMode\**\*.cs" Link="Tests\%(RecursiveDir)%(Filename)%(Extension)" />
+    <!-- UnityOnly tests use AssetDatabase and run exclusively inside the Editor -->
+    <Compile Include="..\..\Assets\_Project\Tests\EditMode\**\*.cs" Exclude="..\..\Assets\_Project\Tests\EditMode\UnityOnly\**\*.cs" Link="Tests\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>

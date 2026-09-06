@@ -55,6 +55,8 @@ namespace Starfall.Core
         public static event Action<bool> OverdriveChanged;
         public static event Action<float, bool> OverdriveMeter;
         public static event Action<Vector2, float> Graze;
+        public static event Action<Vector2, int> BossPartDestroyed;
+        public static event Action<BuildModId> BuildModChosen;
 
         public static void RaiseEnemyDestroyed(in EnemyKilledInfo info) => EnemyDestroyed?.Invoke(info);
         public static void RaisePlayerDamaged(in DamageInfo info, in DamageResult result) => PlayerDamaged?.Invoke(info, result);
@@ -78,6 +80,8 @@ namespace Starfall.Core
         public static void RaiseOverdriveChanged(bool active) => OverdriveChanged?.Invoke(active);
         public static void RaiseOverdriveMeter(float fraction, bool active) => OverdriveMeter?.Invoke(fraction, active);
         public static void RaiseGraze(Vector2 position, float riskMultiplier) => Graze?.Invoke(position, riskMultiplier);
+        public static void RaiseBossPartDestroyed(Vector2 position, int points) => BossPartDestroyed?.Invoke(position, points);
+        public static void RaiseBuildModChosen(BuildModId id) => BuildModChosen?.Invoke(id);
 
         /// <summary>Drops every subscriber. Used by the Boot scene and by tests.</summary>
         public static void ClearAll()
@@ -104,6 +108,8 @@ namespace Starfall.Core
             OverdriveChanged = null;
             OverdriveMeter = null;
             Graze = null;
+            BossPartDestroyed = null;
+            BuildModChosen = null;
         }
     }
 }

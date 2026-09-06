@@ -9,12 +9,14 @@ using UnityEngine;
 namespace Starfall.Waves
 {
     /// <summary>
-    /// Executes a stage. Campaign: the ordered <see cref="StageDefinition"/> events. Survival / Daily: endless
-    /// procedural waves from <see cref="ProceduralWaves"/>. Boss Rush: every main boss in sequence.
-    /// Raises <see cref="GameSignals.StageCompleted"/> when a finite run ends.
+    /// Executes a stage. Campaign: the ordered <see cref="StageDefinition"/> events, with seeded variants, random
+    /// encounters, hazards and build drafts (plan §7.5). Survival / Daily: endless procedural waves. Boss Rush:
+    /// every main boss in sequence. Raises <see cref="GameSignals.StageCompleted"/> when a finite run ends.
     /// </summary>
     public sealed class StageDirector : MonoBehaviour
     {
+        [SerializeField] internal HazardController hazards;
+
         private StageDefinition _stage;
         private GameplayContext _ctx;
         private Coroutine _routine;
@@ -31,6 +33,8 @@ namespace Starfall.Waves
         /// <summary>1-based wave number in endless modes (0 in campaign).</summary>
         public int Wave => _wave;
         public BossController ActiveBoss => _activeBoss;
+        /// <summary>Set by the flow controller: yields until the player picked a build mod.</summary>
+        public System.Func<IEnumerator> BuildDraftRequest { get; set; }
 
         public void Begin(StageDefinition stage, GameplayContext ctx)
         {
@@ -60,6 +64,7 @@ namespace Starfall.Waves
                         _running = false;
                         return;
                     }
+                    ctx.Spawner.StatMultiplier = Mathf.Max(0.1f, stage.EnemyStatMultiplier);
                     _routine = StartCoroutine(RunCampaign());
                     break;
             }
@@ -80,6 +85,8 @@ namespace Starfall.Waves
         private IEnumerator RunCampaign()
         {
             var events = _stage.Events;
+            int seed = GameSession.Seed;
+            int stageIndex = GameSession.CurrentStageIndex;
             for (_eventIndex = 0; _eventIndex < events.Length; _eventIndex++)
             {
                 var ev = events[_eventIndex];
@@ -87,13 +94,27 @@ namespace Starfall.Waves
                 switch (ev.Type)
                 {
                     case StageEventType.Wave:
-                        if (ev.Wave != null)
+                    {
+                        var wave = PickWave(ev, seed, stageIndex, _eventIndex);
+                        if (wave != null)
                         {
                             _wave++;
                             GameSignals.RaiseWaveStarted(_wave);
-                            yield return RunWave(ev.Wave);
+                            yield return RunWave(wave);
                         }
                         break;
+                    }
+                    case StageEventType.RandomEncounter:
+                    {
+                        if (!StageVariation.Roll(seed, stageIndex, _eventIndex, ev.Chance)) break;
+                        var wave = PickWave(ev, seed, stageIndex, _eventIndex);
+                        if (wave == null) break;
+                        GameSignals.RaiseStageMessage(string.IsNullOrEmpty(ev.Message) ? "AMBUSH!" : ev.Message, 1.4f);
+                        _wave++;
+                        GameSignals.RaiseWaveStarted(_wave);
+                        yield return RunWave(wave);
+                        break;
+                    }
                     case StageEventType.Delay:
                         yield return new WaitForSeconds(ev.Seconds);
                         break;
@@ -102,6 +123,13 @@ namespace Starfall.Waves
                         break;
                     case StageEventType.AsteroidField:
                         SetAsteroidField(ev.Flag);
+                        break;
+                    case StageEventType.Hazard:
+                        if (hazards != null)
+                            yield return hazards.Run(ev.Hazard, StageVariation.Value(seed, stageIndex, _eventIndex), _ctx);
+                        break;
+                    case StageEventType.BuildChoice:
+                        yield return OfferBuild();
                         break;
                     case StageEventType.MiniBoss:
                     case StageEventType.Boss:
@@ -113,6 +141,29 @@ namespace Starfall.Waves
             SetAsteroidField(false);
             _running = false;
             GameSignals.RaiseStageCompleted();
+        }
+
+        /// <summary>Wave or one of its seeded variants (partially random stages).</summary>
+        private static WaveDefinition PickWave(StageEvent ev, int seed, int stageIndex, int eventIndex)
+        {
+            int variants = ev.Variants != null ? ev.Variants.Length : 0;
+            if (variants == 0) return ev.Wave;
+            int total = (ev.Wave != null ? 1 : 0) + variants;
+            int pick = StageVariation.PickVariant(seed, stageIndex, eventIndex, total);
+            if (ev.Wave != null)
+            {
+                if (pick == 0) return ev.Wave;
+                pick--;
+            }
+            return pick >= 0 && pick < variants ? ev.Variants[pick] : ev.Wave;
+        }
+
+        private IEnumerator OfferBuild()
+        {
+            if (BuildDraftRequest == null) yield break;
+            float wait = 1.5f;
+            while (wait > 0f && _ctx.Enemies.BlockingCount > 0) { wait -= Time.deltaTime; yield return null; }
+            yield return BuildDraftRequest();
         }
 
         private IEnumerator RunWave(WaveDefinition wave)
@@ -200,6 +251,7 @@ namespace Starfall.Waves
                     var mini = config.SurvivalMiniBosses[(_wave / config.SurvivalMiniBossEvery - 1) % config.SurvivalMiniBosses.Length];
                     yield return RunBoss(mini, null);
                 }
+                if (_wave > 1 && _wave % 5 == 1) yield return OfferBuild();
 
                 ProceduralWaves.Generate(seed, waveIndex, _spawnBuffer);
                 for (int s = 0; s < _spawnBuffer.Count; s++)
@@ -237,6 +289,7 @@ namespace Starfall.Waves
                     _wave = i + 1;
                     GameSignals.RaiseWaveStarted(_wave);
                     yield return RunBoss(bosses[i], null);
+                    if (i % 3 == 2 && i < bosses.Length - 1) yield return OfferBuild();
                     yield return new WaitForSeconds(1.5f);
                 }
             }

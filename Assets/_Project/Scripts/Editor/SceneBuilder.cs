@@ -220,13 +220,14 @@ namespace Starfall.EditorTools
         private static MissionPanel BuildMissionPanel(Transform canvas, ContentFactory.DataSet data)
         {
             var root = UiBuilder.CreatePanelRoot(canvas, "MissionPanel", out var column, 900f);
+            column.GetComponent<VerticalLayoutGroup>().spacing = 8f;
             var panel = root.gameObject.AddComponent<MissionPanel>();
             UiBuilder.AddColumnText(column, "Title", "SELECT MISSION", 60f, UiBuilder.Accent, 84f, FontStyles.Bold);
             UiBuilder.AddColumnText(column, "CampaignLabel", "CAMPAIGN", 30f, UiBuilder.Accent2, 40f, FontStyles.Bold);
             int count = data.Stages.Count;
             panel.stageRows = new ListRow[count];
             for (int i = 0; i < count; i++)
-                panel.stageRows[i] = UiBuilder.CreateListRow(column, "Stage" + i, new Vector2(860f, 84f), false);
+                panel.stageRows[i] = UiBuilder.CreateListRow(column, "Stage" + i, new Vector2(860f, 66f), false);
             UiBuilder.AddColumnText(column, "ModesLabel", "EXTRA MODES", 30f, UiBuilder.Accent2, 40f, FontStyles.Bold);
             var modes = UiBuilder.CreateRect(column, "Modes");
             var modesLayout = modes.gameObject.AddComponent<HorizontalLayoutGroup>();
@@ -417,6 +418,25 @@ namespace Starfall.EditorTools
             var vignette = vignetteGo.AddComponent<RiskVignette>();
             vignette.ring = vignetteRing;
 
+            // Environmental hazards (plan §7.5): telegraphed band + fog overlay.
+            var hazardGo = new GameObject("Hazards");
+            hazardGo.transform.SetParent(services.transform, false);
+            var hazardController = hazardGo.AddComponent<HazardController>();
+            var bandGo = new GameObject("FlareBand");
+            bandGo.transform.SetParent(hazardGo.transform, false);
+            var bandSr = bandGo.AddComponent<SpriteRenderer>();
+            bandSr.sprite = art.Pixel;
+            bandSr.enabled = false;
+            var fogGo = new GameObject("PulseFog");
+            fogGo.transform.SetParent(hazardGo.transform, false);
+            var fogSr = fogGo.AddComponent<SpriteRenderer>();
+            fogSr.sprite = art.Dot;
+            fogSr.enabled = false;
+            hazardController.band = bandSr;
+            hazardController.fogOverlay = fogSr;
+            director.hazards = hazardController;
+            ctx.hazards = hazardController;
+
             // Player
             var playerGo = (GameObject)PrefabUtility.InstantiatePrefab(prefabs.Player);
             playerGo.name = "Player";
@@ -458,9 +478,11 @@ namespace Starfall.EditorTools
             var victory = BuildVictoryPanel(canvas.transform);
             var gameOver = BuildGameOverPanel(canvas.transform);
             var settings = CreateSettingsPanel(canvas.transform);
+            var draft = BuildDraftPanelUi(canvas.transform);
             CreateToast(canvas.transform);
 
             flow.ctx = ctx;
+            flow.buildDraftPanel = draft;
             flow.hud = hudPresenter;
             flow.briefingPanel = briefing;
             flow.pausePanel = pause;
@@ -575,6 +597,20 @@ namespace Starfall.EditorTools
             // Bottom-right: special indicator
             view.specialText = UiBuilder.CreateText(root, "Special", "", 30f, new Color(1f, 0.9f, 0.4f), TextAlignmentOptions.Right, FontStyles.Bold);
             UiBuilder.Place(view.specialText.rectTransform, new Vector2(1f, 0f), new Vector2(1f, 0f), new Vector2(-margin, margin + 8f), new Vector2(300f, 60f));
+        }
+
+        private static BuildDraftPanel BuildDraftPanelUi(Transform canvas)
+        {
+            var root = UiBuilder.CreatePanelRoot(canvas, "BuildDraftPanel", out var column, 900f);
+            var panel = root.gameObject.AddComponent<BuildDraftPanel>();
+            panel.titleText = UiBuilder.AddColumnText(column, "Title", "CHOOSE A MODULE", 56f, UiBuilder.Accent, 76f, FontStyles.Bold);
+            panel.currentBuildText = UiBuilder.AddColumnText(column, "Current", "", 24f, new Color(0.7f, 0.85f, 1f), 60f);
+            panel.rows = new ListRow[BuildMods.DraftSize];
+            for (int i = 0; i < panel.rows.Length; i++)
+                panel.rows[i] = UiBuilder.CreateListRow(column, "Offer" + i, new Vector2(860f, 110f), false);
+            panel.skipButton = UiBuilder.CreateButton(column, "Skip", "SKIP", new Vector2(420f, 80f), 32f);
+            panel.firstSelected = panel.rows[0].gameObject;
+            return panel;
         }
 
         private static BriefingPanel BuildBriefingPanel(Transform canvas)

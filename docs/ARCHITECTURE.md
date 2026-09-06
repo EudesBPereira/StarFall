@@ -161,3 +161,16 @@ Nenhuma dessas classes referencia `UnityEngine`; todas têm teste em `Tests/Edit
 - `UltimateController` — três execuções: Orbital Strike, Spore Swarm (esporos buscadores) e EMP Burst (stun + marca + limpeza).
 - `PlayerShip` — lifesteal por sinal de abate; liga o drone conforme a nave.
 - Conteúdo: `ContentFactory` cria Symbiont, Nexus e Spore Launcher; `PlaceholderArt` gera as silhuetas orgânica e hexagonal, o drone e o esporo.
+
+---
+
+## Fase E — Conteúdo (dez fases, dez chefes, builds temporárias)
+
+- `Logic/StageVariation` — hash estável (seed, fase, evento) para escolhas reproduzíveis: variante de onda, encontro aleatório, posição de hazard.
+- `Logic/BuildMods` + `Player/BuildState` — catálogo de doze módulos temporários, sorteio com semente sem repetição e limite de pilhas, e o estado por fase com os multiplicadores agregados.
+- `Waves/StageDefinition` — eventos `Hazard`, `BuildChoice` e `RandomEncounter`; `Variants` por evento; `EnemyStatMultiplier`, nomes de chefe/mini-chefe.
+- `Waves/HazardController` — solar flare (faixa telegrafada), chuva de meteoros e pulso de nebulosa; o diretor aguarda o hazard terminar.
+- `Waves/StageDirector` — escolhe variantes por semente, rola encontros, executa hazards, pede o sorteio de build ao fluxo (`BuildDraftRequest`) e aplica o multiplicador de atributos da fase. Modos infinitos sorteiam a cada cinco ondas; Boss Rush a cada três chefes.
+- `Bosses/BossPart` + `BossDefinition.Parts` — partes destrutíveis com vida própria que desligam ataques ou blindam o núcleo; `BossController` recompõe a invulnerabilidade (entrada, transformação, blindagem) e ignora runners desligados. Novos padrões `Mines` (projétil que para e detona) e `RiftSpawn` (fendas telegrafadas), movimentos `SideSweep` e `Blink`, formações `LeftEdge/RightEdge/Pincer/TopColumn/TopArc`.
+- `UI/BuildDraftPanel` + `GameState.BuildChoice` — congela o jogo e oferece três módulos; `PlayerShip.ApplyBuild` empurra os multiplicadores para arma, Ultimate, sensor de risco, escudo e ímã de itens.
+- `Tests/EditMode/UnityOnly/ContentValidationTests` — validação estática do conteúdo gerado (dez fases, dez chefes, limites de velocidade/intervalo/telegraph). Fica fora do `dotnet test` porque usa `AssetDatabase`.
