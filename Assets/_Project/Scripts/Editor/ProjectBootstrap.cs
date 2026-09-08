@@ -53,6 +53,7 @@ namespace Starfall.EditorTools
             ConfigureLayersAndPhysics();
             ConfigureInputHandler();
             ConfigurePlayerSettings();
+            FinalAssets.TryApplyIcon();
             EnsureTmpResources();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -74,6 +75,8 @@ namespace Starfall.EditorTools
             prefabs.Player = CreatePlayerPrefab(art, materials, data);
             SceneBuilder.BuildAll(art, data, prefabs);
             ConfigureBuildSettings(data.Config);
+            FinalAssets.TryApplyIcon();
+            Debug.Log($"[Starfall] Final art sprites in use: {FinalAssets.SpritesReplaced}");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log("[Starfall] GenerateAll: done");

@@ -27,11 +27,11 @@ Assets/_Project/Scripts/
 Assets/_Project/{ScriptableObjects,Prefabs,Scenes,Art/Placeholders}  gerados pelo bootstrap
 Assets/_Project/Tests/{EditMode,EditMode/UnityOnly (usa AssetDatabase, fora do dotnet),PlayMode}
 Tools/LogicTests/   projeto `dotnet test` que compila Scripts/Logic + Tests/EditMode
-docs/               RELEASE_STATUS (o que existe e o que falta p/ as lojas), ARCHITECTURE,
+docs/               ASSET_SPEC (arte/áudio finais: nomes, pastas, formatos), RELEASE_STATUS (o que existe e o que falta p/ as lojas), ARCHITECTURE,
                     DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG, GDD_COMPLIANCE
 ```
 
-Cenas, prefabs, sprites placeholder e ScriptableObjects são **gerados por script** (`Starfall → Run Full Bootstrap`). Não escreva YAML de cena/prefab à mão. Re-executar `GenerateAll` sobrescreve valores de balanceamento dos assets gerados (D-006): mude os valores em `ContentFactory.CreateData` ou não re-execute.
+Cenas, prefabs, sprites placeholder e ScriptableObjects são **gerados por script** (`Starfall → Run Full Bootstrap`). Arte e áudio finais entram por `Assets/_Project/Art/Final` e `Audio/Final` com os nomes de `docs/ASSET_SPEC.md` (`FinalAssets` substitui o placeholder de mesmo nome no bootstrap). Não escreva YAML de cena/prefab à mão. Re-executar `GenerateAll` sobrescreve valores de balanceamento dos assets gerados (D-006): mude os valores em `ContentFactory.CreateData` ou não re-execute.
 
 ## Comandos
 

@@ -695,7 +695,8 @@ namespace Starfall.EditorTools
             data.Config = config;
 
             var audio = ProjectBootstrap.CreateOrLoad<AudioLibrary>(D("Audio", "AudioLibrary"));
-            audio.UseSynthesizedPlaceholders = true;
+            audio.UseSynthesizedPlaceholders = true; // missing slots still fall back to synthesized clips
+            FinalAssets.FillAudioLibrary(audio);
             data.Audio = audio;
 
             AssetDatabase.SaveAssets();
@@ -762,7 +763,7 @@ namespace Starfall.EditorTools
             s.UltimatePowerMultiplier = ultPower;
             s.Weapon = weapon;
             s.Sprite = sprite;
-            s.Tint = tint;
+            s.Tint = FinalAssets.Tint(sprite, tint);
             s.ThrusterColor = thruster;
             s.HitboxRadius = 0.28f;
             s.VisualScale = 1f;
@@ -820,7 +821,7 @@ namespace Starfall.EditorTools
         {
             e.DisplayName = name;
             e.Sprite = sprite;
-            e.Tint = tint;
+            e.Tint = FinalAssets.Tint(sprite, tint);
             e.Scale = scale;
             e.ColliderRadius = radius;
             e.MaxHull = hull;
@@ -912,7 +913,7 @@ namespace Starfall.EditorTools
             b.name = asset;
             b.DisplayName = title;
             b.Title = title;
-            b.Tint = tint;
+            b.Tint = FinalAssets.IsFinal(source.Sprite) ? Color.Lerp(Color.white, tint, 0.35f) : tint;
             b.MaxHull = hull;
             b.ComponentReward = components;
             var phases = new BossPhase[source.Phases.Length];

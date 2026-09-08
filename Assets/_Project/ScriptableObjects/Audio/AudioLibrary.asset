@@ -13,66 +13,6 @@ MonoBehaviour:
   m_Name: AudioLibrary
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Audio.AudioLibrary
   UseSynthesizedPlaceholders: 1
-  Sfx:
-  - Id: 0
-    Clips: []
-    Volume: 1
-  - Id: 1
-    Clips: []
-    Volume: 1
-  - Id: 2
-    Clips: []
-    Volume: 1
-  - Id: 3
-    Clips: []
-    Volume: 1
-  - Id: 4
-    Clips: []
-    Volume: 1
-  - Id: 5
-    Clips: []
-    Volume: 1
-  - Id: 6
-    Clips: []
-    Volume: 1
-  - Id: 7
-    Clips: []
-    Volume: 1
-  - Id: 8
-    Clips: []
-    Volume: 1
-  - Id: 9
-    Clips: []
-    Volume: 1
-  - Id: 10
-    Clips: []
-    Volume: 1
-  - Id: 11
-    Clips: []
-    Volume: 1
-  - Id: 12
-    Clips: []
-    Volume: 1
-  - Id: 13
-    Clips: []
-    Volume: 1
-  Music:
-  - Id: 0
-    Clip: {fileID: 0}
-    Volume: 1
-  - Id: 1
-    Clip: {fileID: 0}
-    Volume: 1
-  - Id: 2
-    Clip: {fileID: 0}
-    Volume: 1
-  - Id: 3
-    Clip: {fileID: 0}
-    Volume: 1
-  - Id: 4
-    Clip: {fileID: 0}
-    Volume: 1
-  - Id: 5
-    Clip: {fileID: 0}
-    Volume: 1
+  Sfx: []
+  Music: []
   Ambient: []

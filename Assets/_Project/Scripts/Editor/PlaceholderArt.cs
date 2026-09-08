@@ -28,6 +28,7 @@ namespace Starfall.EditorTools
         public static Set GenerateAll()
         {
             Directory.CreateDirectory(Folder);
+            FinalAssets.ResetCache();
             var set = new Set();
 
             set.Pixel = Save("pixel", 8, (x, y) => -1f, ppu: 100, fullRect: true);
@@ -190,6 +191,8 @@ namespace Starfall.EditorTools
 
         private static Sprite Save(string name, int size, Func<float, float, float> sdf, bool soft = false, int ppu = 100, bool fullRect = false)
         {
+            // Final art (docs/ASSET_SPEC.md) wins over the procedural placeholder when the file exists.
+            if (FinalAssets.TryLoadSprite(name, size, fullRect, out var finalSprite)) return finalSprite;
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
             var pixels = new Color32[size * size];
             float aa = 2.5f / size;

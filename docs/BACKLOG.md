@@ -106,3 +106,14 @@ Concluídos e removidos do backlog: cinco naves, sete armas, classe Elite, mini-
 | — | Analytics, política de privacidade com coleta | P1 | Backlog | Fase F |
 | — | Ranking online | P2 | Backlog | Modelo de dados já carimba seed, versão de balanceamento e revive |
 | — | Fatia de arte final | P0 | Backlog | Fase D |
+
+## Pendências anotadas em 2026-09-08 (a resolver em breve)
+
+| ID | Item | Prioridade | Status | Observação |
+|---|---|---|---|---|
+| SR-BIZ-001 | Escolher a rede de anúncios recompensados | P1 | Blocked | Decisão do responsável; sem ela a fase F usa só o provedor falso de sandbox |
+| SR-BIZ-002 | Definir se haverá analytics e qual fornecedor | P1 | Blocked | Impacta política de privacidade e formulários das lojas |
+| SR-BIZ-003 | Definir preço do Pacote Comandante (remoção de anúncios) | P1 | Blocked | Ver plano §12 |
+| SR-ART-001 | Encomendar arte final (naves, inimigos, chefes, cenários, UI) | P0 | Blocked | Pré-requisito da fase D; lista completa em `docs/ASSET_SPEC.md` (59 imagens) |
+| SR-AUDIO-001 | Encomendar trilhas e efeitos finais | P0 | Blocked | Pré-requisito da fase D; lista completa em `docs/ASSET_SPEC.md` (47 arquivos) |
+| SR-DEV-001 | Fase F: SDK atrás de interface + provedor falso para sandbox | P1 | Backlog | Pode começar antes das decisões acima |

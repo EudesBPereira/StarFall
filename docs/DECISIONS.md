@@ -230,3 +230,10 @@ Recolorações (Destroyer Mk.II, Sentinel-X Mk.II, Widow Prime, Reaper Prime) co
 
 - `HazardController`: solar flare mostra a faixa piscando 1,4 s antes de causar 22 de dano/s por 1,8 s (nunca na linha de spawn); chuva de meteoros avisa 1 s antes; pulso de nebulosa só reduz visibilidade. Isso cumpre "sem situação impossível" do plano §7.5 e a diretriz de dano evitável do GDD.
 - `ContentValidationTests` (só no Editor) verifica dez fases/dez chefes, estrutura por fase, velocidades de projétil ≤ 14 u/s, intervalos ≥ 0,1 s, anéis ≤ 20, laser telegrafado ≥ 0,8 s, invocações com limite e spawns laterais só com inimigos `SideSweep`.
+
+## D-037 — Integração de arte e áudio finais por convenção de nome
+
+- `Assets/_Project/Art/Final/**/<nome>.png` substitui o placeholder de mesmo nome no bootstrap (`FinalAssets.TryLoadSprite`); o importador fixa PPU = 100 × largura ÷ canvas do placeholder, para o sprite ocupar o mesmo tamanho no mundo; filtro Point (pixel art) e sem compressão. Sprites finais recebem tinta branca (já vêm coloridos); elites continuam com a tinta dourada automática.
+- `Assets/_Project/Audio/Final/{SFX,Music,Ambient}/<Id>[_n].{wav,ogg}` preenche `AudioLibrary` (`FinalAssets.FillAudioLibrary`); slots vazios seguem sintetizados.
+- `Art/Final/Fonts/*.ttf` vira a fonte da UI (atlas TMP gerado ao lado); `Art/Final/Icon/icon.png` vira o ícone do app.
+- Especificação completa para o artista e o sound designer em `docs/ASSET_SPEC.md`. Motivo: permitir entregas parciais sem tocar em código nem em YAML.

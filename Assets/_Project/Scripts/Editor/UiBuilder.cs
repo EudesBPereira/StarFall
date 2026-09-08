@@ -22,10 +22,16 @@ namespace Starfall.EditorTools
         public static Material HologramMaterial;
 
         /// <summary>Default TMP font, or null when the TMP essentials are not imported (never throws).</summary>
+        private static TMP_FontAsset _finalFont;
+        private static bool _finalFontChecked;
+
+        /// <summary>Final font from Art/Final/Fonts when delivered, else the TMP default (null when TMP essentials are missing).</summary>
         public static TMP_FontAsset DefaultFont
         {
             get
             {
+                if (!_finalFontChecked) { _finalFont = FinalAssets.TryLoadFont(); _finalFontChecked = true; }
+                if (_finalFont != null) return _finalFont;
                 var settings = Resources.Load<TMP_Settings>("TMP Settings");
                 return settings != null ? TMP_Settings.defaultFontAsset : null;
             }
