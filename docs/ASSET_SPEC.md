@@ -17,7 +17,7 @@ continua usando o placeholder, então dá para entregar aos poucos.
 | Pasta | Qualquer subpasta de `Assets/_Project/Art/Final/` funciona, mas mantenha a organização sugerida |
 | Orientação | Nave do jogador com o nariz para **cima**. Inimigos e chefes com a frente para **baixo** (eles descem em direção ao jogador). Projéteis apontando para **cima** (o jogo rotaciona) |
 | Filtro | O importador usa filtro *Point* (pixel nítido) e sem compressão. Se a arte não for pixel art, avise para trocar para *Bilinear* |
-| Formato de áudio | Efeitos em **WAV** 44,1 kHz 16 bits **mono**. Músicas e ambientes em **OGG Vorbis** 44,1 kHz estéreo, com **loop perfeito** (fim emenda no começo sem clique) |
+| Formato de áudio | Preferência: efeitos em **WAV** 44,1 kHz 16 bits **mono**; músicas e ambientes em **OGG Vorbis** 44,1 kHz estéreo. O importador também aceita MP3 e WAV estéreo e converte (efeitos viram mono). Músicas e ambientes precisam de **loop perfeito** (fim emenda no começo sem clique). Prompts prontos para gerar cada arquivo em `docs/AUDIO_PROMPTS.md` |
 | Nível de áudio | Efeitos com pico em −3 dBFS; músicas normalizadas por volta de −14 LUFS |
 
 Tamanho na tela: o jogo mostra 10 unidades de largura na tela do celular. Uma nave de 1 unidade ocupa 10 % da largura.
