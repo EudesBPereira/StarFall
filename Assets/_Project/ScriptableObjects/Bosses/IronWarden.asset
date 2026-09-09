@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
   DisplayName: IRON WARDEN
   Prefab: {fileID: 3324972674304107122, guid: f7fb06e60f89e3848bff26ba81c1ff95, type: 3}
-  Sprite: {fileID: 21300000, guid: 1d74f26d4735dba4b91ee6866f168abc, type: 3}
-  Tint: {r: 0.85, g: 0.7, b: 0.5, a: 1}
+  Sprite: {fileID: 21300000, guid: 45434dbded08b4a4db9bd34e8a8ce8a0, type: 3}
+  Tint: {r: 1, g: 1, b: 1, a: 1}
   Scale: 1.7
   ColliderRadius: 1.3
   MaxHull: 2000
@@ -253,7 +253,7 @@ MonoBehaviour:
     Score: 800
     DisablesAttack: 0
     ShieldsCore: 0
-    Sprite: {fileID: 21300000, guid: 12ed6d3b852df504fb264babc11af473, type: 3}
+    Sprite: {fileID: 21300000, guid: 4791c9762b62f6c4a98fac9ba31c9cc7, type: 3}
     Tint: {r: 1, g: 0.8, b: 0.5, a: 1}
     Scale: 1
   - Name: Right Drill
@@ -263,7 +263,7 @@ MonoBehaviour:
     Score: 800
     DisablesAttack: 1
     ShieldsCore: 0
-    Sprite: {fileID: 21300000, guid: 12ed6d3b852df504fb264babc11af473, type: 3}
+    Sprite: {fileID: 21300000, guid: 4791c9762b62f6c4a98fac9ba31c9cc7, type: 3}
     Tint: {r: 1, g: 0.8, b: 0.5, a: 1}
     Scale: 1
   SegmentCount: 0

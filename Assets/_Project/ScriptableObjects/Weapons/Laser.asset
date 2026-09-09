@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: Reliable energy beam. Levels add parallel and angled shots.
   Cost: 0
   ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
-  ProjectileSprite: {fileID: 21300000, guid: 368d38b5bd080494fa7409a35b1c1890, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 2573bd515f9e5714e89440bd602ee4cf, type: 3}
   FireInterval: 0.14
   Damage: 4
   ProjectileSpeed: 18

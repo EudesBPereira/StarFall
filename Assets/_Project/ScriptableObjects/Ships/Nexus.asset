@@ -44,8 +44,8 @@ MonoBehaviour:
   DroneDamage: 4
   DroneInterval: 0.5
   LifestealPerKill: 0
-  Sprite: {fileID: 21300000, guid: a6398386fef094545af6cdacd6bc0799, type: 3}
-  Tint: {r: 0.75, g: 0.95, b: 1, a: 1}
+  Sprite: {fileID: 21300000, guid: 5f5d71ec2a5e6964788ca6104de353b4, type: 3}
+  Tint: {r: 1, g: 1, b: 1, a: 1}
   ThrusterColor: {r: 0.14, g: 0.84, b: 1, a: 0.9}
   HitboxRadius: 0.28
   VisualScale: 1

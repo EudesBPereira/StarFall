@@ -18,7 +18,7 @@ MonoBehaviour:
     in numbers.
   Cost: 3500
   ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
-  ProjectileSprite: {fileID: 21300000, guid: 7727e79b237967b479d2405d3866bac6, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 1f8c787c0e1ac4f44b2068aa96c14947, type: 3}
   FireInterval: 0.18
   Damage: 3
   ProjectileSpeed: 7.5

@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: Hold to charge, release to unleash a massive orb.
   Cost: 7000
   ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
-  ProjectileSprite: {fileID: 21300000, guid: a04878c0c0fa31046acbe48b98e939d2, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 4e2f618e47de23641a25dbfb373adaa3, type: 3}
   FireInterval: 0.6
   Damage: 10
   ProjectileSpeed: 14

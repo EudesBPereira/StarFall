@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: Fan of shots. Great coverage, lower damage per bullet.
   Cost: 2500
   ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
-  ProjectileSprite: {fileID: 21300000, guid: bae8aa2cdd2318a448e09a61fdcee32b, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 6bad31d3ba2d0ee43807b8e9d6d28840, type: 3}
   FireInterval: 0.2
   Damage: 3
   ProjectileSpeed: 16

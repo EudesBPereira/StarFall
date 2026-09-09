@@ -171,7 +171,7 @@ MonoBehaviour:
   DebrisSprites: []
   DebrisInterval: 0
   DebrisTint: {r: 1, g: 1, b: 1, a: 1}
-  BackdropSprite: {fileID: 21300000, guid: c1d23bca188ae3949bd1e82606af4fc5, type: 3}
+  BackdropSprite: {fileID: 21300000, guid: 614f1824ebb8f4749abc62d1d1a51856, type: 3}
   BackdropTint: {r: 0.6, g: 0.3, b: 0.9, a: 0.5}
   BackdropScale: 12
   AsteroidDefinition: {fileID: 0}

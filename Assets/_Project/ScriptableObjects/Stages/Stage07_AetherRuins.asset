@@ -169,11 +169,11 @@ MonoBehaviour:
   StarDensity: 0.6
   StarTint: {r: 0.8, g: 0.9, b: 1, a: 1}
   DebrisSprites:
-  - {fileID: 21300000, guid: 20fb635e48725af41a1af3cb93fc4a1d, type: 3}
-  - {fileID: 21300000, guid: 2c1f3cf140567ee4c8639e2178c6c467, type: 3}
+  - {fileID: 21300000, guid: 5b7d1e035797aa543a889b9c1f549575, type: 3}
+  - {fileID: 21300000, guid: 537c813e2c757954fa7b9ce1b00dc860, type: 3}
   DebrisInterval: 4
   DebrisTint: {r: 0.5, g: 0.7, b: 0.9, a: 0.5}
-  BackdropSprite: {fileID: 21300000, guid: 499d7eebfd0cb904f863849fec254215, type: 3}
+  BackdropSprite: {fileID: 21300000, guid: 6c57d5cf16bc7d648aadaf29a184dec4, type: 3}
   BackdropTint: {r: 0.35, g: 0.4, b: 0.5, a: 0.55}
   BackdropScale: 12
   AsteroidDefinition: {fileID: 0}

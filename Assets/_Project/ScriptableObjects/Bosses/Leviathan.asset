@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
   DisplayName: LEVIATHAN
   Prefab: {fileID: 8867001722131291425, guid: a84d4d609ccbf9546b47454bddba5b92, type: 3}
-  Sprite: {fileID: 21300000, guid: 51447fc47bc90df43a010e7d10c68b31, type: 3}
-  Tint: {r: 0.45, g: 0.9, b: 0.75, a: 1}
+  Sprite: {fileID: 21300000, guid: 2b2663e7b8240f44ca08e0f1c80ed608, type: 3}
+  Tint: {r: 1, g: 1, b: 1, a: 1}
   Scale: 1.5
   ColliderRadius: 0.8
   MaxHull: 2800
@@ -239,6 +239,6 @@ MonoBehaviour:
   DeathSequenceSeconds: 2.4
   Parts: []
   SegmentCount: 8
-  SegmentSprite: {fileID: 21300000, guid: 573a88f24a3951a429ecb9d46ec179c6, type: 3}
+  SegmentSprite: {fileID: 21300000, guid: dcca4d3ec87366b4da7e97446f03edc2, type: 3}
   SegmentSpacing: 0.95
   SegmentScale: 0.85

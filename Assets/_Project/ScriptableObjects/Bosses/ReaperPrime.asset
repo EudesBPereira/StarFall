@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
   DisplayName: REAPER PRIME
   Prefab: {fileID: 1397754334055864830, guid: e5ff9752d99edc047a20ee6f2cb47b62, type: 3}
-  Sprite: {fileID: 21300000, guid: a35b53f2d137d0a45b5e82a1f511c851, type: 3}
-  Tint: {r: 1, g: 0.35, b: 0.6, a: 1}
+  Sprite: {fileID: 21300000, guid: 0df46b53e7a754b4e88dd0651dae9074, type: 3}
+  Tint: {r: 1, g: 0.7725, b: 0.86, a: 1}
   Scale: 1.4
   ColliderRadius: 0.9
   MaxHull: 2400

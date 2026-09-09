@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
   DisplayName: THE ASSEMBLER
   Prefab: {fileID: 8560364597132467159, guid: 74a563d064bb3874e9f0a29b632610f4, type: 3}
-  Sprite: {fileID: 21300000, guid: fe2a66543c32b4647be077a2f75c454b, type: 3}
-  Tint: {r: 0.8, g: 0.85, b: 0.9, a: 1}
+  Sprite: {fileID: 21300000, guid: a760e4b840c33844b852d5c8f0ceb02e, type: 3}
+  Tint: {r: 1, g: 1, b: 1, a: 1}
   Scale: 2
   ColliderRadius: 1.5
   MaxHull: 3400
@@ -277,7 +277,7 @@ MonoBehaviour:
     Score: 900
     DisablesAttack: 0
     ShieldsCore: 0
-    Sprite: {fileID: 21300000, guid: c2761da43d40d484884996b7ede0fc7e, type: 3}
+    Sprite: {fileID: 21300000, guid: f9e97db6e83afe842bbe0162d95cc43c, type: 3}
     Tint: {r: 1, g: 0.7, b: 0.4, a: 1}
     Scale: 1
   - Name: Drone Fabricator
@@ -287,7 +287,7 @@ MonoBehaviour:
     Score: 900
     DisablesAttack: 1
     ShieldsCore: 0
-    Sprite: {fileID: 21300000, guid: c2761da43d40d484884996b7ede0fc7e, type: 3}
+    Sprite: {fileID: 21300000, guid: f9e97db6e83afe842bbe0162d95cc43c, type: 3}
     Tint: {r: 0.6, g: 0.9, b: 1, a: 1}
     Scale: 1
   SegmentCount: 0

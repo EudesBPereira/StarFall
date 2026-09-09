@@ -62,6 +62,12 @@ namespace Starfall.EditorTools
                 settings.spriteMeshType = fullRect ? SpriteMeshType.FullRect : SpriteMeshType.Tight;
                 settings.spriteGenerateFallbackPhysicsShape = false;
                 importer.SetTextureSettings(settings);
+                // 9-slice panel: keep corners crisp when the button stretches (border = 25% of the canvas).
+                if (name.Equals("panel", StringComparison.OrdinalIgnoreCase))
+                {
+                    float b = Mathf.Round(width * 0.25f);
+                    importer.spriteBorder = new Vector4(b, b, b, b);
+                }
                 importer.SaveAndReimport();
             }
             sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);

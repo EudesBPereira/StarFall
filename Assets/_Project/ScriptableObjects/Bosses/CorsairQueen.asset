@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
   DisplayName: CORSAIR QUEEN
   Prefab: {fileID: 5812416440362913586, guid: e32308f90fb5c56418ffdf79490f8db3, type: 3}
-  Sprite: {fileID: 21300000, guid: 413eef262ffd14243897f30d7f116a8e, type: 3}
-  Tint: {r: 1, g: 0.55, b: 0.5, a: 1}
+  Sprite: {fileID: 21300000, guid: 238b397f0d1d4de47bfb1558db3981bc, type: 3}
+  Tint: {r: 1, g: 1, b: 1, a: 1}
   Scale: 1.6
   ColliderRadius: 1.2
   MaxHull: 3000

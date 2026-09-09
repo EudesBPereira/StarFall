@@ -17,7 +17,7 @@ MonoBehaviour:
   Description: Hyper-velocity slug that pierces through several enemies.
   Cost: 4500
   ProjectilePrefab: {fileID: 9087136008500134440, guid: 5eca7a9bcb586d745b5b15ff50761112, type: 3}
-  ProjectileSprite: {fileID: 21300000, guid: d0da9956c2e827f4a98ab3550d19be95, type: 3}
+  ProjectileSprite: {fileID: 21300000, guid: 12e39f23d401ce94da4b2bcbc12ac084, type: 3}
   FireInterval: 0.55
   Damage: 16
   ProjectileSpeed: 32

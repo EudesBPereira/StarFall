@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Enemies.EnemyDefinition
   DisplayName: ShieldDrone
   Prefab: {fileID: 0}
-  Sprite: {fileID: 21300000, guid: 30268dcedac3c724e9d1ae75230aa4fd, type: 3}
-  Tint: {r: 0.5, g: 1, b: 0.85, a: 1}
+  Sprite: {fileID: 21300000, guid: d1226e7e18f9e7343999d7b5ef2fe324, type: 3}
+  Tint: {r: 1, g: 1, b: 1, a: 1}
   Scale: 1
   ColliderRadius: 0.42
   MaxHull: 20

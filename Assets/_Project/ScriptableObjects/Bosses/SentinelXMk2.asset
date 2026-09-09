@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Starfall.Runtime::Starfall.Bosses.BossDefinition
   DisplayName: SENTINEL-X MK.II
   Prefab: {fileID: 1029946724396800464, guid: 4c029b8221f17b3489454960502fe23f, type: 3}
-  Sprite: {fileID: 21300000, guid: 26025c2e6bae9664bafbca2e4643846d, type: 3}
-  Tint: {r: 1, g: 0.55, b: 0.35, a: 1}
+  Sprite: {fileID: 21300000, guid: 34207cf352caeed47be45f6c3d48282c, type: 3}
+  Tint: {r: 1, g: 0.84250003, b: 0.7725, a: 1}
   Scale: 1.4
   ColliderRadius: 1.05
   MaxHull: 1800
