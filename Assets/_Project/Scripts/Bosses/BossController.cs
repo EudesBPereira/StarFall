@@ -36,6 +36,10 @@ namespace Starfall.Bosses
         private readonly HashSet<int> _disabledAttacks = new HashSet<int>();
         private bool _coreShielded;
         private float _statMultiplier = 1f;
+        private float _damageAccum;
+        private float _damageTextTimer;
+        private float _sparkTimer;
+        private Vector2 _lastHitPoint;
 
         public BossDefinition Boss => _boss;
         public bool IsEntering => _entering;
@@ -53,6 +57,35 @@ namespace Starfall.Bosses
 
         protected override Color CurrentTint => _phaseTint;
 
+        /// <summary>Heavy hit feedback (plan §7.7 / player feedback): red-white flash, sparks at the impact point and
+        /// accumulated damage numbers so the player sees the boss suffering.</summary>
+        protected override void OnDamageFeedback(in DamageInfo info, in DamageResult result, Vector2 hitPoint)
+        {
+            bool shieldOnly = result.ShieldDamage > 0f && result.HullDamage <= 0f;
+            Flash(shieldOnly ? Definition.ShieldColor : new Color(1f, 0.55f, 0.5f), 0.1f);
+            _damageAccum += result.ShieldDamage + result.HullDamage;
+            _lastHitPoint = hitPoint;
+            if (Context != null && Context.Vfx != null && _sparkTimer <= 0f)
+            {
+                _sparkTimer = 0.08f;
+                Context.Vfx.SpawnSparks(hitPoint, shieldOnly ? Definition.ShieldColor : new Color(1f, 0.75f, 0.35f), 6);
+            }
+        }
+
+        private void TickDamageNumbers(float dt)
+        {
+            if (_sparkTimer > 0f) _sparkTimer -= dt;
+            if (_damageAccum <= 0f) return;
+            _damageTextTimer -= dt;
+            if (_damageTextTimer > 0f) return;
+            _damageTextTimer = 0.25f;
+            if (Context != null && Context.Vfx != null)
+                Context.Vfx.SpawnFloatingText(_lastHitPoint + Vector2.up * 0.3f, "-" + Mathf.RoundToInt(_damageAccum), DamageColor(_damageAccum), 0.6f);
+            _damageAccum = 0f;
+        }
+
+        private static Color DamageColor(float damage) => damage >= 100f ? new Color(1f, 0.85f, 0.3f) : new Color(1f, 0.6f, 0.45f);
+
         public override void Initialize(EnemyDefinition definition, GameplayContext ctx, EnemySpawner spawner, float statMultiplier = 1f, float speedMultiplier = 1f)
         {
             base.Initialize(definition, ctx, spawner, statMultiplier, speedMultiplier);
@@ -63,6 +96,9 @@ namespace Starfall.Bosses
             _runners.Clear();
             _trail.Clear();
             _disabledAttacks.Clear();
+            _damageAccum = 0f;
+            _damageTextTimer = 0f;
+            _sparkTimer = 0f;
 
             var area = Area;
             _entranceStartY = area != null ? area.Top + 3f : transform.position.y;
@@ -100,6 +136,7 @@ namespace Starfall.Bosses
             if (!IsActiveInstance) return;
             float dt = Time.deltaTime;
             TickStatus(dt);
+            TickDamageNumbers(dt);
             if (IsStunned && !_entering)
             {
                 if (frontLaser != null) frontLaser.Hide();

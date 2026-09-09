@@ -19,6 +19,8 @@ namespace Starfall.EditorTools
         public static readonly Color TextColor = new Color(0.92f, 0.96f, 1f);
 
         public static Sprite PanelSprite;
+        /// <summary>Plain white sprite for bar fills and highlights (never the decorated panel, which is dark).</summary>
+        public static Sprite FillSprite;
         public static Material HologramMaterial;
 
         /// <summary>Default TMP font, or null when the TMP essentials are not imported (never throws).</summary>
@@ -145,7 +147,7 @@ namespace Starfall.EditorTools
             var bg = CreateImage(parent, name, background, PanelSprite);
             bg.rectTransform.sizeDelta = size;
             bg.type = Image.Type.Sliced;
-            fillImage = CreateImage(bg.transform, "Fill", fill, PanelSprite);
+            fillImage = CreateImage(bg.transform, "Fill", fill, FillSprite != null ? FillSprite : PanelSprite);
             Stretch(fillImage.rectTransform, 3f, 3f, 3f, 3f);
             fillImage.type = Image.Type.Filled;
             fillImage.fillMethod = Image.FillMethod.Horizontal;
@@ -174,7 +176,7 @@ namespace Starfall.EditorTools
 
             var fillArea = CreateRect(sliderRt, "Fill Area");
             Stretch(fillArea, 10f, 10f, 15f, 15f);
-            var fill = CreateImage(fillArea, "Fill", Accent, PanelSprite);
+            var fill = CreateImage(fillArea, "Fill", Accent, FillSprite != null ? FillSprite : PanelSprite);
             Stretch(fill.rectTransform);
 
             var handleArea = CreateRect(sliderRt, "Handle Slide Area");
@@ -206,7 +208,7 @@ namespace Starfall.EditorTools
 
             var bg = CreateImage(row, "Background", new Color(0.1f, 0.12f, 0.2f, 1f), PanelSprite, true);
             Place(bg.rectTransform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(0f, 0f), new Vector2(56f, 56f));
-            var check = CreateImage(bg.transform, "Checkmark", Accent, PanelSprite);
+            var check = CreateImage(bg.transform, "Checkmark", Accent, FillSprite != null ? FillSprite : PanelSprite);
             Stretch(check.rectTransform, 10f, 10f, 10f, 10f);
 
             var text = CreateText(row, "Label", label, 32f, TextColor, TextAlignmentOptions.Left);
@@ -260,7 +262,7 @@ namespace Starfall.EditorTools
             var label = button.GetComponentInChildren<TextMeshProUGUI>();
             if (label != null) Object.DestroyImmediate(label.gameObject);
 
-            var highlight = CreateImage(rt, "Highlight", new Color(0.35f, 0.9f, 1f, 0.25f), PanelSprite);
+            var highlight = CreateImage(rt, "Highlight", new Color(0.35f, 0.9f, 1f, 0.25f), FillSprite != null ? FillSprite : PanelSprite);
             highlight.type = Image.Type.Sliced;
             Stretch(highlight.rectTransform, 2f, 2f, 2f, 2f);
             highlight.enabled = false;

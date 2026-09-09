@@ -411,7 +411,7 @@ namespace Starfall.EditorTools
             var vignetteGo = new GameObject("RiskVignette");
             vignetteGo.transform.SetParent(services.transform, false);
             var vignetteRing = vignetteGo.AddComponent<SpriteRenderer>();
-            vignetteRing.sprite = art.Ring;
+            vignetteRing.sprite = art.Vignette;
             vignetteRing.sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>(ProjectBootstrap.MaterialRoot + "/Additive.mat");
             vignetteRing.color = new Color(0f, 0f, 0f, 0f);
             vignetteRing.enabled = false;
@@ -560,7 +560,16 @@ namespace Starfall.EditorTools
             UiBuilder.Place(bossGroup, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -130f), new Vector2(700f, 70f));
             view.bossNameText = UiBuilder.CreateText(bossGroup, "BossName", "BOSS", 30f, UiBuilder.Accent2, TextAlignmentOptions.Center, FontStyles.Bold);
             UiBuilder.Place(view.bossNameText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(700f, 36f));
-            var bossBar = UiBuilder.CreateBar(bossGroup, "BossBar", new Vector2(700f, 24f), new Color(0.1f, 0.05f, 0.1f, 0.9f), UiBuilder.Accent2, out view.bossFill);
+            var bossBar = UiBuilder.CreateBar(bossGroup, "BossBar", new Vector2(700f, 30f), new Color(0.1f, 0.05f, 0.1f, 0.9f), new Color(1f, 0.25f, 0.35f), out view.bossFill);
+            // White "damage trail" behind the real fill: lags so every hit is visible as a shrinking bright chunk.
+            view.bossTrailFill = UiBuilder.CreateImage(bossBar.transform, "Trail", new Color(1f, 0.9f, 0.8f, 0.85f), art.Pixel);
+            UiBuilder.Stretch(view.bossTrailFill.rectTransform, 3f, 3f, 3f, 3f);
+            view.bossTrailFill.type = Image.Type.Filled;
+            view.bossTrailFill.fillMethod = Image.FillMethod.Horizontal;
+            view.bossTrailFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+            view.bossTrailFill.transform.SetSiblingIndex(0);
+            view.bossPercentText = UiBuilder.CreateText(bossBar.transform, "Percent", "100%", 20f, Color.white, TextAlignmentOptions.Center, FontStyles.Bold);
+            UiBuilder.Stretch(view.bossPercentText.rectTransform);
             UiBuilder.Place(bossBar.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -40f), new Vector2(700f, 24f));
             view.bossGroup = bossGroup.gameObject;
             bossGroup.gameObject.SetActive(false);
@@ -575,7 +584,7 @@ namespace Starfall.EditorTools
             glow.transform.SetAsFirstSibling();
             view.ultimateGlow = glow;
             glow.enabled = false;
-            view.energyFill = UiBuilder.CreateImage(ultRt, "Fill", new Color(0.75f, 0.4f, 1f, 0.9f), art.Panel);
+            view.energyFill = UiBuilder.CreateImage(ultRt, "Fill", new Color(0.75f, 0.4f, 1f, 0.9f), art.Pixel);
             UiBuilder.Stretch(view.energyFill.rectTransform, 6f, 6f, 6f, 6f);
             view.energyFill.type = Image.Type.Filled;
             view.energyFill.fillMethod = Image.FillMethod.Horizontal;

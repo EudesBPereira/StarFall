@@ -999,9 +999,10 @@ namespace Starfall.EditorTools
             s.StarTint = starTint;
             s.DebrisSprites = debris ?? new Sprite[0];
             s.DebrisInterval = debrisInterval;
-            s.DebrisTint = debrisTint;
+            s.DebrisTint = debris != null && debris.Length > 0 && FinalAssets.IsFinal(debris[0]) ? new Color(1f, 1f, 1f, Mathf.Min(debrisTint.a, 0.7f)) : debrisTint;
             s.BackdropSprite = backdrop;
-            s.BackdropTint = backdropTint;
+            // Final art is already coloured and detailed: keep it neutral and faint so it never competes with bullets.
+            s.BackdropTint = FinalAssets.IsFinal(backdrop) ? new Color(1f, 1f, 1f, Mathf.Min(backdropTint.a, 0.32f)) : backdropTint;
             s.BackdropScale = backdropScale;
             s.AsteroidDefinition = asteroid;
             s.AsteroidInterval = 1.2f;

@@ -174,11 +174,17 @@ namespace Starfall.Enemies
         private void OnDamaged(DamageInfo info, DamageResult result, Vector2 hitPoint)
         {
             if (result.Killed) return;
-            Flash(result.ShieldDamage > 0f && result.HullDamage <= 0f ? _definition.ShieldColor : Color.white);
+            OnDamageFeedback(info, result, hitPoint);
             if (result.ShieldDamage > 0f) PulseShield();
             RefreshShieldVisual();
             if (result.ShieldBroken && _ctx != null && _ctx.Vfx != null)
                 _ctx.Vfx.SpawnShieldBreak(transform.position, _definition.ShieldColor);
+        }
+
+        /// <summary>Visual reaction to a non-lethal hit. Bosses override it with heavier feedback.</summary>
+        protected virtual void OnDamageFeedback(in DamageInfo info, in DamageResult result, Vector2 hitPoint)
+        {
+            Flash(result.ShieldDamage > 0f && result.HullDamage <= 0f ? _definition.ShieldColor : Color.white);
         }
 
         private void OnDied(DamageInfo info)
@@ -365,18 +371,18 @@ namespace Starfall.Enemies
             shieldVisual.transform.localScale = Vector3.one * 1.3f;
         }
 
-        protected void Flash(Color color)
+        protected void Flash(Color color, float seconds = 0.06f)
         {
             if (body == null || !gameObject.activeInHierarchy) return;
             if (_flashRoutine != null) StopCoroutine(_flashRoutine);
-            _flashRoutine = StartCoroutine(FlashRoutine(color));
+            _flashRoutine = StartCoroutine(FlashRoutine(color, seconds));
         }
 
-        private IEnumerator FlashRoutine(Color color)
+        private IEnumerator FlashRoutine(Color color, float seconds)
         {
             var original = CurrentTint;
             body.color = Color.Lerp(original, color, 0.85f);
-            yield return new WaitForSeconds(0.06f);
+            yield return new WaitForSeconds(seconds);
             body.color = CurrentTint;
             if (shieldVisual != null) shieldVisual.transform.localScale = Vector3.one;
             _flashRoutine = null;

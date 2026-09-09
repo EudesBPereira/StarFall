@@ -68,6 +68,7 @@ namespace Starfall.EditorTools
             EnsureFolders();
             var art = PlaceholderArt.GenerateAll();
             UiBuilder.PanelSprite = art.Panel;
+            UiBuilder.FillSprite = art.Pixel;
             var materials = CreateMaterials(art);
             UiBuilder.HologramMaterial = materials.Hologram;
             var prefabs = CreatePooledPrefabs(art, materials);

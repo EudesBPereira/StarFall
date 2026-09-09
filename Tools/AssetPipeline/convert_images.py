@@ -85,9 +85,15 @@ def uniform_corner_bg(rgba: np.ndarray):
     return c.mean(axis=0) if float(c.std(axis=0).max()) < 12.0 else None
 
 
-def to_white(rgba: np.ndarray) -> np.ndarray:
+def to_white(rgba: np.ndarray, radial_glow: bool = False) -> np.ndarray:
     lum = (0.299 * rgba[..., 0] + 0.587 * rgba[..., 1] + 0.114 * rgba[..., 2]) / 255.0
     alpha = (rgba[..., 3].astype(np.float32) / 255.0) * np.clip(lum * 1.15, 0, 1)
+    if radial_glow:
+        # Glow sprites are used as additive halos: fade smoothly from the centre so they never read as discs.
+        h, w = alpha.shape
+        yy, xx = np.mgrid[0:h, 0:w]
+        r = np.sqrt(((xx - (w - 1) / 2) / (w / 2)) ** 2 + ((yy - (h - 1) / 2) / (h / 2)) ** 2)
+        alpha = alpha * np.clip(1.0 - r, 0, 1) ** 1.6
     out = np.zeros_like(rgba)
     out[..., :3] = 255
     out[..., 3] = (alpha * 255).astype(np.uint8)
@@ -157,7 +163,7 @@ def convert(src: Path, dest_root: Path):
             keyed = rgba
             mode = "alpha"
         if name in WHITE:
-            keyed = to_white(keyed)
+            keyed = to_white(keyed, radial_glow=(name == "dot"))
         keyed = crop_square(keyed, KEEP_MARGIN.get(name, DEFAULT_MARGIN))
         out = resize(keyed, size)
 

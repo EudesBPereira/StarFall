@@ -237,3 +237,18 @@ Recolorações (Destroyer Mk.II, Sentinel-X Mk.II, Widow Prime, Reaper Prime) co
 - `Assets/_Project/Audio/Final/{SFX,Music,Ambient}/<Id>[_n].{wav,ogg}` preenche `AudioLibrary` (`FinalAssets.FillAudioLibrary`); slots vazios seguem sintetizados.
 - `Art/Final/Fonts/*.ttf` vira a fonte da UI (atlas TMP gerado ao lado); `Art/Final/Icon/icon.png` vira o ícone do app.
 - Especificação completa para o artista e o sound designer em `docs/ASSET_SPEC.md`. Motivo: permitir entregas parciais sem tocar em código nem em YAML.
+
+## D-038 — Pipeline de conversão da arte gerada e ajustes de integração
+
+- **Origem:** 57 imagens geradas por IA (Gemini) a partir de `docs/IMAGE_PROMPTS.md`, em JPG/PNG 1024–2048 px com fundo magenta.
+- **Conversão** (`Tools/AssetPipeline/convert_images.py`): chroma key com tolerância a artefatos de JPEG e remoção de halo por "un-mix" contra a cor de fundo; fundos planos de outra cor são detectados pelos cantos; recorte ao conteúdo, quadrado centrado com 4 % de margem; redução com pré-multiplicação de alfa para 2× o canvas sugerido (48–512 px; ícone 1024 opaco). Originais ficam fora do repositório.
+- **Sprites recoloridos por código** (`dot`, `spark`, `ring`, `flame`) viram branco puro por luminância; `dot` recebe queda radial suave porque é usado como halo aditivo (senão vira um disco e os tiros parecem bolas).
+- **Vinheta de risco** usa um sprite procedural dedicado (`vignette`, sempre gerado), não o `ring.png` final: esticado sobre a tela, o anel de pixel art virava um padrão de blocos.
+- **Fundos e destroços finais** recebem tinta branca com alfa limitado (0,32 e 0,7) em vez das tintas coloridas dos placeholders, para não escurecer nem competir com os projéteis.
+- **`panel.png`** recebe borda 9-slice de 25 % automaticamente na importação.
+
+## D-039 — Feedback de dano em chefes e barras legíveis (playtest no aparelho, 2026-09-09)
+
+- **Problema observado pelo responsável:** o chefe não parecia sofrer dano e a barra de vida não era lida. Causa da barra: todos os preenchimentos (casco, escudo, energia, chefe) usavam o sprite decorado do painel, que na arte final é azul-escuro com borda ciano; a barra cheia parecia vazia.
+- **Correção:** `UiBuilder.FillSprite` (pixel branco) para todo preenchimento; painel decorado só em botões e fundos. Barra do chefe maior (30 px), preenchimento vermelho, **rastro branco** que encolhe com atraso (`HudView.bossTrailFill`) e **porcentagem** no centro.
+- **Feedback de dano no chefe** (`BossController.OnDamageFeedback`): flash vermelho-branco de 0,1 s, faíscas no ponto de impacto (limite 12/s) e **números de dano flutuantes** acumulados a cada 0,25 s (dourado ≥ 100). `Enemy` ganhou o gancho virtual `OnDamageFeedback` e `Flash(cor, segundos)`.

@@ -48,6 +48,11 @@ namespace Starfall.UI
         [SerializeField] internal GameObject bossGroup;
         [SerializeField] internal TMP_Text bossNameText;
         [SerializeField] internal Image bossFill;
+        [SerializeField] internal Image bossTrailFill;
+        [SerializeField] internal TMP_Text bossPercentText;
+
+        private float _bossTarget = 1f;
+        private float _bossTrail = 1f;
 
         private Color _hullColor = new Color(1f, 0.45f, 0.3f);
 
@@ -157,9 +162,21 @@ namespace Starfall.UI
 
         public void SetBoss(bool visible, string name, float fill)
         {
+            bool wasVisible = bossGroup != null && bossGroup.activeSelf;
             if (bossGroup != null) bossGroup.SetActive(visible);
             if (bossNameText != null) bossNameText.text = name;
-            if (bossFill != null) bossFill.fillAmount = Mathf.Clamp01(fill);
+            _bossTarget = Mathf.Clamp01(fill);
+            if (!wasVisible && visible) _bossTrail = _bossTarget;
+            if (bossFill != null) bossFill.fillAmount = _bossTarget;
+            if (bossPercentText != null) bossPercentText.text = visible ? Mathf.CeilToInt(_bossTarget * 100f) + "%" : "";
+        }
+
+        private void Update()
+        {
+            // Damage trail: the bright chunk behind the fill shrinks after a short delay so every hit reads clearly.
+            if (bossTrailFill == null || bossGroup == null || !bossGroup.activeSelf) return;
+            _bossTrail = _bossTrail > _bossTarget ? Mathf.MoveTowards(_bossTrail, _bossTarget, Time.unscaledDeltaTime * 0.35f) : _bossTarget;
+            bossTrailFill.fillAmount = _bossTrail;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Starfall.EditorTools
 
         public sealed class Set
         {
-            public Sprite Pixel, Dot, Circle, Ring, Gradient, Panel, Spark;
+            public Sprite Pixel, Dot, Circle, Ring, Gradient, Panel, Spark, Vignette;
             public Sprite Ship, Falcon, Titan, Phantom, NovaX, Symbiont, Nexus, Drone2, Flame;
             public Sprite Projectile, Bullet, Plasma, Missile, Rail, Web, Spore;
             public Sprite Drone, Interceptor, Bomber, Kamikaze, ShieldDrone, Asteroid, Turret;
@@ -36,6 +36,8 @@ namespace Starfall.EditorTools
             set.Spark = Save("spark", 32, (x, y) => Capsule(x, y, 0.18f, 0.7f), soft: true);
             set.Circle = Save("circle", 128, (x, y) => Circle(x, y, 0.95f));
             set.Ring = Save("ring", 128, (x, y) => Ring(x, y, 0.92f, 0.12f));
+            // Always procedural (not part of the final-art spec): a smooth edge glow stretched over the screen by RiskVignette.
+            set.Vignette = Save("vignette", 128, (x, y) => 0.55f - Mathf.Max(Mathf.Abs(x), Mathf.Abs(y)), soft: true);
             set.Gradient = SaveGradient("gradient", 4, 256);
             set.Panel = Save("panel", 64, (x, y) => RoundedBox(x, y, 0.95f, 0.95f, 0.25f), ppu: 64, fullRect: true);
 

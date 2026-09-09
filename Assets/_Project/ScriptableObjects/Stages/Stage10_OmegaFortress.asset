@@ -172,9 +172,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2dcde146469f2ad44ae6caf4efe07fcb, type: 3}
   - {fileID: 21300000, guid: 537c813e2c757954fa7b9ce1b00dc860, type: 3}
   DebrisInterval: 3.5
-  DebrisTint: {r: 0.5, g: 0.4, b: 0.5, a: 0.5}
+  DebrisTint: {r: 1, g: 1, b: 1, a: 0.5}
   BackdropSprite: {fileID: 21300000, guid: 5a5c8471895102b4f8f24037c49ef70d, type: 3}
-  BackdropTint: {r: 0.45, g: 0.15, b: 0.35, a: 0.55}
+  BackdropTint: {r: 1, g: 1, b: 1, a: 0.32}
   BackdropScale: 12
   AsteroidDefinition: {fileID: 0}
   AsteroidInterval: 1.2

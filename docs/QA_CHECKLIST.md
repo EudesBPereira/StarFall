@@ -215,3 +215,8 @@ Executar no Editor (Game view em 1080x1920 e 1920x1080) e em pelo menos um Andro
 
 ### Validação automatizada
 - [ ] `ContentValidationTests` passa no Test Runner (EditMode) após regenerar os assets.
+
+## Feedback de chefe (D-039)
+- [ ] Barra do chefe cheia aparece vermelha inteira ao entrar; cada acerto deixa um rastro claro que encolhe em ~1 s; a porcentagem cai.
+- [ ] Ao acertar o chefe: flash avermelhado, faíscas no ponto do tiro e números "-N" subindo.
+- [ ] Barras de casco, escudo e energia preenchem com cor sólida (não escuras).
