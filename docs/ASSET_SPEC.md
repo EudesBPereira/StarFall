@@ -10,7 +10,7 @@ continua usando o placeholder, então dá para entregar aos poucos.
 | Regra | Detalhe |
 |---|---|
 | Estilo | Pixel art moderna, sci-fi neon com influência cyberpunk (GDD §24). Paleta: azul elétrico, roxo neon, vermelho energético, branco holográfico. Cada facção com identidade: Federação (azul/branco, militar), Biomecânica (verde/orgânico), Cyber (ciano/magenta, hexágonos) |
-| Formato de imagem | PNG 32 bits com transparência (RGBA). Sem fundo, sem sombra projetada fora do sprite |
+| Formato de imagem | PNG 32 bits com transparência (RGBA). Sem fundo, sem sombra projetada fora do sprite. Prompts prontos para gerar cada imagem em `docs/IMAGE_PROMPTS.md` |
 | Canvas | Sempre **quadrado**, o desenho centrado e ocupando o canvas como descrito na coluna "Ocupação". O importador calcula a escala pela largura do arquivo, por isso o tamanho em pixels é livre; a coluna "Canvas sugerido" é para pixel art a 64 px por unidade do jogo. Entregar em 2x (o dobro) também funciona |
 | Cor | Entregar já na cor final. Placeholders são brancos e coloridos por código; a arte final **não** recebe tinta, com uma exceção: versões Elite dos inimigos recebem um tom dourado automático por cima |
 | Nome | Exatamente como na coluna "Arquivo", em minúsculas, sem espaços. O nome é a chave de integração |

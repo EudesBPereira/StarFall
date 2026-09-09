@@ -36,3 +36,9 @@ crashlytics-build.properties
 /*-results.xml
 /.utmp/
 !/Tools/LogicTests/*.csproj
+
+# Credenciais (nunca versionar)
+*-fcm.json
+*service-account*.json
+google-services.json
+GoogleService-Info.plist

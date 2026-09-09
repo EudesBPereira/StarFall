@@ -27,7 +27,7 @@ Assets/_Project/Scripts/
 Assets/_Project/{ScriptableObjects,Prefabs,Scenes,Art/Placeholders}  gerados pelo bootstrap
 Assets/_Project/Tests/{EditMode,EditMode/UnityOnly (usa AssetDatabase, fora do dotnet),PlayMode}
 Tools/LogicTests/   projeto `dotnet test` que compila Scripts/Logic + Tests/EditMode
-docs/               ASSET_SPEC (arte/áudio finais: nomes, pastas, formatos), AUDIO_PROMPTS (prompts p/ gerar cada áudio), RELEASE_STATUS (o que existe e o que falta p/ as lojas), ARCHITECTURE,
+docs/               ASSET_SPEC (arte/áudio finais: nomes, pastas, formatos), IMAGE_PROMPTS e AUDIO_PROMPTS (prompts p/ gerar cada imagem/áudio), RELEASE_STATUS (o que existe e o que falta p/ as lojas), ARCHITECTURE,
                     DECISIONS, BALANCING, QA_CHECKLIST, BACKLOG, GDD_COMPLIANCE
 ```
 
