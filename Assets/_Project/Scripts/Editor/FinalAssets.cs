@@ -178,7 +178,7 @@ namespace Starfall.EditorTools
             {
                 var clips = LoadClips(AudioRoot + "/SFX", id.ToString(), false);
                 if (clips.Count == 0) continue;
-                sfx.Add(new AudioLibrary.SfxEntry { Id = id, Clips = clips.ToArray(), Volume = 1f });
+                sfx.Add(new AudioLibrary.SfxEntry { Id = id, Clips = clips.ToArray(), Volume = AudioMix.SfxVolume(id) });
                 found += clips.Count;
             }
             library.Sfx = sfx.ToArray();
@@ -189,7 +189,7 @@ namespace Starfall.EditorTools
                 if (id == MusicId.None) continue;
                 var clips = LoadClips(AudioRoot + "/Music", id.ToString(), true);
                 if (clips.Count == 0) continue;
-                music.Add(new AudioLibrary.MusicEntry { Id = id, Clip = clips[0], Volume = 1f });
+                music.Add(new AudioLibrary.MusicEntry { Id = id, Clip = clips[0], Volume = AudioMix.MusicVolume(id) });
                 found++;
             }
             library.Music = music.ToArray();
@@ -200,7 +200,7 @@ namespace Starfall.EditorTools
                 if (id == AmbientId.None) continue;
                 var clips = LoadClips(AudioRoot + "/Ambient", id.ToString(), true);
                 if (clips.Count == 0) continue;
-                ambient.Add(new AudioLibrary.AmbientEntry { Id = id, Clip = clips[0], Volume = 1f });
+                ambient.Add(new AudioLibrary.AmbientEntry { Id = id, Clip = clips[0], Volume = AudioMix.AmbientVolume(id) });
                 found++;
             }
             library.Ambient = ambient.ToArray();

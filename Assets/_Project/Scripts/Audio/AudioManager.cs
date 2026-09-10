@@ -26,6 +26,7 @@ namespace Starfall.Audio
         private Coroutine _layerFade;
         private AudioSource[] _sfx;
         private int _nextSfx;
+        private float[] _lastSfxTime;
         private MusicId _currentMusic = MusicId.None;
         private AmbientId _currentAmbient = AmbientId.None;
         private float _currentMusicVolume = 1f;
@@ -70,6 +71,8 @@ namespace Starfall.Audio
             _musicB = CreateSource("MusicB", true);
             _ambient = CreateSource("Ambient", true);
             _overdriveLayer = CreateSource("OverdriveLayer", true);
+            _lastSfxTime = new float[64];
+            for (int i = 0; i < _lastSfxTime.Length; i++) _lastSfxTime[i] = -10f;
             _sfx = new AudioSource[SfxSourceCount];
             for (int i = 0; i < SfxSourceCount; i++) _sfx[i] = CreateSource("Sfx" + i, false);
             ApplySavedSettings();
@@ -235,6 +238,17 @@ namespace Starfall.Audio
                 clip = PlaceholderAudioSynth.GetSfx(id);
             }
             if (clip == null || _sfx == null) return;
+
+            // Voice limiting: the same sound fired in a burst is dropped or ducked so weapon spam never stacks
+            // into a wall that buries the music (AudioMix).
+            int slot = (int)id;
+            if (slot >= 0 && slot < _lastSfxTime.Length)
+            {
+                float since = Time.unscaledTime - _lastSfxTime[slot];
+                if (since < AudioMix.MinRepeatSeconds) return;
+                if (since < AudioMix.OverlapWindowSeconds) volumeScale *= AudioMix.OverlapGain;
+                _lastSfxTime[slot] = Time.unscaledTime;
+            }
 
             var src = _sfx[_nextSfx];
             _nextSfx = (_nextSfx + 1) % _sfx.Length;

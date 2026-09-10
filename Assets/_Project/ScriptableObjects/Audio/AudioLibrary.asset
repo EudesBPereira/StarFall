@@ -17,131 +17,131 @@ MonoBehaviour:
   - Id: 0
     Clips:
     - {fileID: 8300000, guid: 0e3e7e125915cd44393e11d68dd3a99d, type: 3}
-    Volume: 1
+    Volume: 0.28
   - Id: 1
     Clips:
     - {fileID: 8300000, guid: 9b9e928c743eee946b0d59a7a53374b0, type: 3}
-    Volume: 1
+    Volume: 0.3
   - Id: 2
     Clips:
     - {fileID: 8300000, guid: 0813e5aaca3531c4a96456e52d629c23, type: 3}
-    Volume: 1
+    Volume: 0.22
   - Id: 3
     Clips:
     - {fileID: 8300000, guid: 77059184c9dafa74dbd2b7b5e4f50f07, type: 3}
-    Volume: 1
+    Volume: 0.45
   - Id: 4
     Clips:
     - {fileID: 8300000, guid: 050faccb72dddd943831ad04c03d7304, type: 3}
-    Volume: 1
+    Volume: 0.5
   - Id: 5
     Clips:
     - {fileID: 8300000, guid: 3c1618e34e509bc43bf888e0ba2ecb2f, type: 3}
-    Volume: 1
+    Volume: 0.85
   - Id: 6
     Clips:
     - {fileID: 8300000, guid: b414abd94f932624b9a7c683a9ee9260, type: 3}
-    Volume: 1
+    Volume: 0.6
   - Id: 7
     Clips:
     - {fileID: 8300000, guid: a134264a5e5972e4a8c78431bfa6d251, type: 3}
-    Volume: 1
+    Volume: 0.85
   - Id: 8
     Clips:
     - {fileID: 8300000, guid: 734f17fc754d9c54e818e2d9d2e64535, type: 3}
-    Volume: 1
+    Volume: 0.9
   - Id: 9
     Clips:
     - {fileID: 8300000, guid: b60d99f32a362494eac1cd995b273c25, type: 3}
-    Volume: 1
+    Volume: 0.35
   - Id: 10
     Clips:
     - {fileID: 8300000, guid: 80bcd05ef1d8732489a28ec5d81eef1f, type: 3}
-    Volume: 1
+    Volume: 0.5
   - Id: 11
     Clips:
     - {fileID: 8300000, guid: 51d1e49752c328c4f81b68f235773b9c, type: 3}
-    Volume: 1
+    Volume: 0.5
   - Id: 12
     Clips:
     - {fileID: 8300000, guid: acf94af1e7860904aaaff1f1b4310ffa, type: 3}
-    Volume: 1
+    Volume: 0.85
   - Id: 13
     Clips:
     - {fileID: 8300000, guid: 8a317a8296d8c774187821ee183551d5, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 14
     Clips:
     - {fileID: 8300000, guid: 887b3af9bd8c7c24b8c45b0a25f941e0, type: 3}
-    Volume: 1
+    Volume: 0.36
   - Id: 15
     Clips:
     - {fileID: 8300000, guid: a2d2b371ebcd4694288cb2652b21f2ab, type: 3}
-    Volume: 1
+    Volume: 0.42
   - Id: 16
     Clips:
     - {fileID: 8300000, guid: ef29966677ac3074eb3dcab2501b22e9, type: 3}
-    Volume: 1
+    Volume: 0.38
   - Id: 17
     Clips:
     - {fileID: 8300000, guid: 122004991e9d50548bdfde99630ecfe5, type: 3}
-    Volume: 1
+    Volume: 0.5
   - Id: 18
     Clips:
     - {fileID: 8300000, guid: 090dec95c55211b41a186a5c779ff34a, type: 3}
-    Volume: 1
+    Volume: 0.4
   - Id: 19
     Clips:
     - {fileID: 8300000, guid: ca929aeb3e8ea5e479d3d0aa779db28c, type: 3}
-    Volume: 1
+    Volume: 0.6
   - Id: 20
     Clips:
     - {fileID: 8300000, guid: 75d075750d1a7ee428d197494dc237e8, type: 3}
-    Volume: 1
+    Volume: 0.45
   - Id: 21
     Clips:
     - {fileID: 8300000, guid: fdddb21559dca7d418f7cab0aa913c71, type: 3}
-    Volume: 1
+    Volume: 0.6
   - Id: 22
     Clips:
     - {fileID: 8300000, guid: f7e426c8f9553ea41bfab6ab6695625b, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 23
     Clips:
     - {fileID: 8300000, guid: af14ce2e9e26f5347ba3814b1e2fcc26, type: 3}
-    Volume: 1
+    Volume: 0.6
   - Id: 24
     Clips:
     - {fileID: 8300000, guid: d700a5853eb4c6945ab722e32685aebc, type: 3}
-    Volume: 1
+    Volume: 0.28
   - Id: 25
     Clips:
     - {fileID: 8300000, guid: e5d1ddf6c2010834ba7ed0db66009207, type: 3}
-    Volume: 1
+    Volume: 0.3
   - Id: 26
     Clips:
     - {fileID: 8300000, guid: 00a8a3e8cc8100f43a0c7d9daece1c1e, type: 3}
-    Volume: 1
+    Volume: 0.4
   - Id: 27
     Clips:
     - {fileID: 8300000, guid: bdaf90b819aaa364fbcf319e8c7aacee, type: 3}
-    Volume: 1
+    Volume: 0.35
   - Id: 28
     Clips:
     - {fileID: 8300000, guid: f230ec5bc783c304fa8fb9ac77a144d7, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 29
     Clips:
     - {fileID: 8300000, guid: 457d3e81e3e132a47bca376f4f9908f1, type: 3}
-    Volume: 1
+    Volume: 0.6
   - Id: 30
     Clips:
     - {fileID: 8300000, guid: ce058aefb670a7642a422a1d99818df7, type: 3}
-    Volume: 1
+    Volume: 0.35
   - Id: 31
     Clips:
     - {fileID: 8300000, guid: cb51cfeeeb497284397d655848f06155, type: 3}
-    Volume: 1
+    Volume: 0.7
   Music:
   - Id: 1
     Clip: {fileID: 8300000, guid: a51a6eca3eeb2aa45a0bfacad8e8eaef, type: 3}
@@ -172,20 +172,20 @@ MonoBehaviour:
     Volume: 1
   - Id: 10
     Clip: {fileID: 8300000, guid: a00a648a45f20a344b29a9b437d7ac56, type: 3}
-    Volume: 1
+    Volume: 0.8
   Ambient:
   - Id: 1
     Clip: {fileID: 8300000, guid: 5b8447e0de16ec44c88b28b727e6c02a, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 2
     Clip: {fileID: 8300000, guid: b21424e013c4a714abe901c184400c35, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 3
     Clip: {fileID: 8300000, guid: 571b495ff11913345b017875c25ec88b, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 4
     Clip: {fileID: 8300000, guid: 6db1f6eb5b366414fa978a29fb03fa39, type: 3}
-    Volume: 1
+    Volume: 0.7
   - Id: 5
     Clip: {fileID: 8300000, guid: 713117f869198974883ef53608a854a9, type: 3}
-    Volume: 1
+    Volume: 0.7

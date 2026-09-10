@@ -385,3 +385,19 @@ Sorteios por fase: 2 (após o mini-chefe e antes do chefe). Sobrevivência: a ca
 |---|---|---|---|
 | Laser Duplo | 3,5 de dano | 3,0 | DPS 54 → 46, fecha a distância para o Laser |
 | Mísseis | 0,45 s | 0,55 s | DPS 53 → 44 com dano em área e busca |
+
+## Mixagem do áudio final (`AudioMix`)
+
+Os clipes gerados pela ElevenLabs saem todos masterizados alto; o equilíbrio entre efeitos e música é feito por ganho por clipe, gravado no `AudioLibrary` quando o bootstrap integra os arquivos, mais limitação de vozes no `AudioManager`.
+
+| Grupo | Ganho | Motivo |
+|---|---|---|
+| Tiros do jogador (Laser, Spread, Plasma, Railgun, Missile, EnergyCannon) | 0,28 a 0,50 | disparam várias vezes por segundo; ficam sob a música |
+| Tiros inimigos e impactos pequenos | 0,22 a 0,45 | textura de fundo |
+| Explosões, dano no jogador, power-up, Ultimate, alerta de chefe | 0,50 a 0,90 | eventos que o jogador precisa perceber |
+| Raspão, risco, combo | 0,30 a 0,40 | frequentes e sutis; Overdrive inicia em 0,70 |
+| Interface e meta | 0,35 a 0,70 | |
+| Música | 1,0 (camada de Overdrive 0,8) | referência da mixagem; slider padrão 0,8 |
+| Ambiente | 0,7 (x 0,6 no gerenciador) | |
+
+Limitação de vozes: o mesmo id disparado em menos de 50 ms é descartado; em menos de 180 ms toca a 60%. Retoque de mixagem por feedback do jogador em 10/09/2026: tiros abafavam a música.
