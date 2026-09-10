@@ -230,7 +230,7 @@ Continuam no backlog e podem entrar depois: coop online, ranking global, clãs, 
 |---|---|
 | Jogo | Completo conforme o GDD. Cinco fases, quatro chefes, cinco naves, sete armas, três modos extras, progressão e conquistas |
 | Código | Compila sem erros, 133 testes automatizados passando, build Android funcionando |
-| Arte e áudio | Arte final integrada (56 sprites + ícone). Áudio: 32 efeitos e 5 ambientes finais gerados pela ElevenLabs (D-041); faltam as 10 músicas (API paga ou geração manual no site) |
+| Arte e áudio | Arte final integrada (56 sprites + ícone). Áudio final completo: 32 efeitos, 5 ambientes e 10 trilhas gerados pela ElevenLabs (D-041) |
 | Empacotamento | Falta ícone, assinatura de release, app bundle e API alvo fixa. Trabalho de horas, não de semanas |
 | Contas e conformidade | Nada iniciado. Depende de decisão comercial e de pagamento das taxas |
 | iOS | Bloqueado por falta de macOS |

@@ -142,7 +142,37 @@ MonoBehaviour:
     Clips:
     - {fileID: 8300000, guid: cb51cfeeeb497284397d655848f06155, type: 3}
     Volume: 1
-  Music: []
+  Music:
+  - Id: 1
+    Clip: {fileID: 8300000, guid: a51a6eca3eeb2aa45a0bfacad8e8eaef, type: 3}
+    Volume: 1
+  - Id: 2
+    Clip: {fileID: 8300000, guid: 11baa7802dcb5cd418d2b95748d9bc0d, type: 3}
+    Volume: 1
+  - Id: 3
+    Clip: {fileID: 8300000, guid: 6aa38fa2e5678b5418873b8802098691, type: 3}
+    Volume: 1
+  - Id: 4
+    Clip: {fileID: 8300000, guid: db75516fc957d98428de5e754f6a0697, type: 3}
+    Volume: 1
+  - Id: 5
+    Clip: {fileID: 8300000, guid: f31be74de139bfe45baa82411794589a, type: 3}
+    Volume: 1
+  - Id: 6
+    Clip: {fileID: 8300000, guid: a8a898e5de9a69d4a93b54f161e9da7c, type: 3}
+    Volume: 1
+  - Id: 7
+    Clip: {fileID: 8300000, guid: 4bf05aa08d5ad7f45ba7a39fa6ae10b3, type: 3}
+    Volume: 1
+  - Id: 8
+    Clip: {fileID: 8300000, guid: a8f348147e9a455469c72b7c8c35ab0b, type: 3}
+    Volume: 1
+  - Id: 9
+    Clip: {fileID: 8300000, guid: ce055e1cff26899468964cb979ca17a1, type: 3}
+    Volume: 1
+  - Id: 10
+    Clip: {fileID: 8300000, guid: a00a648a45f20a344b29a9b437d7ac56, type: 3}
+    Volume: 1
   Ambient:
   - Id: 1
     Clip: {fileID: 8300000, guid: 5b8447e0de16ec44c88b28b727e6c02a, type: 3}
