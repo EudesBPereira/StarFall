@@ -4,7 +4,7 @@ Shoot'em up 2D vertical para **Android e iOS**, feito em **Unity 6**. No ano de 
 
 Campanha de 10 fases com 10 chefes e mini-chefes, 8 armas, 7 naves em 3 facções, Zona de Risco, Overdrive, graze, builds temporárias, árvore de upgrades permanente, ranking local, conquistas e os modos Sobrevivência, Boss Rush e Desafio Diário.
 
-Documentação: [Plano Mestre STAR RISK](docs/product/IMPLEMENTATION_MASTER_PLAN.md) · [Especificação de arte e áudio](docs/ASSET_SPEC.md) · [Prompts de imagem](docs/IMAGE_PROMPTS.md) · [Prompts de áudio](docs/AUDIO_PROMPTS.md) · [Especificação de arte e áudio finais](docs/ASSET_SPEC.md) · [Estado do projeto e caminho até as lojas](docs/RELEASE_STATUS.md) · [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Balanceamento](docs/BALANCING.md) · [Checklist de QA](docs/QA_CHECKLIST.md) · [Backlog](docs/BACKLOG.md) · [Blueprint original](blueprint.md)
+Documentação: [Visão completa do jogo (estado atual)](docs/GAME_OVERVIEW.md) · [Plano Mestre STAR RISK](docs/product/IMPLEMENTATION_MASTER_PLAN.md) · [Especificação de arte e áudio](docs/ASSET_SPEC.md) · [Prompts de imagem](docs/IMAGE_PROMPTS.md) · [Prompts de áudio](docs/AUDIO_PROMPTS.md) · [Estado do projeto e caminho até as lojas](docs/RELEASE_STATUS.md) · [Arquitetura](docs/ARCHITECTURE.md) · [Decisões](docs/DECISIONS.md) · [Balanceamento](docs/BALANCING.md) · [Checklist de QA](docs/QA_CHECKLIST.md) · [Backlog](docs/BACKLOG.md) · [Blueprint original](blueprint.md)
 
 ## Requisitos
 
