@@ -33,7 +33,7 @@ namespace Starfall.UI
         {
             var save = SaveService.Data;
             if (save == null) return;
-            if (walletText != null) walletText.text = $"{save.credits:N0} CREDITS   {save.components} COMPONENTS";
+            if (walletText != null) walletText.text = Loc.F("{0} CREDITS   {1} COMPONENTS", save.credits.ToString("N0"), save.components);
             for (int i = 0; i < rows.Length && i < UpgradeCatalog.NodeCount; i++)
             {
                 var node = (UpgradeNode)i;
@@ -41,11 +41,11 @@ namespace Starfall.UI
                 bool maxed = level >= UpgradeCatalog.MaxLevel;
                 string pips = new string('#', level) + new string('-', UpgradeCatalog.MaxLevel - level);
                 string cost = maxed
-                    ? "MAX"
-                    : $"{UpgradeCatalog.CreditCost(node, level):N0} CR" +
-                      (UpgradeCatalog.ComponentCost(node, level) > 0 ? $" + {UpgradeCatalog.ComponentCost(node, level)} PARTS" : "");
-                rows[i].Set($"{UpgradeCatalog.Category(node)}  {UpgradeCatalog.DisplayName(node).ToUpperInvariant()}",
-                    $"[{pips}]   {UpgradeCatalog.BonusLabel(node)} per level", cost, UpgradeCatalog.CanPurchase(save, node), false);
+                    ? Loc.T("MAX")
+                    : Loc.F("{0} CR", UpgradeCatalog.CreditCost(node, level).ToString("N0")) +
+                      (UpgradeCatalog.ComponentCost(node, level) > 0 ? " + " + UpgradeCatalog.ComponentCost(node, level) + " " + Loc.T("PARTS") : "");
+                rows[i].Set(Loc.T(UpgradeCatalog.Category(node)) + "  " + Loc.Upper(Loc.T(UpgradeCatalog.DisplayName(node))),
+                    Loc.F("[{0}]   {1} per level", pips, Loc.T(UpgradeCatalog.BonusLabel(node))), cost, UpgradeCatalog.CanPurchase(save, node), false);
             }
         }
 

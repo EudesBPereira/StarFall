@@ -48,11 +48,11 @@ namespace Starfall.UI
                 var stage = i < Config.Stages.Length ? Config.Stages[i] : null;
                 bool unlocked = i <= save.unlockedStage && stage != null;
                 bool completed = save.IsStageCompleted(i);
-                string title = stage != null ? $"{i + 1}. {stage.DisplayName.ToUpperInvariant()}" : $"{i + 1}. ???";
+                string title = stage != null ? (i + 1) + ". " + Loc.Upper(Loc.T(stage.DisplayName)) : (i + 1) + ". ???";
                 int slot = Mathf.Min(i, save.stageBestScores.Length - 1);
                 string rank = completed && save.stageBestRanks != null && slot < save.stageBestRanks.Length ? StageResultRules.RankLabel((StageRank)save.stageBestRanks[slot]) : "";
-                string bosses = stage != null && !string.IsNullOrEmpty(stage.BossName) ? $"  {stage.BossName.ToUpperInvariant()}" : "";
-                string detail = !unlocked ? "LOCKED" : completed ? $"RANK {rank}  BEST {save.stageBestScores[slot]:N0}{bosses}" : "NEW" + bosses;
+                string bosses = stage != null && !string.IsNullOrEmpty(stage.BossName) ? "  " + Loc.Upper(Loc.T(stage.BossName)) : "";
+                string detail = !unlocked ? Loc.T("LOCKED") : completed ? Loc.F("RANK {0}  BEST {1}{2}", rank, save.stageBestScores[slot].ToString("N0"), bosses) : Loc.T("NEW") + bosses;
                 row.Set(title, detail, "", unlocked, i == save.unlockedStage && !completed);
                 row.gameObject.SetActive(stage != null);
             }
@@ -60,9 +60,9 @@ namespace Starfall.UI
             if (bossRushButton != null) bossRushButton.interactable = save.bossesDefeatedMask != 0;
             if (modeInfoText != null)
             {
-                string daily = save.dailyDate == DateTime.Now.ToString("yyyy-MM-dd") ? $"today best {save.dailyBestScore:N0}" : "not played today";
-                modeInfoText.text = $"SURVIVAL best wave {save.survivalBestWave}   |   BOSS RUSH best {save.bossRushBestScore:N0}   |   DAILY {daily}" +
-                                    (campaignDone ? "\nCAMPAIGN COMPLETE" : "") + (save.bossesDefeatedMask == 0 ? "\nBoss Rush unlocks after defeating a boss." : "");
+                string daily = save.dailyDate == DateTime.Now.ToString("yyyy-MM-dd") ? Loc.F("today best {0}", save.dailyBestScore.ToString("N0")) : Loc.T("not played today");
+                modeInfoText.text = Loc.F("SURVIVAL best wave {0}   |   BOSS RUSH best {1}   |   DAILY {2}", save.survivalBestWave, save.bossRushBestScore.ToString("N0"), daily) +
+                                    (campaignDone ? Loc.T("\nCAMPAIGN COMPLETE") : "") + (save.bossesDefeatedMask == 0 ? Loc.T("\nBoss Rush unlocks after defeating a boss.") : "");
             }
             if (stageRows.Length > 0)
             {

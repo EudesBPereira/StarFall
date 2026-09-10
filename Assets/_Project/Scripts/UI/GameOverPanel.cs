@@ -17,23 +17,23 @@ namespace Starfall.UI
 
         public void Show(RunStats run, in RunRewards rewards, bool isRecord, int rank)
         {
-            if (scoreText != null) scoreText.text = $"FINAL SCORE  {run.Score:N0}";
+            if (scoreText != null) scoreText.text = Loc.F("FINAL SCORE  {0}", run.Score.ToString("N0"));
             if (detailText != null)
             {
                 detailText.text = run.Mode == GameModeId.Survival || run.Mode == GameModeId.DailyChallenge
-                    ? $"WAVES SURVIVED  {run.WavesSurvived}   ENEMIES  {run.Kills}"
-                    : $"ENEMIES  {run.Kills}   BOSSES  {run.BossKills}";
+                    ? Loc.F("WAVES SURVIVED  {0}   ENEMIES  {1}", run.WavesSurvived, run.Kills)
+                    : Loc.F("ENEMIES  {0}   BOSSES  {1}", run.Kills, run.BossKills);
             }
             if (rewardsText != null) rewardsText.text = VictoryPanel.FormatRewards(rewards);
             if (recordText != null)
             {
                 recordText.gameObject.SetActive(isRecord || rank >= 0);
-                recordText.text = isRecord ? "NEW HIGH SCORE!" : rank >= 0 ? $"RANKING #{rank + 1}" : "";
+                recordText.text = isRecord ? Loc.T("NEW HIGH SCORE!") : rank >= 0 ? Loc.F("RANKING #{0}", rank + 1) : "";
             }
             if (restartButton != null)
             {
                 var label = restartButton.GetComponentInChildren<TMP_Text>();
-                if (label != null) label.text = run.Mode == GameModeId.Campaign ? "RETRY STAGE" : "PLAY AGAIN";
+                if (label != null) label.text = Loc.T(run.Mode == GameModeId.Campaign ? "RETRY STAGE" : "PLAY AGAIN");
             }
             Show();
         }

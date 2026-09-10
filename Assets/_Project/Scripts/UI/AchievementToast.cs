@@ -40,8 +40,8 @@ namespace Starfall.UI
             {
                 var id = _queue.Dequeue();
                 if (panel == null) yield break;
-                if (titleText != null) titleText.text = "ACHIEVEMENT: " + AchievementRules.DisplayName(id).ToUpperInvariant();
-                if (bodyText != null) bodyText.text = AchievementRules.Description(id);
+                if (titleText != null) titleText.text = Loc.F("ACHIEVEMENT: {0}", Loc.Upper(Loc.T(AchievementRules.DisplayName(id))));
+                if (bodyText != null) bodyText.text = Loc.T(AchievementRules.Description(id));
                 panel.gameObject.SetActive(true);
                 float t = 0f;
                 Vector2 hidden = new Vector2(0f, 160f);

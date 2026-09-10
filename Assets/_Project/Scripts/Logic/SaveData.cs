@@ -68,6 +68,8 @@ namespace Starfall.Logic
         public float sfxVolume = 1f;
         public bool autoFire = true;
         public float touchSensitivity = 1.4f;
+        /// <summary>-1 = follow the device language; otherwise a <see cref="Language"/> value.</summary>
+        public int language = -1;
         public bool reducedEffects = false;
         public bool grazeFeedback = true;
         public bool showHitbox = false;
@@ -179,6 +181,7 @@ namespace Starfall.Logic
             data.musicVolume = Clamp01(data.musicVolume);
             data.sfxVolume = Clamp01(data.sfxVolume);
             data.touchSensitivity = Math.Clamp(data.touchSensitivity, 0.5f, 3f);
+            if (data.language < -1 || data.language > 1) data.language = -1;
             return data;
         }
 

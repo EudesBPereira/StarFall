@@ -91,6 +91,7 @@ namespace Starfall.EditorTools
             panel.reducedEffectsToggle = UiBuilder.CreateToggle(column, "ReducedEffects", "REDUCED EFFECTS");
             panel.grazeFeedbackToggle = UiBuilder.CreateToggle(column, "GrazeFeedback", "GRAZE FEEDBACK");
             panel.showHitboxToggle = UiBuilder.CreateToggle(column, "ShowHitbox", "SHOW HITBOX");
+            panel.languageButton = UiBuilder.CreateButton(column, "Language", "LANGUAGE: ENGLISH", new Vector2(560f, 88f), 34f);
             panel.resetProgressButton = UiBuilder.CreateButton(column, "ResetProgress", "RESET PROGRESS", new Vector2(560f, 88f), 34f, new Color(0.35f, 0.1f, 0.15f, 0.95f));
             panel.resetFeedbackText = UiBuilder.AddColumnText(column, "ResetFeedback", "", 28f, UiBuilder.Accent2, 40f);
             panel.backButton = UiBuilder.CreateButton(column, "Back", "BACK", new Vector2(560f, 96f));

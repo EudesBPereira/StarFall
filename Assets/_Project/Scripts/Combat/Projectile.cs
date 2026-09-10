@@ -152,7 +152,7 @@ namespace Starfall.Combat
                 else
                     _vfx.SpawnImpact(hit, _spec.Color);
                 if (_spec.Critical && result.Applied)
-                    _vfx.SpawnFloatingText(hit + Vector2.up * 0.3f, "CRIT", new Color(1f, 0.9f, 0.3f), 0.6f);
+                    _vfx.SpawnFloatingText(hit + Vector2.up * 0.3f, Loc.T("CRIT"), new Color(1f, 0.9f, 0.3f), 0.6f);
             }
 
             if (_spec.SplashRadius > 0f) ApplySplash(hit, target);

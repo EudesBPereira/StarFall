@@ -229,7 +229,7 @@ namespace Starfall.Bosses
             {
                 Flash(Color.white);
                 Projectile.ClearEnemyProjectiles();
-                GameSignals.RaiseStageMessage(string.IsNullOrEmpty(phase.Name) ? $"PHASE {index + 1}" : phase.Name, 1.4f);
+                GameSignals.RaiseStageMessage(string.IsNullOrEmpty(phase.Name) ? Loc.F("PHASE {0}", index + 1) : Loc.T(phase.Name), 1.4f);
                 GameSignals.RaiseBossPhaseChanged(this, index);
                 AudioManager.PlaySfx(SfxId.BossWarning, 0.7f);
                 if (Context != null)
@@ -316,7 +316,7 @@ namespace Starfall.Bosses
             if (Context != null && Context.Vfx != null)
             {
                 Context.Vfx.SpawnExplosion(part.transform.position, 1.2f, Definition.ExplosionColor);
-                Context.Vfx.SpawnFloatingText(part.transform.position + Vector3.up * 0.5f, string.IsNullOrEmpty(spec.Name) ? "PART DESTROYED" : spec.Name.ToUpperInvariant(), new Color(1f, 0.85f, 0.3f), 0.9f);
+                Context.Vfx.SpawnFloatingText(part.transform.position + Vector3.up * 0.5f, Loc.Upper(Loc.T(string.IsNullOrEmpty(spec.Name) ? "PART DESTROYED" : spec.Name)), new Color(1f, 0.85f, 0.3f), 0.9f);
             }
             if (spec.DisablesAttack >= 0) _disabledAttacks.Add(spec.DisablesAttack);
             if (spec.DisablesAttack >= 0 && frontLaser != null)
@@ -338,7 +338,7 @@ namespace Starfall.Bosses
                     _coreShielded = false;
                     RefreshInvulnerability();
                     if (shieldVisual != null) shieldVisual.enabled = false;
-                    GameSignals.RaiseStageMessage("CORE EXPOSED", 1.4f);
+                    GameSignals.RaiseStageMessage(Loc.T("CORE EXPOSED"), 1.4f);
                     if (Context != null && Context.Vfx != null) Context.Vfx.SpawnShieldBreak(transform.position, new Color(0.8f, 0.5f, 1f));
                 }
             }

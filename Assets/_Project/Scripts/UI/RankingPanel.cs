@@ -49,9 +49,9 @@ namespace Starfall.UI
                 if (!has) continue;
                 var e = _buffer[i];
                 string ship = e.ship >= 0 && e.ship < ProgressionRules.ShipCount ? ((ShipId)e.ship).ToString().ToUpperInvariant() : "";
-                string detail = _mode == GameModeId.Campaign ? $"STAGE {e.stage + 1}  {ship}  {e.date}"
+                string detail = _mode == GameModeId.Campaign ? Loc.F("STAGE {0}  {1}  {2}", e.stage + 1, ship, e.date)
                     : _mode == GameModeId.BossRush ? $"{ship}  {e.date}"
-                    : $"WAVE {e.wave}  {ship}  {e.date}";
+                    : Loc.F("WAVE {0}  {1}  {2}", e.wave, ship, e.date);
                 row.Set($"#{i + 1}   {e.score:N0}", detail, "", false, false);
             }
             if (emptyText != null) emptyText.gameObject.SetActive(_buffer.Count == 0);
@@ -62,14 +62,14 @@ namespace Starfall.UI
             if (achievementsText != null && save != null)
             {
                 _sb.Clear();
-                _sb.Append("ACHIEVEMENTS\n");
+                _sb.Append(Loc.T("ACHIEVEMENTS\n"));
                 for (int i = 0; i < AchievementRules.Count; i++)
                 {
                     var id = (AchievementId)i;
                     _sb.Append(save.HasAchievement(i) ? "[X] " : "[ ] ")
-                       .Append(AchievementRules.DisplayName(id))
+                       .Append(Loc.T(AchievementRules.DisplayName(id)))
                        .Append(" - ")
-                       .Append(AchievementRules.Description(id))
+                       .Append(Loc.T(AchievementRules.Description(id)))
                        .Append('\n');
                 }
                 achievementsText.text = _sb.ToString();

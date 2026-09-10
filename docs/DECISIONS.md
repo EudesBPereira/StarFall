@@ -252,3 +252,17 @@ Recolorações (Destroyer Mk.II, Sentinel-X Mk.II, Widow Prime, Reaper Prime) co
 - **Problema observado pelo responsável:** o chefe não parecia sofrer dano e a barra de vida não era lida. Causa da barra: todos os preenchimentos (casco, escudo, energia, chefe) usavam o sprite decorado do painel, que na arte final é azul-escuro com borda ciano; a barra cheia parecia vazia.
 - **Correção:** `UiBuilder.FillSprite` (pixel branco) para todo preenchimento; painel decorado só em botões e fundos. Barra do chefe maior (30 px), preenchimento vermelho, **rastro branco** que encolhe com atraso (`HudView.bossTrailFill`) e **porcentagem** no centro.
 - **Feedback de dano no chefe** (`BossController.OnDamageFeedback`): flash vermelho-branco de 0,1 s, faíscas no ponto de impacto (limite 12/s) e **números de dano flutuantes** acumulados a cada 0,25 s (dourado ≥ 100). `Enemy` ganhou o gancho virtual `OnDamageFeedback` e `Flash(cor, segundos)`.
+
+## D-040 — Idiomas: inglês e português do Brasil
+
+- **Mecanismo:** localização por texto-fonte. O inglês escrito no código e nos dados é a chave; `Logic/PortugueseStrings` mapeia cada chave para a tradução; `Loc.T` (texto) e `Loc.F` (formato com `{0}`) fazem a busca com fallback para o inglês, de modo que um texto sem tradução nunca quebra a interface. Sem `UnityEngine` na lógica: testável no `dotnet test`.
+- **Dados:** nomes de fase, briefings, objetivos, descrições de naves e armas, títulos de chefes, partes, power-ups e mensagens de evento continuam em inglês nos ScriptableObjects e são traduzidos na exibição. Trocar um texto no `ContentFactory` exige atualizar a chave na tabela (o teste `PortugueseTable_CoversLogicDisplayStrings` cobre as strings da lógica; as de conteúdo caem no fallback).
+- **Rótulos fixos das cenas** (HULL, PLAY, SETTINGS…) recebem `LocalizedText` automaticamente no `UiBuilder.CreateText`; o componente só altera o texto enquanto ele ainda mostra a chave ou a última tradução, então textos dinâmicos definidos por código não são sobrescritos.
+- **Seleção:** `SaveData.language` (-1 = idioma do aparelho, detectado por `Application.systemLanguage`); botão "IDIOMA" em Configurações alterna e salva; `Loc.Changed` atualiza os rótulos fixos na hora e os painéis se atualizam ao reabrir.
+- **Fora do escopo agora:** outros idiomas (basta uma nova tabela e um valor no enum) e localização de áudio.
+
+## D-041 — Geração do áudio final pela API da ElevenLabs
+
+- **Ferramenta:** `Tools/AssetPipeline/generate_audio.py` chama `POST /v1/sound-generation` (32 efeitos e 5 ambientes em loop) e `POST /v1/music` (10 trilhas instrumentais a 120 BPM em ré menor) e grava direto em `Assets/_Project/Audio/Final/{SFX,Ambient,Music}/<Id>.mp3` com os nomes de `ASSET_SPEC.md`; o bootstrap integra pela convenção de nome (D-037). Arquivos existentes são pulados, então dá para reexecutar para preencher lacunas ou trocar um som com `--force --only Nome`.
+- **Credencial:** lida de `ELEVENLABS_API_KEY` ou `~/.starfall/elevenlabs.key`; nunca do repositório (`*.key` e `.starfall/` no `.gitignore`). A chave precisa das permissões **Sound Generation** e **Music Generation** no painel da ElevenLabs.
+- **Formato:** MP3 44,1 kHz; o importador converte (efeitos em mono, música em streaming). Loops de ambiente usam o parâmetro `loop` da API; as trilhas pedem loop no prompt e devem ser conferidas na emenda (QA).

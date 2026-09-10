@@ -109,7 +109,7 @@ namespace Starfall.Waves
                         if (!StageVariation.Roll(seed, stageIndex, _eventIndex, ev.Chance)) break;
                         var wave = PickWave(ev, seed, stageIndex, _eventIndex);
                         if (wave == null) break;
-                        GameSignals.RaiseStageMessage(string.IsNullOrEmpty(ev.Message) ? "AMBUSH!" : ev.Message, 1.4f);
+                        GameSignals.RaiseStageMessage(Loc.T(string.IsNullOrEmpty(ev.Message) ? "AMBUSH!" : ev.Message), 1.4f);
                         _wave++;
                         GameSignals.RaiseWaveStarted(_wave);
                         yield return RunWave(wave);
@@ -119,7 +119,7 @@ namespace Starfall.Waves
                         yield return new WaitForSeconds(ev.Seconds);
                         break;
                     case StageEventType.Message:
-                        GameSignals.RaiseStageMessage(ev.Message, ev.Seconds > 0f ? ev.Seconds : 2f);
+                        GameSignals.RaiseStageMessage(Loc.T(ev.Message), ev.Seconds > 0f ? ev.Seconds : 2f);
                         break;
                     case StageEventType.AsteroidField:
                         SetAsteroidField(ev.Flag);
@@ -202,7 +202,7 @@ namespace Starfall.Waves
         {
             float wait = 1.5f;
             while (wait > 0f && _ctx.Enemies.BlockingCount > 0) { wait -= Time.deltaTime; yield return null; }
-            GameSignals.RaiseStageMessage(string.IsNullOrEmpty(warning) ? $"WARNING: {boss.Title}" : warning, 2.2f);
+            GameSignals.RaiseStageMessage(string.IsNullOrEmpty(warning) ? Loc.F("WARNING: {0}", Loc.T(boss.Title)) : Loc.T(warning), 2.2f);
             yield return new WaitForSeconds(1.2f);
 
             var spawnPos = new Vector2(_ctx.PlayArea.Center.x, _ctx.PlayArea.Top + 3f);
@@ -231,11 +231,11 @@ namespace Starfall.Waves
             {
                 _ctx.Spawner.SpeedMultiplier = config.DailyEnemySpeedMultiplier;
                 _ctx.Spawner.DropChanceMultiplier = config.DailyDropChanceMultiplier;
-                GameSignals.RaiseStageMessage("DAILY CHALLENGE  -  FASTER ENEMIES, FEWER DROPS", 3f);
+                GameSignals.RaiseStageMessage(Loc.T("DAILY CHALLENGE  -  FASTER ENEMIES, FEWER DROPS"), 3f);
             }
             else
             {
-                GameSignals.RaiseStageMessage("SURVIVAL  -  ENDLESS WAVES", 2.5f);
+                GameSignals.RaiseStageMessage(Loc.T("SURVIVAL  -  ENDLESS WAVES"), 2.5f);
             }
             yield return new WaitForSeconds(2f);
 
@@ -244,7 +244,7 @@ namespace Starfall.Waves
                 _wave = waveIndex + 1;
                 _ctx.Spawner.StatMultiplier = ProceduralWaves.DifficultyMultiplier(waveIndex);
                 GameSignals.RaiseWaveStarted(_wave);
-                GameSignals.RaiseStageMessage($"WAVE {_wave}", 1.2f);
+                GameSignals.RaiseStageMessage(Loc.F("WAVE {0}", _wave), 1.2f);
 
                 if (config.SurvivalMiniBossEvery > 0 && _wave % config.SurvivalMiniBossEvery == 0 && config.SurvivalMiniBosses != null && config.SurvivalMiniBosses.Length > 0)
                 {
@@ -279,7 +279,7 @@ namespace Starfall.Waves
         private IEnumerator RunBossRush()
         {
             var bosses = _ctx.Config.Bosses;
-            GameSignals.RaiseStageMessage("BOSS RUSH", 2.5f);
+            GameSignals.RaiseStageMessage(Loc.T("BOSS RUSH"), 2.5f);
             yield return new WaitForSeconds(2f);
             if (bosses != null)
             {

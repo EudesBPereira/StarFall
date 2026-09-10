@@ -1,3 +1,4 @@
+using Starfall.Logic;
 using System;
 using Starfall.Audio;
 using Starfall.Save;
@@ -22,6 +23,7 @@ namespace Starfall.UI
         [SerializeField] internal Button resetProgressButton;
         [SerializeField] internal TMP_Text resetFeedbackText;
         [SerializeField] internal Button backButton;
+        [SerializeField] internal Button languageButton;
 
         private bool _suppress;
         public event Action Closed;
@@ -39,6 +41,7 @@ namespace Starfall.UI
             if (showHitboxToggle != null) showHitboxToggle.onValueChanged.AddListener(_ => ApplyLive());
             if (resetProgressButton != null) resetProgressButton.onClick.AddListener(ResetProgress);
             if (backButton != null) backButton.onClick.AddListener(Close);
+            if (languageButton != null) languageButton.onClick.AddListener(CycleLanguage);
         }
 
         public override void Show()
@@ -58,6 +61,7 @@ namespace Starfall.UI
                 if (showHitboxToggle != null) showHitboxToggle.isOn = data.showHitbox;
             }
             if (resetFeedbackText != null) resetFeedbackText.text = "";
+            RefreshLanguageLabel();
             _suppress = false;
             base.Show();
         }
@@ -79,10 +83,28 @@ namespace Starfall.UI
             if (AudioManager.Instance != null) AudioManager.Instance.SetVolumes(data.masterVolume, data.musicVolume, data.sfxVolume);
         }
 
+        private void CycleLanguage()
+        {
+            var data = SaveService.Data;
+            var next = Loc.Next(Loc.Current);
+            if (data != null) data.language = (int)next;
+            Loc.Set(next);
+            SaveService.Save();
+            RefreshLanguageLabel();
+            Audio.AudioManager.PlaySfx(Audio.SfxId.UiConfirm);
+        }
+
+        private void RefreshLanguageLabel()
+        {
+            if (languageButton == null) return;
+            var label = languageButton.GetComponentInChildren<TMPro.TMP_Text>();
+            if (label != null) label.text = Loc.F("LANGUAGE: {0}", Loc.DisplayName(Loc.Current));
+        }
+
         private void ResetProgress()
         {
             SaveService.ResetProgress();
-            if (resetFeedbackText != null) resetFeedbackText.text = "Progress reset.";
+            if (resetFeedbackText != null) resetFeedbackText.text = Loc.T("Progress reset.");
         }
 
         public void Close()

@@ -33,17 +33,17 @@ namespace Starfall.UI
             _offer.Clear();
             _offer.AddRange(offer);
             _onChosen = onChosen;
-            if (titleText != null) titleText.text = "CHOOSE A MODULE";
+            if (titleText != null) titleText.text = Loc.T("CHOOSE A MODULE");
             if (currentBuildText != null)
             {
-                if (current == null || current.Count == 0) currentBuildText.text = "Current build: none";
+                if (current == null || current.Count == 0) currentBuildText.text = Loc.T("Current build: none");
                 else
                 {
-                    var sb = new System.Text.StringBuilder("Current build: ");
+                    var sb = new System.Text.StringBuilder(Loc.T("Current build: "));
                     for (int i = 0; i < current.Count; i++)
                     {
                         if (i > 0) sb.Append(", ");
-                        sb.Append(BuildMods.DisplayName(current[i]));
+                        sb.Append(Loc.T(BuildMods.DisplayName(current[i])));
                     }
                     currentBuildText.text = sb.ToString();
                 }
@@ -55,7 +55,7 @@ namespace Starfall.UI
                 if (!has) continue;
                 var id = _offer[i];
                 int stacks = BuildMods.CountOf(current, id);
-                rows[i].Set(BuildMods.DisplayName(id).ToUpperInvariant(), BuildMods.Description(id), stacks > 0 ? $"x{stacks + 1}" : "", true, false);
+                rows[i].Set(Loc.Upper(Loc.T(BuildMods.DisplayName(id))), Loc.T(BuildMods.Description(id)), stacks > 0 ? $"x{stacks + 1}" : "", true, false);
             }
             firstSelected = _offer.Count > 0 && rows.Length > 0 ? rows[0].gameObject : (skipButton != null ? skipButton.gameObject : null);
             Show();

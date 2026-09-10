@@ -47,7 +47,7 @@ namespace Starfall.Waves
             band.transform.localScale = new Vector3((area.Width + 2f) / Mathf.Max(0.01f, size.x), FlareHeight / Mathf.Max(0.01f, size.y), 1f);
             band.sortingOrder = SortingOrders.Fog + 1;
             band.enabled = true;
-            GameSignals.RaiseStageMessage("SOLAR FLARE - CLEAR THE BAND", 1.4f);
+            GameSignals.RaiseStageMessage(Loc.T("SOLAR FLARE - CLEAR THE BAND"), 1.4f);
             AudioManager.PlaySfx(SfxId.Alarm, 0.7f);
 
             float t = 0f;
@@ -86,7 +86,7 @@ namespace Starfall.Waves
                 yield break;
             }
             var def = ctx.CurrentStage.AsteroidDefinition;
-            GameSignals.RaiseStageMessage("METEOR SHOWER", 1.4f);
+            GameSignals.RaiseStageMessage(Loc.T("METEOR SHOWER"), 1.4f);
             AudioManager.PlaySfx(SfxId.Alarm, 0.5f);
             yield return new WaitForSeconds(1f);
             int count = 8 + Mathf.RoundToInt(value * 6f);
@@ -111,7 +111,7 @@ namespace Starfall.Waves
             fogOverlay.transform.localScale = new Vector3((area.Width + 2f) / Mathf.Max(0.01f, size.x), (area.Height + 2f) / Mathf.Max(0.01f, size.y), 1f);
             fogOverlay.sortingOrder = SortingOrders.Fog;
             fogOverlay.enabled = true;
-            GameSignals.RaiseStageMessage("NEBULA PULSE - LOW VISIBILITY", 1.4f);
+            GameSignals.RaiseStageMessage(Loc.T("NEBULA PULSE - LOW VISIBILITY"), 1.4f);
             float peak = 0.28f + 0.12f * value;
             float duration = 6f;
             float t = 0f;

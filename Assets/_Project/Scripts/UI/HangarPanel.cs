@@ -58,7 +58,7 @@ namespace Starfall.UI
         {
             var save = SaveService.Data;
             if (Config == null || save == null) return;
-            if (walletText != null) walletText.text = $"{save.credits:N0} CREDITS   {save.components} COMPONENTS";
+            if (walletText != null) walletText.text = Loc.F("{0} CREDITS   {1} COMPONENTS", save.credits.ToString("N0"), save.components);
 
             for (int i = 0; i < shipRows.Length; i++)
             {
@@ -66,9 +66,9 @@ namespace Starfall.UI
                 if (row == null) continue;
                 var ship = Config.GetShip((ShipId)i);
                 bool owned = save.IsShipUnlocked(i);
-                string cost = owned ? (save.selectedShip == i ? "EQUIPPED" : "OWNED")
-                    : ProgressionRules.ShipRequiresCampaign((ShipId)i) ? "CAMPAIGN" : $"{ProgressionRules.ShipCreditCost((ShipId)i):N0} CR";
-                row.Set(ship != null ? ship.DisplayName.ToUpperInvariant() : ((ShipId)i).ToString().ToUpperInvariant(),
+                string cost = owned ? (save.selectedShip == i ? Loc.T("EQUIPPED") : Loc.T("OWNED"))
+                    : ProgressionRules.ShipRequiresCampaign((ShipId)i) ? Loc.T("CAMPAIGN") : Loc.F("{0} CR", ProgressionRules.ShipCreditCost((ShipId)i).ToString("N0"));
+                row.Set(ship != null ? Loc.Upper(Loc.T(ship.DisplayName)) : ((ShipId)i).ToString().ToUpperInvariant(),
                     ship != null ? ShortStats(ship) : "", cost, ship != null, _viewWeapon < 0 && _viewShip == i);
                 if (row.icon != null && ship != null) { row.icon.sprite = ship.Sprite; row.icon.color = ship.Tint; }
             }
@@ -78,9 +78,9 @@ namespace Starfall.UI
                 if (row == null) continue;
                 var weapon = Config.GetWeapon((WeaponId)i);
                 bool owned = save.IsWeaponUnlocked(i);
-                string cost = owned ? (save.selectedWeapon == i ? "EQUIPPED" : "OWNED") : $"{ProgressionRules.WeaponCreditCost((WeaponId)i):N0} CR";
-                row.Set(weapon != null ? weapon.DisplayName.ToUpperInvariant() : ((WeaponId)i).ToString().ToUpperInvariant(),
-                    weapon != null ? weapon.Description : "", cost, weapon != null, _viewWeapon == i);
+                string cost = owned ? (save.selectedWeapon == i ? Loc.T("EQUIPPED") : Loc.T("OWNED")) : Loc.F("{0} CR", ProgressionRules.WeaponCreditCost((WeaponId)i).ToString("N0"));
+                row.Set(weapon != null ? Loc.Upper(Loc.T(weapon.DisplayName)) : ((WeaponId)i).ToString().ToUpperInvariant(),
+                    weapon != null ? Loc.T(weapon.Description) : "", cost, weapon != null, _viewWeapon == i);
                 if (row.icon != null && weapon != null) { row.icon.sprite = weapon.ProjectileSprite; row.icon.color = weapon.ProjectileColor; }
             }
 
@@ -94,14 +94,14 @@ namespace Starfall.UI
             if (ship == null) return;
             if (previewImage != null) { previewImage.sprite = ship.Sprite; previewImage.color = ship.Tint; previewImage.preserveAspect = true; }
             if (preview != null) preview.SetTarget(previewImage != null ? previewImage.rectTransform : null);
-            if (previewName != null) previewName.text = ship.DisplayName.ToUpperInvariant();
-            if (previewDescription != null) previewDescription.text = ship.Description;
+            if (previewName != null) previewName.text = Loc.Upper(Loc.T(ship.DisplayName));
+            if (previewDescription != null) previewDescription.text = Loc.T(ship.Description);
             var mods = UpgradeCatalog.Compute(save.upgradeLevels);
             var loadout = new PlayerLoadout(ship, ship.Weapon, mods);
             if (statsText != null)
-                statsText.text = $"HULL {loadout.MaxHull:0}   SHIELD {loadout.MaxShield:0}   SPEED {loadout.MoveSpeed:0.0}\n" +
-                                 $"DAMAGE x{loadout.DamageMultiplier:0.00}   CRIT {loadout.CritChance * 100f:0}% (x{loadout.CritMultiplier:0.0})\n" +
-                                 $"SHIELD REGEN {loadout.ShieldRegenPerSecond:0.0}/s   ULTIMATE x{loadout.UltimatePowerMultiplier:0.00}\n" + KitLine(ship);
+                statsText.text = Loc.F("HULL {0}   SHIELD {1}   SPEED {2}\n", loadout.MaxHull.ToString("0"), loadout.MaxShield.ToString("0"), loadout.MoveSpeed.ToString("0.0")) +
+                                 Loc.F("DAMAGE x{0}   CRIT {1}% (x{2})\n", loadout.DamageMultiplier.ToString("0.00"), (loadout.CritChance * 100f).ToString("0"), loadout.CritMultiplier.ToString("0.0")) +
+                                 Loc.F("SHIELD REGEN {0}/s   ULTIMATE x{1}\n", loadout.ShieldRegenPerSecond.ToString("0.0"), loadout.UltimatePowerMultiplier.ToString("0.00")) + KitLine(ship);
 
             bool owned = save.IsShipUnlocked(_viewShip);
             bool equipped = save.selectedShip == _viewShip;
@@ -110,17 +110,17 @@ namespace Starfall.UI
                 if (owned)
                 {
                     actionButton.interactable = !equipped;
-                    actionLabel.text = equipped ? "EQUIPPED" : "EQUIP";
+                    actionLabel.text = Loc.T(equipped ? "EQUIPPED" : "EQUIP");
                 }
                 else if (ProgressionRules.ShipRequiresCampaign((ShipId)_viewShip))
                 {
                     actionButton.interactable = false;
-                    actionLabel.text = string.IsNullOrEmpty(ship.UnlockHint) ? "FINISH THE CAMPAIGN" : ship.UnlockHint.ToUpperInvariant();
+                    actionLabel.text = string.IsNullOrEmpty(ship.UnlockHint) ? Loc.T("FINISH THE CAMPAIGN") : Loc.Upper(Loc.T(ship.UnlockHint));
                 }
                 else
                 {
                     actionButton.interactable = ProgressionRules.CanBuyShip(save, (ShipId)_viewShip);
-                    actionLabel.text = $"BUY  {ProgressionRules.ShipCreditCost((ShipId)_viewShip):N0} CR";
+                    actionLabel.text = Loc.F("BUY  {0} CR", ProgressionRules.ShipCreditCost((ShipId)_viewShip).ToString("N0"));
                 }
             }
         }
@@ -131,15 +131,15 @@ namespace Starfall.UI
             if (weapon == null) return;
             if (previewImage != null) { previewImage.sprite = weapon.ProjectileSprite; previewImage.color = weapon.ProjectileColor; previewImage.preserveAspect = true; }
             if (preview != null) preview.SetTarget(previewImage != null ? previewImage.rectTransform : null);
-            if (previewName != null) previewName.text = weapon.DisplayName.ToUpperInvariant();
-            if (previewDescription != null) previewDescription.text = weapon.Description;
+            if (previewName != null) previewName.text = Loc.Upper(Loc.T(weapon.DisplayName));
+            if (previewDescription != null) previewDescription.text = Loc.T(weapon.Description);
             if (statsText != null)
             {
                 float dps = weapon.FireInterval > 0f ? weapon.Damage * weapon.GetLevel(1).Shots.Length / weapon.FireInterval : 0f;
-                string extra = weapon.Pierce > 0 ? $"   PIERCE {weapon.Pierce}"
-                    : weapon.Homing ? "   HOMING"
-                    : weapon.ChargeSeconds > 0f ? $"   CHARGE {weapon.ChargeSeconds:0.0}s" : "";
-                statsText.text = $"DAMAGE {weapon.Damage:0.#}   RATE {1f / weapon.FireInterval:0.0}/s   DPS {dps:0}{extra}\nMAX LEVEL {weapon.MaxLevel}";
+                string extra = weapon.Pierce > 0 ? Loc.F("   PIERCE {0}", weapon.Pierce)
+                    : weapon.Homing ? Loc.T("   HOMING")
+                    : weapon.ChargeSeconds > 0f ? Loc.F("   CHARGE {0}s", weapon.ChargeSeconds.ToString("0.0")) : "";
+                statsText.text = Loc.F("DAMAGE {0}   RATE {1}/s   DPS {2}{3}\nMAX LEVEL {4}", weapon.Damage.ToString("0.#"), (1f / weapon.FireInterval).ToString("0.0"), dps.ToString("0"), extra, weapon.MaxLevel);
             }
             bool owned = save.IsWeaponUnlocked(_viewWeapon);
             bool equipped = save.selectedWeapon == _viewWeapon;
@@ -148,12 +148,12 @@ namespace Starfall.UI
                 if (owned)
                 {
                     actionButton.interactable = !equipped;
-                    actionLabel.text = equipped ? "EQUIPPED" : "EQUIP";
+                    actionLabel.text = Loc.T(equipped ? "EQUIPPED" : "EQUIP");
                 }
                 else
                 {
                     actionButton.interactable = ProgressionRules.CanBuyWeapon(save, (WeaponId)_viewWeapon);
-                    actionLabel.text = $"BUY  {ProgressionRules.WeaponCreditCost((WeaponId)_viewWeapon):N0} CR";
+                    actionLabel.text = Loc.F("BUY  {0} CR", ProgressionRules.WeaponCreditCost((WeaponId)_viewWeapon).ToString("N0"));
                 }
             }
         }
@@ -183,14 +183,14 @@ namespace Starfall.UI
             Refresh();
         }
 
-        private static string ShortStats(ShipDefinition s) => $"{FactionRules.FactionName(s.Faction)}  HULL {s.MaxHull:0}  SHD {s.MaxShield:0}  SPD {s.MoveSpeed:0.0}";
+        private static string ShortStats(ShipDefinition s) => Loc.F("{0}  HULL {1}  SHD {2}  SPD {3}", Loc.T(FactionRules.FactionName(s.Faction)), s.MaxHull.ToString("0"), s.MaxShield.ToString("0"), s.MoveSpeed.ToString("0.0"));
 
         private static string KitLine(ShipDefinition s)
         {
-            string passive = s.Faction == FactionId.Biomech ? $"LIFESTEAL {s.LifestealPerKill * 100f:0.#}%/KILL"
-                : s.Faction == FactionId.Cyber ? (s.HasCompanionDrone ? "DRONE + MARK" : "MARK TARGETS")
-                : $"PRECISION +{s.PrecisionBonusPerHit * 100f:0.#}%/HIT";
-            return $"{FactionRules.FactionName(s.Faction)}   ULT: {FactionRules.UltimateName(s.Ultimate)}   PASSIVE: {passive}";
+            string passive = s.Faction == FactionId.Biomech ? Loc.F("LIFESTEAL {0}%/KILL", (s.LifestealPerKill * 100f).ToString("0.#"))
+                : s.Faction == FactionId.Cyber ? Loc.T(s.HasCompanionDrone ? "DRONE + MARK" : "MARK TARGETS")
+                : Loc.F("PRECISION +{0}%/HIT", (s.PrecisionBonusPerHit * 100f).ToString("0.#"));
+            return Loc.F("{0}   ULT: {1}   PASSIVE: {2}", Loc.T(FactionRules.FactionName(s.Faction)), Loc.T(FactionRules.UltimateName(s.Ultimate)), passive);
         }
     }
 }

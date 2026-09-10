@@ -257,7 +257,7 @@ namespace Starfall.Player
             if (_ctx != null && _ctx.Vfx != null)
             {
                 _ctx.Vfx.SpawnPickupBurst(transform.position, def.Color);
-                _ctx.Vfx.SpawnFloatingText(transform.position + Vector3.up * 0.8f, def.Label, def.Color);
+                _ctx.Vfx.SpawnFloatingText(transform.position + Vector3.up * 0.8f, Loc.T(def.Label), def.Color);
             }
         }
 

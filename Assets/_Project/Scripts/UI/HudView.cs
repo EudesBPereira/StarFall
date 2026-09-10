@@ -75,7 +75,7 @@ namespace Starfall.UI
         public void SetMultiplier(int m)
         {
             if (multiplierText == null) return;
-            multiplierText.text = $"COMBO x{m}";
+            multiplierText.text = Loc.F("COMBO x{0}", m);
             multiplierText.color = m >= 10 ? AlertColor : m >= 5 ? new Color(0.6f, 1f, 0.8f) : Color.white;
         }
 
@@ -109,7 +109,7 @@ namespace Starfall.UI
             if (riskText != null)
             {
                 string marks = state == RiskState.Safe ? "" : new string('!', (int)state);
-                riskText.text = overdrive ? $"OVERDRIVE x{multiplier:0.#}" : $"RISK {RiskLabel(state)}{marks} x{multiplier:0.#}";
+                riskText.text = overdrive ? Loc.F("OVERDRIVE x{0}", multiplier.ToString("0.#")) : Loc.F("RISK {0}{1} x{2}", Loc.T(RiskLabel(state)), marks, multiplier.ToString("0.#"));
                 riskText.color = overdrive ? Color.Lerp(AllyColor, ExtremeColor, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 8f)) : RiskColor(state);
             }
             if (riskFill != null)
@@ -127,22 +127,22 @@ namespace Starfall.UI
                 overdriveFill.color = active ? Color.Lerp(AllyColor, ExtremeColor, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 10f)) : AllyColor;
             }
             if (overdriveLabel != null)
-                overdriveLabel.text = active ? $"OVERDRIVE {remainingSeconds:0.0}s" : fraction >= 0.999f ? "OVERDRIVE READY" : "OVERDRIVE";
+                overdriveLabel.text = active ? Loc.F("OVERDRIVE {0}s", remainingSeconds.ToString("0.0")) : fraction >= 0.999f ? Loc.T("OVERDRIVE READY") : Loc.T("OVERDRIVE");
         }
 
         public void SetGrazes(int grazes)
         {
-            if (grazeText != null) grazeText.text = grazes > 0 ? $"GRAZE {grazes}" : "";
+            if (grazeText != null) grazeText.text = grazes > 0 ? Loc.F("GRAZE {0}", grazes) : "";
         }
 
         public void SetEnergy(float f, bool ready)
         {
             if (energyFill != null) energyFill.fillAmount = Mathf.Clamp01(f);
-            if (energyLabel != null) energyLabel.text = ready ? "ULTIMATE READY" : $"ENERGY {Mathf.RoundToInt(f * 100f)}%";
+            if (energyLabel != null) energyLabel.text = ready ? Loc.T("ULTIMATE READY") : Loc.F("ENERGY {0}%", Mathf.RoundToInt(f * 100f));
             if (ultimateGlow != null) ultimateGlow.enabled = ready;
         }
 
-        public void SetWeapon(string name, int level) { if (weaponText != null) weaponText.text = $"{name} LV.{level}"; }
+        public void SetWeapon(string name, int level) { if (weaponText != null) weaponText.text = Loc.F("{0} LV.{1}", name, level); }
 
         public void SetCharge(float f)
         {

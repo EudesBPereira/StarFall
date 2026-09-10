@@ -42,3 +42,7 @@ crashlytics-build.properties
 *service-account*.json
 google-services.json
 GoogleService-Info.plist
+
+# Chaves de API locais (nunca versionar)
+*.key
+.starfall/

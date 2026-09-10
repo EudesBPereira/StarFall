@@ -220,3 +220,10 @@ Executar no Editor (Game view em 1080x1920 e 1920x1080) e em pelo menos um Andro
 - [ ] Barra do chefe cheia aparece vermelha inteira ao entrar; cada acerto deixa um rastro claro que encolhe em ~1 s; a porcentagem cai.
 - [ ] Ao acertar o chefe: flash avermelhado, faíscas no ponto do tiro e números "-N" subindo.
 - [ ] Barras de casco, escudo e energia preenchem com cor sólida (não escuras).
+
+## Idiomas (D-040)
+- [ ] Num aparelho em português, o jogo abre em português sem mexer em nada; em inglês, abre em inglês.
+- [ ] Configurações → botão IDIOMA alterna entre PORTUGUÊS (BR) e ENGLISH; os rótulos fixos mudam na hora e o menu principal muda ao voltar.
+- [ ] Briefing, nomes de fase, descrições no Hangar, módulos, conquistas e mensagens de chefe aparecem no idioma escolhido.
+- [ ] Textos dinâmicos (pontuação, "FASE 3 ONDA 2", barra do chefe) não são sobrescritos ao trocar o idioma.
+- [ ] Nenhum texto com "{0}" visível e nenhum acento quebrado.

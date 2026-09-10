@@ -111,6 +111,8 @@ namespace Starfall.EditorTools
             tmp.raycastTarget = false;
             var font = DefaultFont;
             if (font != null) tmp.font = font;
+            // Static labels translate themselves; dynamic ones are left alone because they never equal a table key.
+            if (!string.IsNullOrEmpty(text)) rt.gameObject.AddComponent<LocalizedText>().key = text;
             return tmp;
         }
 
@@ -139,6 +141,11 @@ namespace Starfall.EditorTools
 
             var text = CreateText(rt, "Label", label, fontSize, TextColor, TextAlignmentOptions.Center, FontStyles.Bold);
             Stretch(text.rectTransform, 12f, 12f, 4f, 4f);
+            // Translated labels can be longer than the English source: shrink instead of wrapping inside the button.
+            text.enableAutoSizing = true;
+            text.fontSizeMax = fontSize;
+            text.fontSizeMin = Mathf.Max(18f, fontSize * 0.55f);
+            text.textWrappingMode = TextWrappingModes.NoWrap;
             return button;
         }
 

@@ -67,7 +67,7 @@ namespace Starfall.UI
             view.SetRisk(RiskState.Safe, 1f, 0f, false);
             view.SetOverdrive(0f, false, 0f);
             view.SetGrazes(0);
-            view.SetWave(GameSession.Mode == GameModeId.Campaign ? $"STAGE {GameSession.CurrentStageIndex + 1}" : "");
+            view.SetWave(GameSession.Mode == GameModeId.Campaign ? Loc.F("STAGE {0}", GameSession.CurrentStageIndex + 1) : "");
         }
 
         private void OnDestroy()
@@ -104,7 +104,7 @@ namespace Starfall.UI
         {
             if (!_bound) return;
             if (_boss != null && _boss.IsActiveInstance)
-                view.SetBoss(true, _boss.Boss != null ? _boss.Boss.Title : "BOSS", _boss.Health.MaxHull > 0f ? _boss.Health.Hull / _boss.Health.MaxHull : 0f);
+                view.SetBoss(true, _boss.Boss != null ? Loc.T(_boss.Boss.Title) : Loc.T("BOSS"), _boss.Health.MaxHull > 0f ? _boss.Health.Hull / _boss.Health.MaxHull : 0f);
 
             if (_critical) view.SetCritical(true, 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 8f));
             view.SetCharge(_ctx.Player.Weapon.ChargeFraction);
@@ -129,7 +129,7 @@ namespace Starfall.UI
                 _specialRefresh = 0.1f;
                 var effects = _ctx.Player.Effects;
                 var kind = effects.Tracker.Longest(out float remaining);
-                string text = kind.HasValue ? $"{Label(kind.Value)} {remaining:0.0}s" : "";
+                string text = kind.HasValue ? Loc.T(Label(kind.Value)) + " " + remaining.ToString("0.0") + "s" : "";
                 if (text != _lastSpecial)
                 {
                     _lastSpecial = text;
@@ -163,12 +163,12 @@ namespace Starfall.UI
 
         private void OnWaveStarted(int wave)
         {
-            if (GameSession.Mode == GameModeId.Campaign) view.SetWave($"STAGE {GameSession.CurrentStageIndex + 1}  WAVE {wave}");
-            else if (GameSession.Mode == GameModeId.BossRush) view.SetWave($"BOSS {wave}");
-            else view.SetWave($"WAVE {wave}");
+            if (GameSession.Mode == GameModeId.Campaign) view.SetWave(Loc.F("STAGE {0}  WAVE {1}", GameSession.CurrentStageIndex + 1, wave));
+            else if (GameSession.Mode == GameModeId.BossRush) view.SetWave(Loc.F("BOSS {0}", wave));
+            else view.SetWave(Loc.F("WAVE {0}", wave));
         }
 
-        private void OnComponentCollected(int amount) => OnStageMessage($"+{amount} COMPONENT", 0.9f);
+        private void OnComponentCollected(int amount) => OnStageMessage(Loc.F("+{0} COMPONENT", amount), 0.9f);
 
         private void OnGraze(Vector2 position, float riskMultiplier)
         {
@@ -178,9 +178,9 @@ namespace Starfall.UI
             if (data == null || data.grazeFeedback)
             {
                 Audio.AudioManager.PlaySfx(Audio.SfxId.Graze, 0.6f);
-                if (_ctx.Vfx != null) _ctx.Vfx.SpawnFloatingText(position + Vector2.up * 0.5f, "GRAZE", HudView.AllyColor, 0.45f);
+                if (_ctx.Vfx != null) _ctx.Vfx.SpawnFloatingText(position + Vector2.up * 0.5f, Loc.T("GRAZE"), HudView.AllyColor, 0.45f);
             }
-            TutorialHint(4, "GRAZE! DODGE CLOSE TO BULLETS FOR BONUS POINTS AND OVERDRIVE");
+            TutorialHint(4, Loc.T("GRAZE! DODGE CLOSE TO BULLETS FOR BONUS POINTS AND OVERDRIVE"));
         }
 
         /// <summary>Contextual tutorial for the risk loop, shown once per hint on the first stage (plan §15.1).</summary>
@@ -189,16 +189,16 @@ namespace Starfall.UI
             if (to <= from) return;
             switch (to)
             {
-                case RiskState.Alert: TutorialHint(0, "RISK ALERT x2 - CLOSER TO ENEMIES = MORE POINTS"); break;
-                case RiskState.Danger: TutorialHint(1, "DANGER x3 - OVERDRIVE IS CHARGING"); break;
-                case RiskState.Extreme: TutorialHint(2, "EXTREME x5 - MAXIMUM RISK"); break;
+                case RiskState.Alert: TutorialHint(0, Loc.T("RISK ALERT x2 - CLOSER TO ENEMIES = MORE POINTS")); break;
+                case RiskState.Danger: TutorialHint(1, Loc.T("DANGER x3 - OVERDRIVE IS CHARGING")); break;
+                case RiskState.Extreme: TutorialHint(2, Loc.T("EXTREME x5 - MAXIMUM RISK")); break;
             }
         }
 
         private void OnOverdriveChanged(bool active)
         {
-            if (active) TutorialHint(3, "OVERDRIVE! SCORE UP TO x8 - DAMAGE SHORTENS IT");
-            else if (_tutorialMask != 0) OnStageMessage("OVERDRIVE ENDED", 0.8f);
+            if (active) TutorialHint(3, Loc.T("OVERDRIVE! SCORE UP TO x8 - DAMAGE SHORTENS IT"));
+            else if (_tutorialMask != 0) OnStageMessage(Loc.T("OVERDRIVE ENDED"), 0.8f);
         }
 
         private void TutorialHint(int bit, string text)
@@ -219,7 +219,7 @@ namespace Starfall.UI
         private void OnWeaponLevelChanged(int level)
         {
             var weapon = _ctx.Player.Weapon.Definition;
-            view.SetWeapon(weapon != null ? weapon.DisplayName.ToUpperInvariant() : "LASER", level);
+            view.SetWeapon(Loc.Upper(Loc.T(weapon != null ? weapon.DisplayName : "LASER")), level);
         }
 
         private void OnPowerUpCollected(PowerUpDefinition def)
@@ -245,7 +245,7 @@ namespace Starfall.UI
         private void OnBossSpawned(BossController boss)
         {
             _boss = boss;
-            view.SetBoss(true, boss.Boss != null ? boss.Boss.Title : "BOSS", 1f);
+            view.SetBoss(true, boss.Boss != null ? Loc.T(boss.Boss.Title) : Loc.T("BOSS"), 1f);
         }
 
         private void OnBossDefeated(BossController boss)

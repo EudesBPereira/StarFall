@@ -111,9 +111,9 @@ namespace Starfall.UI
         private void RefreshMain()
         {
             var data = SaveService.Data;
-            if (highScoreText != null) highScoreText.text = data != null ? $"HIGH SCORE  {data.highScore:N0}" : "";
+            if (highScoreText != null) highScoreText.text = data != null ? Loc.F("HIGH SCORE  {0}", data.highScore.ToString("N0")) : "";
             if (pilotText != null && data != null)
-                pilotText.text = $"PILOT LV.{ProgressionRules.PilotLevel(data.xp)}   {data.credits:N0} CR   {data.components} PARTS";
+                pilotText.text = Loc.F("PILOT LV.{0}   {1} CR   {2} PARTS", ProgressionRules.PilotLevel(data.xp), data.credits.ToString("N0"), data.components);
         }
 
         private void Quit()

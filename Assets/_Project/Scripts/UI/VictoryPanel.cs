@@ -23,28 +23,28 @@ namespace Starfall.UI
 
         public void Show(string title, RunStats run, ScoreModel score, in StageResult result, int lives, in RunRewards rewards, bool isRecord, int rank, bool hasNext)
         {
-            if (titleText != null) titleText.text = title;
+            if (titleText != null) titleText.text = Loc.T(title);
             if (rankText != null)
             {
-                rankText.text = run.Mode == GameModeId.Campaign ? $"RANK {StageResultRules.RankLabel(result.Rank)}" : "";
+                rankText.text = run.Mode == GameModeId.Campaign ? Loc.F("RANK {0}", StageResultRules.RankLabel(result.Rank)) : "";
                 rankText.color = RankColor(result.Rank);
             }
-            if (scoreText != null) scoreText.text = $"SCORE  {result.Total:N0}";
+            if (scoreText != null) scoreText.text = Loc.F("SCORE  {0}", result.Total.ToString("N0"));
             if (breakdownText != null)
             {
                 breakdownText.text =
-                    $"KILLS {result.KillPoints:N0}   GRAZE {result.GrazePoints:N0}   OBJECTIVE {result.ObjectiveBonus:N0}\n" +
-                    $"TIME {result.TimeBonus:N0}   NO DAMAGE {result.NoDamageBonus:N0}";
+                    Loc.F("KILLS {0}   GRAZE {1}   OBJECTIVE {2}\n", result.KillPoints.ToString("N0"), result.GrazePoints.ToString("N0"), result.ObjectiveBonus.ToString("N0")) +
+                    Loc.F("TIME {0}   NO DAMAGE {1}", result.TimeBonus.ToString("N0"), result.NoDamageBonus.ToString("N0"));
             }
-            if (multiplierText != null) multiplierText.text = $"BEST COMBO x{score.HighestMultiplier}   BEST RISK x{score.HighestRiskMultiplier:0.#}   GRAZES {score.Grazes}";
-            if (enemiesText != null) enemiesText.text = run.Mode == GameModeId.BossRush ? $"BOSSES DESTROYED  {run.BossKills}" : $"ENEMIES DESTROYED  {score.EnemiesDestroyed}";
-            if (damageText != null) damageText.text = $"HITS TAKEN  {score.DamageTakenCount}   OVERDRIVES  {run.OverdriveActivations}";
-            if (livesText != null) livesText.text = $"LIVES LEFT  {lives}";
+            if (multiplierText != null) multiplierText.text = Loc.F("BEST COMBO x{0}   BEST RISK x{1}   GRAZES {2}", score.HighestMultiplier, score.HighestRiskMultiplier.ToString("0.#"), score.Grazes);
+            if (enemiesText != null) enemiesText.text = run.Mode == GameModeId.BossRush ? Loc.F("BOSSES DESTROYED  {0}", run.BossKills) : Loc.F("ENEMIES DESTROYED  {0}", score.EnemiesDestroyed);
+            if (damageText != null) damageText.text = Loc.F("HITS TAKEN  {0}   OVERDRIVES  {1}", score.DamageTakenCount, run.OverdriveActivations);
+            if (livesText != null) livesText.text = Loc.F("LIVES LEFT  {0}", lives);
             if (rewardsText != null) rewardsText.text = FormatRewards(rewards);
             if (recordText != null)
             {
                 recordText.gameObject.SetActive(isRecord || rank >= 0);
-                recordText.text = isRecord ? "NEW HIGH SCORE!" : rank >= 0 ? $"RANKING #{rank + 1}" : "";
+                recordText.text = isRecord ? Loc.T("NEW HIGH SCORE!") : rank >= 0 ? Loc.F("RANKING #{0}", rank + 1) : "";
             }
             if (nextButton != null)
             {
@@ -70,9 +70,9 @@ namespace Starfall.UI
 
         public static string FormatRewards(in RunRewards r)
         {
-            string detail = r.FirstClearCredits > 0 ? $"  (BASE {r.BaseCredits} + RANK {r.RankCredits} + RISK {r.RiskCredits} + FIRST CLEAR {r.FirstClearCredits})"
-                : r.RankCredits > 0 || r.RiskCredits > 0 ? $"  (BASE {r.BaseCredits} + RANK {r.RankCredits} + RISK {r.RiskCredits})" : "";
-            return $"+{r.Credits:N0} CREDITS{detail}\n+{r.Xp} XP   +{r.Components} COMPONENTS";
+            string detail = r.FirstClearCredits > 0 ? Loc.F("  (BASE {0} + RANK {1} + RISK {2} + FIRST CLEAR {3})", r.BaseCredits, r.RankCredits, r.RiskCredits, r.FirstClearCredits)
+                : r.RankCredits > 0 || r.RiskCredits > 0 ? Loc.F("  (BASE {0} + RANK {1} + RISK {2})", r.BaseCredits, r.RankCredits, r.RiskCredits) : "";
+            return Loc.F("+{0} CREDITS{1}\n+{2} XP   +{3} COMPONENTS", r.Credits.ToString("N0"), detail, r.Xp, r.Components);
         }
     }
 }

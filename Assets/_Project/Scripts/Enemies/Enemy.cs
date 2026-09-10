@@ -200,7 +200,7 @@ namespace Starfall.Enemies
             {
                 _ctx.Vfx.SpawnExplosion(transform.position, _definition.ExplosionScale, _definition.ExplosionColor);
                 if (!_definition.IsObstacle) _ctx.Vfx.SpawnSparks(transform.position, _definition.ExplosionColor);
-                if (_definition.IsElite) _ctx.Vfx.SpawnFloatingText(transform.position + Vector3.up * 0.6f, "ELITE", new Color(1f, 0.85f, 0.3f), 0.8f);
+                if (_definition.IsElite) _ctx.Vfx.SpawnFloatingText(transform.position + Vector3.up * 0.6f, Loc.T("ELITE"), new Color(1f, 0.85f, 0.3f), 0.8f);
             }
 
             GameSignals.RaiseEnemyDestroyed(new EnemyKilledInfo(_definition, transform.position, source, IsBoss));

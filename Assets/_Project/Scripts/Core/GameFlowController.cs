@@ -141,7 +141,7 @@ namespace Starfall.Core
                     build.Choose(chosen.Value);
                     ctx.Player.ApplyBuild();
                     GameSignals.RaiseBuildModChosen(chosen.Value);
-                    GameSignals.RaiseStageMessage(BuildMods.DisplayName(chosen.Value).ToUpperInvariant() + " INSTALLED", 1.4f);
+                    GameSignals.RaiseStageMessage(Loc.F("{0} INSTALLED", Loc.Upper(Loc.T(BuildMods.DisplayName(chosen.Value)))), 1.4f);
                     AudioManager.PlaySfx(SfxId.Purchase);
                 }
                 else build.Skip();
@@ -266,7 +266,7 @@ namespace Starfall.Core
             ctx.Player.Health.Invulnerable = true;
             Projectile.ClearEnemyProjectiles();
             ctx.Enemies.KillAllCommon(DamageSource.Environment);
-            GameSignals.RaiseStageMessage(GameSession.Mode == GameModeId.BossRush ? "ALL BOSSES DESTROYED" : "SECTOR CLEARED", 2f);
+            GameSignals.RaiseStageMessage(Loc.T(GameSession.Mode == GameModeId.BossRush ? "ALL BOSSES DESTROYED" : "SECTOR CLEARED"), 2f);
             yield return new WaitForSeconds(2f);
 
             var run = FinalizeRun(true);

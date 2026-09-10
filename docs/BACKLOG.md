@@ -115,5 +115,5 @@ Concluídos e removidos do backlog: cinco naves, sete armas, classe Elite, mini-
 | SR-BIZ-002 | Definir se haverá analytics e qual fornecedor | P1 | Blocked | Impacta política de privacidade e formulários das lojas |
 | SR-BIZ-003 | Definir preço do Pacote Comandante (remoção de anúncios) | P1 | Blocked | Ver plano §12 |
 | SR-ART-001 | Arte final (naves, inimigos, chefes, cenários, UI) | P0 | QA | 57 imagens geradas por IA e integradas (D-038); falta fonte da UI; validar legibilidade no aparelho |
-| SR-AUDIO-001 | Encomendar trilhas e efeitos finais | P0 | Blocked | Pré-requisito da fase D; lista completa em `docs/ASSET_SPEC.md` (47 arquivos) |
+| SR-AUDIO-001 | Gerar trilhas e efeitos finais (ElevenLabs) | P0 | In Progress | 32 efeitos + 5 ambientes gerados e em uso (D-041). Faltam as 10 músicas: a API de música exige plano pago; alternativa é gerar no site com `docs/AUDIO_PROMPTS.md` |
 | SR-DEV-001 | Fase F: SDK atrás de interface + provedor falso para sandbox | P1 | Backlog | Pode começar antes das decisões acima |

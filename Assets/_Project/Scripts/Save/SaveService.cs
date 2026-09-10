@@ -27,6 +27,16 @@ namespace Starfall.Save
             _repository.Load();
             if (_repository.LastLoadWasCorrupt)
                 Debug.LogWarning("[Starfall] Save file was missing or corrupt. Defaults restored.");
+            ApplyLanguage();
+        }
+
+        /// <summary>Registers the translation tables and selects the saved language (or the device language).</summary>
+        public static void ApplyLanguage()
+        {
+            Loc.Register(Language.Portuguese, PortugueseStrings.Table);
+            var data = Data;
+            var language = data != null && data.language >= 0 ? (Language)data.language : Loc.FromSystem(Application.systemLanguage.ToString());
+            Loc.Set(language);
         }
 
         /// <summary>Replaces the repository (tests / tools).</summary>
